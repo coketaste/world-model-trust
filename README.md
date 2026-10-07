@@ -22,13 +22,14 @@ Almost every idea has verified prior work in vision, graphics or robotics ([`doc
 ## Repository layout
 
 ```
-site/          static web pages (no build step): overview, ideas, geophysics primer, experiments, literature, method
+site/          static web pages (no build step): overview, ideas, geophysics primer, experiments, literature, method;
+               assets/ holds the shared JS/CSS, SVG figure toolkit and rendered figures (assets/figs/)
 src/wmt/       library: SPZ reader, tile rasterizer (illumination, Fisher), ICP, stand-in generator, benchmark, per-experiment code
 experiments/   one folder per experiment: runners and analysis scripts
 prereg/        hypotheses and success criteria written before each run, with dated amendments
 results/       write-ups (WP*.md), raw JSON, plots, recorded hashes; see results/README.md
 docs/literature/  verified literature maps (also rendered on the site's Literature page)
-scripts/       data fetch, site-data build, smoke tests
+scripts/       data fetch, site-data build, figure generation (make_figures.py), smoke tests
 tests/         pytest suite
 ```
 
@@ -62,6 +63,14 @@ python3 -m http.server -d site 8000      # then open http://localhost:8000 (open
 ```
 
 `scripts/smoke_site.js` loads every page in jsdom (`npm install jsdom`), exercises the controls and checks for errors; `scripts/test_primer.js` tests the geophysics illustrations' compute code (`node scripts/test_primer.js`). Neither can judge visual appearance, so review the pages in a browser.
+
+### Figures
+
+Every figure on the site is this project's own work.
+
+- **Diagrams and icons** are inline SVG drawn in JavaScript: `site/assets/viz.js` (`V.diagram`, `V.figure`), `icons.js` (themed icons), `analogy.js` (geophysics-to-vision maps, literature status matrix) and per-page code. Colours come from theme tokens in `style.css`/`figures.css`, so they follow light and dark mode.
+- **Rendered figures** in `site/assets/figs/`: `synthetic-room_*.png` come from `scripts/make_figures.py`, which builds a procedural room (no third-party assets) and renders it with `src/wmt/raster.py`; the other PNGs are plots and schematics from this project's experiments. The synthetic room is an illustration, not a World Labs or Marble output.
+- Text alternatives or captions accompany each figure; when adding one, check it in light and dark mode and with the keyboard.
 
 ## Limits and provenance
 

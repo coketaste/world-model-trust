@@ -14,6 +14,7 @@ The project starts from open problems that World Labs describes on its own publi
 
 - No World Labs or Spark data files, and no images or renders derived from World Labs content, are included in this repository. `scripts/fetch_data.py` downloads public example files from their public locations on demand; check World Labs' terms before reusing them.
 - No model weights are included.
+- All figures on the site are original: inline SVG drawn in `site/assets/*.js`, plots from this project's own results, and renders of a procedurally generated synthetic room (`scripts/make_figures.py`, no third-party assets). The site's icons are drawn for this project; no logos or third-party artwork are used.
 
 ## Third-party code
 

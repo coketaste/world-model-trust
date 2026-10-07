@@ -97,7 +97,8 @@
 venv/bin/python scripts/fetch_data.py                    # public example exports, SHA-256 verified
 venv/bin/python -m pytest -q
 venv/bin/python experiments/wp0_baseline/reproduce.py    # ~5 min on CPU
-venv/bin/python scripts/build_site_data.py               # regenerate this site's data from results/</code></pre>
+venv/bin/python scripts/build_site_data.py               # regenerate this site's data from results/
+venv/bin/python scripts/make_figures.py                  # regenerate the synthetic-room figures (~1 min)</code></pre>
 <p class="small muted">No GPU needed. The site is plain static files in <code>site/</code>; open <code>site/index.html</code> directly or serve the folder.</p>
 
 <h2>Limits and permissions</h2>
