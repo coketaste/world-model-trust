@@ -10,8 +10,24 @@
 <meta property="og:description" content="Seismic-imaging methods meet generated 3D worlds and robots: ideas, small experiments, and what already exists.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
+<script src="assets/icons.js"></script>
 <script src="assets/data.js"></script>
+<style>
+.steps4 { list-style: none; margin: 28px 0 6px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; counter-reset: s; }
+.steps4 li { position: relative; background: var(--surface); border: 1px solid var(--ring); border-radius: var(--radius); padding: 16px 14px 14px; text-align: center; }
+.steps4 .si { display: block; width: 92px; margin: 0 auto 8px; }
+.steps4 .sn { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent-wash); font-weight: 650; font-size: 0.8rem; margin-bottom: 6px; }
+.steps4 b { display: block; font-size: 0.95rem; line-height: 1.3; margin-bottom: 4px; }
+.steps4 .sc { display: block; color: var(--ink2); font-size: 0.82rem; line-height: 1.4; }
+.steps4 .sarr { position: absolute; right: -28px; top: 50px; width: 26px; height: 12px; }
+@media (max-width: 900px) { .steps4 { grid-template-columns: repeat(2, 1fr); gap: 14px; } .steps4 .sarr { display: none; } }
+@media (max-width: 480px) { .steps4 { grid-template-columns: 1fr; } }
+.cellicon { display: flex; gap: 12px; align-items: center; }
+.cellicon .ci { flex: none; width: 46px; }
+#guide .gi { flex: none; width: 56px; }
+</style>
 </head>
 <body>
 <div id="nav"></div>
@@ -22,6 +38,7 @@
   <h1>What could a geophysicist contribute to spatial intelligence and physical AI?</h1>
   <p class="lede">Companies such as World Labs build models that generate and reconstruct 3D worlds for people and robots. Seismic imaging has spent decades on a closely related problem: recovering a hidden 3D structure from sparse, indirect measurements, and saying honestly what the data do and do not tell you. This site explores how those methods could help, tries the ideas on small experiments, and checks what already exists.</p>
   <p class="narrow" style="margin-top:14px">This project starts from open problems that World Labs describes on its own public pages (for example, as its taxonomy post puts it, that “AI-generated geometry can look correct while containing self-intersections or wrong scale that produce nonsensical physics”, or that “Object shape, weight, and friction may be uncertain”) and asks whether ideas from geophysics could complement that work. It uses public information and small stand-in experiments only, and does not evaluate or compare any company's products. Much of the relevant prior work comes from the vision and robotics communities, which the <a href="literature.html">literature page</a> credits. The ideas are hypotheses to examine, and comments or corrections from World Labs or anyone else are welcome.</p>
+  <ol class="steps4" id="steps" aria-label="How this project works"></ol>
   <p style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px">
     <a class="card link" href="ideas.html" style="padding:12px 18px"><b>See the ideas →</b></a>
     <a class="card link" href="geophysics.html" style="padding:12px 18px"><b>Learn the methods →</b></a>
@@ -36,7 +53,7 @@
 
 <section id="bridge">
   <h2>From a need to a seismic idea</h2>
-  <p class="narrow">Each row pairs an open problem that generated worlds and robots have with the seismic idea that speaks to it, and says where this project stands. The <a href="ideas.html">Ideas</a> page has the full brainstorm.</p>
+  <p class="narrow">Each row pairs an open problem with the seismic idea that speaks to it. <a href="ideas.html">All the ideas →</a></p>
   <div class="card tablewrap bridge"><table>
     <thead><tr><th>An open problem</th><th>The seismic idea</th><th>Where it stands</th></tr></thead>
     <tbody id="bridge-rows"></tbody>
@@ -90,6 +107,33 @@ const cards = document.getElementById("cards");
  ["Shadows", "mixed", "Simulation only", `In an idealised simulation, a cast shadow lets you work out an object's distance from a single photo, if the shadow is in view. Without a shadow the distance cannot be determined at all (the measurement carries no information about it).`, "shadows.html"]
 ].forEach(([t, k, b, x, h]) => cards.append(E("a", { class: "card link", href: h },
   E("div", { style: "display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px" }, E("b", {}, t), V.badge(k, b)), E("p", { class: "muted small", style: "margin:0" }, x))));
+
+/* ---- illustrated 4-step strip ---- */
+(function () {
+  const STEPS = [["openproblems", "Open problems World Labs describes", "Quoted from its own public pages"],
+    ["seismic", "Seismic-imaging ideas", "Illumination, tomography, migration, multiples, inversion"],
+    ["flask", "Small experiments with known truth", "A stand-in generator tests each idea"],
+    ["verify", "Checked against what already exists", "Verified references, honest negative results"]];
+  const U = Icons.util, ol = document.getElementById("steps");
+  STEPS.forEach(([ic, title, cap], i) => {
+    const li = E("li", {}, E("span", { class: "si" }, Icons[ic]()), E("span", { class: "sn" }, String(i + 1)), E("b", {}, title), E("span", { class: "sc" }, cap));
+    if (i < STEPS.length - 1) li.append(E("span", { class: "sarr", "aria-hidden": "true" }, E("svg", { viewBox: "0 0 26 12", width: "26", height: "12" }, U.arrow(1, 6, 24, 6, "s-ink2 mid round", "f-ink2", 5))));
+    ol.append(li);
+  });
+})();
+
+/* ---- icons in the need-to-idea table and in the start cards ---- */
+(function () {
+  ["trustmap", "shadow", "ensemble", "params", "align", "robot"].forEach((name, i) => {
+    const tr = document.querySelectorAll("#bridge-rows tr")[i]; if (!tr) return;
+    const td = tr.firstChild, wrap = E("div", { class: "cellicon" }, E("span", { class: "ci" }, Icons[name]()), E("span", {}, ...td.childNodes));
+    td.append(wrap);
+  });
+  ["clock", "seismic", "verify"].forEach((name, i) => {
+    const step = document.querySelectorAll("#guide .step")[i]; if (!step) return;
+    const n = step.querySelector(".n"); if (n) n.replaceWith(E("span", { class: "gi" }, Icons[name]()));
+  });
+})();
 </script>
 </body>
 </html>

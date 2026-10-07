@@ -8,10 +8,12 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <link rel="stylesheet" href="assets/primer.css">
 <script src="assets/viz.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/lit.js"></script>
+<script src="assets/analogy.js"></script>
 <script src="assets/geo-tomography.js"></script>
 <script src="assets/geo-migration.js"></script>
 <script src="assets/geo-moveout.js"></script>
@@ -26,46 +28,49 @@
 <section class="hero" style="padding-bottom:8px">
   <p class="eyebrow">The geophysics behind the project</p>
   <h1>What can a seismic background add?</h1>
-  <p class="lede">Seismic imaging is the craft of seeing inside something you cannot open, using waves that bounce and bend. Spatial AI faces a similar problem: it builds 3D scenes from a few views and must fill in the rest. This page explains the main seismic methods in pictures you can play with, then asks where they might help.</p>
-  <p class="purpose"><b>Purpose.</b> To brainstorm how seismic imaging experience (migration, tomography, imaging with multiples, full-waveform inversion, resolution and uncertainty analysis) could contribute to spatial intelligence and physical AI, including robots, and to be honest about what already exists. It starts from open problems that World Labs describes on its own public pages and offers complementary ideas, using public information only. It is not an evaluation of anyone's product.</p>
+  <p class="lede">Seismic imaging sees inside what you cannot open, using waves. Spatial AI builds 3D scenes from a few views and must fill in the rest. This page explains the main seismic methods with pictures you can play with, then asks where they might help.</p>
+  <p class="purpose"><b>Purpose.</b> To brainstorm how seismic imaging experience (migration, tomography, imaging with multiples, full-waveform inversion, resolution and uncertainty analysis) could contribute to spatial intelligence and physical AI, and to be honest about what already exists. It starts from open problems World Labs describes on its own public pages, uses public information only, and is not an evaluation of anyone's product.</p>
   <nav class="primer-toc" aria-label="On this page"><a href="#documented">Open problems</a><a href="#methods-in-pictures">Methods in pictures</a><a href="#toolkit">Your toolkit, mapped</a><a href="#glossary">Plain-language glossary</a><a href="#lessons">What the experiments taught</a><a href="#niches">Open niches</a></nav>
 </section>
 
 <aside class="glance" aria-label="At a glance">
-  <div><div class="glance-label">What you will learn</div><p>How five core seismic methods work (tomography, migration, moveout, multiples and full-waveform inversion), shown with small models you can change, and where each one might help spatial AI and robots.</p></div>
-  <div><div class="glance-label">Key takeaway</div><p>Most seismic ideas already have counterparts in vision and robotics. The best-supported contribution is a way of thinking: ask what the data cannot constrain, test against known truth, and report negative results.</p></div>
+  <div><div class="glance-label">What you will learn</div><p>How five core seismic methods work, shown with small models you can change, and where each might help spatial AI and robots.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>Most seismic ideas already have counterparts in vision and robotics. The best-supported contribution is a way of thinking: ask what the data cannot constrain, test against known truth, report negative results.</p></div>
 </aside>
+<div id="fig-banner"></div>
 
 <h2 id="documented">Open problems World Labs describes</h2>
-<p class="narrow">These are the starting points for the ideas on this site: open problems that World Labs' own posts and documentation describe for the field. Quotes are short and attributed. They come from public pages and were retrieved through a summarising tool, so check the primary page before reusing them.</p>
+<p class="narrow">Starting points for the ideas here: open problems that World Labs' own posts and documentation describe. Quotes are short and attributed; they were retrieved through a summarising tool, so check the primary page before reusing them.</p>
 <div class="grid g3" id="quotes"></div>
 
 
-<div class="callout"><strong>The honest summary so far</strong>Almost every seismic idea tested here has a verified counterpart in vision, graphics or robotics, and some are mature. What a geophysicist brings is less a new algorithm than a discipline: asking what the data cannot constrain, testing against known truth, calibrating, and reporting negative results. The experiments (a baseline reproduction, three pre-specified tests and an earlier beam-inversion study) support that framing; none supports a claim of a new method.</div>
+<div class="callout"><strong>The honest summary so far</strong>Almost every seismic idea tested here has a verified counterpart in vision, graphics or robotics, and some are mature. A geophysicist brings less a new algorithm than a discipline: ask what the data cannot constrain, test against known truth, calibrate, report negative results. The experiments (a baseline reproduction, three pre-specified tests and an earlier beam-inversion study) support that framing; none supports a claim of a new method.</div>
 
 <h2 id="methods-in-pictures">Seismic methods in pictures</h2>
-<p class="narrow">Five small models, each with a control to change. They are teaching models: simplified on purpose, and each says where it stops being realistic. Together they explain most of the vocabulary used on the rest of the site.</p>
+<p class="narrow">Five small models, each with a control to change. They are simplified on purpose, and each says where it stops being realistic.</p>
+<div id="fig-chain"></div>
 <nav class="primer-toc" aria-label="The five illustrations"><a href="#w-tomo">1 · Tomography and illumination</a><a href="#w-migration">2 · Migration</a><a href="#w-moveout">3 · Velocity–depth ambiguity</a><a href="#w-multiples">4 · Multiples and shadow zones</a><a href="#w-fwi">5 · The FWI loop</a></nav>
 <div id="primer"></div>
 
 <h2 id="toolkit">Your toolkit, mapped</h2>
-<p class="narrow">Pick a seismic skill. Each panel says, in plain terms, what the skill is, what already exists on the vision and robotics side (from the verified literature map), what this project tested, and what is still only a hypothesis.</p>
+<p class="narrow">Pick a seismic skill, on the map or with the buttons. Each panel says what the skill is, what already exists in vision and robotics, what this project tested, and what is still a hypothesis.</p>
+<div id="fig-toolkit"></div>
 <div class="filters"><div class="seg" id="skills" role="group" aria-label="Seismic skill" style="flex-wrap:wrap"></div></div>
 <div class="card" id="panel" aria-live="polite" style="margin-top:12px"></div>
 
 <h2 id="glossary">Plain-language glossary</h2>
-<dl class="glossary card" id="gloss"></dl>
+<details class="lit"><summary>Show the nine terms</summary><div class="body"><dl class="glossary" id="gloss"></dl></div></details>
 
 <h2 id="lessons">What the experiments taught</h2>
 <div class="grid g2" id="lessons-grid"></div>
 <figure class="fig"><img src="assets/figs/beam_inversion.png" alt="Four panels: recovered Young's modulus against truth, a calibration frequency response, a held-out displacement waveform, and held-out error with an ideal and an incorrect support model" loading="lazy">
-<figcaption><b>A synthetic physical-parameter inversion (the earlier beam study).</b> Geometry and a noisy mass are supplied; stiffness and damping are inferred from vibration data and then used to predict a held-out force location, sensor location and pulse. Inversion and a simple modal baseline both beat nominal values by a wide margin. <b>The lesson for model error:</b> with an incorrect support model the held-out waveform error stays near 2%, yet the intrinsic stiffness is off by about 25%. A fitted effective parameter can predict well and still be the wrong material property, which is a familiar identifiability and model-discrepancy phenomenon, not a new result.<span class="src">Source: the author's earlier beam study (not part of this repository). Synthetic, same beam theory for truth and inference, simple peak and half-power modal baseline, not real-world validation and not a full 3D elastic FWI.</span></figcaption></figure>
+<figcaption><b>A synthetic physical-parameter inversion (the earlier beam study).</b> Stiffness and damping are inferred from vibration data, then predict a held-out force location, sensor location and pulse. Inversion and a simple modal baseline both beat nominal values by a wide margin. <b>With an incorrect support model</b> the held-out waveform error stays near 2%, yet the intrinsic stiffness is off by about 25%: a fitted effective parameter can predict well and still be the wrong material property, a familiar identifiability and model-discrepancy effect, not a new result.<span class="src">Source: the author's earlier beam study (not part of this repository). Synthetic, same beam theory for truth and inference, simple peak and half-power modal baseline, not real-world validation and not a full 3D elastic FWI.</span></figcaption></figure>
 
 <h2 id="niches">Where the open niches look plausible, and where they do not</h2>
-<p class="narrow">A ledger drawn from the verified physical-AI literature. "Covered" means published work already does it. "Open" means not found in an arXiv abstract search, which is not proof of absence.</p>
-<div class="card tablewrap"><table>
+<p class="narrow">A ledger from the verified physical-AI literature. "Covered" means published work already does it; "open" means not found in an arXiv abstract search, which is not proof of absence.</p>
+<details class="lit"><summary>Show the ledger (eight areas)</summary><div class="body"><div class="tablewrap"><table>
 <thead><tr><th>Area</th><th>Already covered</th><th>What remains open</th><th>Our evidence</th></tr></thead>
-<tbody id="ledger"></tbody></table></div>
+<tbody id="ledger"></tbody></table></div></div></details>
 
 
 <h2>Ways to contribute, and what each needs</h2>
@@ -93,6 +98,7 @@ const stat = (r) => r.status || (r.gap ? "Remaining gap: " + r.gap : "");
 
 /* ---------- the five illustrations ---------- */
 const primer = document.getElementById("primer");
+Analogy.banner(document.getElementById("fig-banner")); Analogy.chain(document.getElementById("fig-chain"));
 GeoPrimerA.tomography(primer); GeoPrimerA.migration(primer); GeoPrimerB.moveoutWidget(primer); GeoPrimerB.multiplesWidget(primer); GeoPrimerB.fwiWidget(primer);
 
 /* ---------- toolkit mapping ---------- */
@@ -139,14 +145,18 @@ const SKILLS = [
    hyp: "Phase-aware modelling and velocity analysis for radar, sonar, ultrasound and acoustic world models. Relevance to World Labs' products is unconfirmed.", ev: "Low–medium (crowded)" },
 ];
 
+const LVL = ["none", "none", "tested", "partly", "tested", "tested", "partly", "partly", "none", "none"];
+SKILLS.forEach((s, i) => { s.lvl = LVL[i]; });
 const skills = document.getElementById("skills"), panel = document.getElementById("panel");
+const toolkit = Analogy.toolkitMap(document.getElementById("fig-toolkit"), SKILLS, (i) => show(i));
 const H4 = (t, top) => E("h4", { style: `margin:${top ? "14px" : "0"} 0 4px;color:var(--ink2);font-size:.85rem` }, t);
 function show(i) {
   skills.querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", String(k === i)));
+  toolkit.select(i);
   const s = SKILLS[i], rows = s.rows.map((id) => rowById[id]).filter(Boolean);
   const refs = rows.flatMap((r) => (r.counterparts || r.works || []).slice(0, 3));
   panel.replaceChildren(
-    E("h3", { style: "margin-top:0" }, s.name),
+    E("h3", { style: "margin-top:0;display:flex;align-items:center;gap:8px" }, Analogy.iconAt(i, 24), s.name),
     E("div", { class: "grid g2", style: "gap:18px" },
       E("div", {}, H4("In seismic practice"), E("p", { class: "small" }, s.seismic, s.link ? [" ", E("a", { href: s.link }, "See the picture →")] : null),
         H4("What this project tested", true), E("p", { class: "small" }, s.tested, s.page ? [" ", E("a", { href: s.page }, "Details →")] : null)),
@@ -155,7 +165,7 @@ function show(i) {
         refs.length ? E("p", { class: "small muted", style: "margin:0" }, "Examples: ", refs.map((r, k) => [k ? "; " : "", refUrl(r.id) ? E("a", { href: refUrl(r.id), rel: "noopener" }, `${r.authors} ${r.year}`) : `${r.authors} ${r.year}`])) : null)),
     E("div", { class: "callout", style: "margin-bottom:0" }, E("strong", {}, "Plausible contribution (hypothesis)"), s.hyp, E("div", { class: "small muted", style: "margin-top:6px" }, "Evidence level: " + s.ev)));
 }
-SKILLS.forEach((s, i) => { const b = E("button", { type: "button", "aria-pressed": "false" }, s.name); b.addEventListener("click", () => show(i)); skills.append(b); });
+SKILLS.forEach((s, i) => { const b = E("button", { type: "button", "aria-pressed": "false", style: "display:inline-flex;align-items:center;gap:6px" }, Analogy.iconAt(i, 18), s.name); b.addEventListener("click", () => show(i)); skills.append(b); });
 show(0);
 
 /* ---------- glossary ---------- */

@@ -9,7 +9,22 @@
 <meta property="og:title" content="Method · world-model-trust">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
+<script src="assets/icons.js"></script>
+<style>
+.flow6 { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; align-items: start; }
+.flow6 li { position: relative; text-align: center; padding: 10px 6px 8px; background: var(--surface); border: 1px solid var(--grid); border-radius: 10px; }
+.flow6 .fi { width: 64px; margin: 0 auto 4px; }
+.flow6 b { display: block; font-size: .86rem; }
+.flow6 span.fc { display: block; font-size: .76rem; color: var(--muted); line-height: 1.35; margin-top: 2px; }
+.flow6 svg.farr { position: absolute; right: -9px; top: 28px; width: 12px; height: 12px; z-index: 1; }
+.tiers { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; font-size: .86rem; margin: 0 0 16px; }
+.tiers .tt { display: inline-flex; align-items: center; gap: 7px; }
+.tiers svg { width: 18px; height: 18px; flex: none; }
+@media (max-width: 900px) { .flow6 { grid-template-columns: repeat(3, 1fr); gap: 10px 8px; } .flow6 li:nth-child(3) svg.farr { display: none; } }
+@media (max-width: 480px) { .flow6 { grid-template-columns: repeat(2, 1fr); } .flow6 li:nth-child(3) svg.farr { display: block; } .flow6 li:nth-child(even) svg.farr { display: none; } }
+</style>
 </head>
 <body data-autotoc>
 <div id="nav"></div>
@@ -51,6 +66,8 @@
 </tbody></table></div>
 
 <h2>Pipeline</h2>
+<ol class="flow6" id="flow" aria-label="Pipeline stages, in order"></ol>
+<div class="tiers" id="tiers"></div>
 <div class="card tablewrap"><table>
   <thead><tr><th>Stage</th><th>What happens</th><th>Code</th></tr></thead>
   <tbody>
@@ -88,6 +105,28 @@ venv/bin/python scripts/build_site_data.py               # regenerate this site'
 <div class="callout warn"><strong>No third-party assets</strong>World Labs and Spark files are not redistributed. The data script downloads public example files from their public locations; check World Labs' terms before reusing them. Every image on this site is this project's own plot, schematic or render.</div>
 <footer><p><a href="index.html">← Overview</a></p></footer>
 </main>
-<script>V.nav("method.html");</script>
+<script>V.nav("method.html");
+(function () {
+  const E = V.el, U = Icons.util;
+  const STAGES = [
+    ["world", "Truth world", "a public example world"],
+    ["photo", "Prompt photo", "rendered from the truth"],
+    ["generator", "Stand-in generator", "depth network plus room-box prior"],
+    ["trustmap", "Trust map", "per-splat confidence"],
+    ["align", "Alignment", "seen splats only"],
+    ["grade", "Grading", "error against the truth"]
+  ];
+  const flow = document.getElementById("flow");
+  STAGES.forEach(([ic, title, cap], i) => {
+    const li = E("li", {}, E("div", { class: "fi" }, Icons[ic]()), E("b", {}, title), E("span", { class: "fc" }, cap));
+    if (i < STAGES.length - 1) li.append(E("svg", { viewBox: "0 0 12 12", class: "farr", "aria-hidden": "true" }, U.arrow(1, 6, 11, 6, "s-ink2 mid", "f-ink2", 4)));
+    flow.append(li);
+  });
+  const tiers = document.getElementById("tiers");
+  tiers.append(E("strong", {}, "Trust tiers:"));
+  [["f-o1", "imagined (filled in by a prior)"], ["f-o3", "seen, depth from a prior"], ["f-o5", "seen with parallax"]].forEach(([c, t]) =>
+    tiers.append(E("span", { class: "tt" }, E("svg", { viewBox: "0 0 18 18", "aria-hidden": "true" }, U.rect(1, 1, 16, 16, c, 3)), t)));
+})();
+</script>
 </body>
 </html>

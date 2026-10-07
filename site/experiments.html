@@ -9,8 +9,14 @@
 <meta property="og:title" content="The experiments: testing seismic ideas on generated 3D worlds">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
+<script src="assets/icons.js"></script>
 <script src="assets/data.js"></script>
+<style>
+.thumbwrap { margin: -2px -2px 4px; }
+.thumbwrap svg.thumb { height: auto; }
+</style>
 </head>
 <body>
 <div id="nav"></div>
@@ -31,9 +37,9 @@
 
 <h2>How to read these results</h2>
 <div class="grid g2">
-  <div class="card"><h3>A stand-in generator, not Marble</h3><p class="small">The "generated world" is built by a public depth network plus a simple room-box rule. It lets us know the truth. It says nothing about how Marble itself behaves; testing that needs paid access and permission.</p></div>
-  <div class="card"><h3>Known truth, held out where possible</h3><p class="small">A public example world plays the real room. Scores are graded against it. The alignment study tuned on one world and tested on two others; the other experiments have no held-out split.</p></div>
-  <div class="card"><h3>What "pre-specified" means here</h3><p class="small">Each question's hypothesis and success criterion were written down before its run, with a locally recorded hash. They were not committed beforehand, so the record is self-attested. Changes are listed as dated amendments, and extra analyses are labelled exploratory.</p></div>
+  <div class="card"><h3>A stand-in generator, not Marble</h3><p class="small">A public depth network plus a simple room-box rule builds the "generated world", so the truth is known. It says nothing about how Marble itself behaves; testing that needs paid access and permission.</p></div>
+  <div class="card"><h3>Known truth, held out where possible</h3><p class="small">A public example world plays the real room. The alignment study tuned on one world and tested on two others; the other experiments have no held-out split.</p></div>
+  <div class="card"><h3>What "pre-specified" means here</h3><p class="small">Hypotheses and success criteria were written down before each run, with a locally recorded hash. They were not committed beforehand, so the record is self-attested. Post-hoc changes are labelled exploratory.</p></div>
   <div class="card"><h3>Small samples</h3><p class="small">Twelve cases from three worlds is a proof of concept. Intervals are indicative, and cases from the same world are not independent.</p></div>
 </div>
 <footer><p><a href="index.html">← Overview</a></p></footer>
@@ -52,8 +58,69 @@ const items = [
  { id: "Alignment", q: "Does an optimal-transport misfit line up generated and real geometry better than ICP?", how: "Eight held-out cases, perturbations up to ±40% scale, 30° and one unit, five methods compared.",
    res: D.wp2 && D.wp2.sensitivity ? `Not as a firm result. At its original, smaller compute budget one formulation was far narrower than ICP (clean check ${f.n(D.wp2.C.basins.strict.ot, 3)} against ${f.n(D.wp2.C.basins.strict.icp, 3)}); with equal compute the two are about level (${f.n(D.wp2.sensitivity.strict.basins.ot100, 3)} against ${f.n(D.wp2.sensitivity.strict.basins.icp, 3)}, inconclusive).` : "Pending.", badge: ["mixed", "Inconclusive at matched compute"], href: "alignment.html", means: "The first negative result was largely a compute artefact. Optimal-transport registration exists elsewhere; this is one formulation, not a verdict." }
 ];
+
+/* ---- thumbnails: one per experiment, same size, drawn from the shared icon helpers ---- */
+const U = Icons.util;
+const thumb = (label, ...kids) => E("svg", { viewBox: "0 0 240 110", class: "thumb", role: "img", "aria-label": label }, ...kids.flat().filter(Boolean));
+const legendItem = (x, y, swatch, text) => [swatch(x, y), E("text", { x: x + 15, y: y + 9, class: "t-muted" }, text)];
+function thumbIllumination() {
+  const cols = 16, rows = 5, cs = 12, x0 = 24, y0 = 8, half = 0.95, cam = [x0 + cols * cs / 2, y0 + rows * cs + 9], ob = { c0: 7, c1: 8, r0: 2, r1: 2 };
+  const isOb = (c, r) => c >= ob.c0 && c <= ob.c1 && r >= ob.r0 && r <= ob.r1;
+  const cellAt = (x, y) => [Math.floor((x - x0) / cs), Math.floor((y - y0) / cs)];
+  const visible = (x, y) => {
+    const dx = x - cam[0], dy = y - cam[1];
+    if (Math.abs(Math.atan2(dx, -dy)) > half) return false;
+    const tc = cellAt(x, y);
+    for (let k = 1; k < 120; k++) {
+      const [c, r] = cellAt(cam[0] + dx * k / 120, cam[1] + dy * k / 120);
+      if (isOb(c, r) && !(c === tc[0] && r === tc[1])) return false;
+    }
+    return true;
+  };
+  const cells = [];
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const x = x0 + c * cs + cs / 2, y = y0 + r * cs + cs / 2;
+    cells.push(U.rect(x0 + c * cs + 0.75, y0 + r * cs + 0.75, cs - 1.5, cs - 1.5, isOb(c, r) ? "f-ink2" : visible(x, y) ? "f-o3" : "f-o1", 1.5));
+  }
+  const edge = (sgn) => U.line(cam[0], cam[1] - 6, cam[0] + sgn * Math.tan(half) * (cam[1] - y0), y0, "s-ink2 thin dash");
+  return thumb("Top-down map of a room: a camera at the bottom sees a fan of cells, shown dark blue; cells outside the fan and the cells hidden directly behind the obstacle are light, meaning filled in by a prior.",
+    cells, edge(-1), edge(1), U.poly(`${cam[0]},${cam[1] - 6} ${cam[0] - 5},${cam[1] + 3} ${cam[0] + 5},${cam[1] + 3}`, "f-ink"),
+    legendItem(24, 96, (x, y) => U.rect(x, y, 10, 10, "f-o3", 2), "seen"), legendItem(80, 96, (x, y) => U.rect(x, y, 10, 10, "f-o1", 2), "filled in"), legendItem(154, 96, (x, y) => U.rect(x, y, 10, 10, "f-ink2", 2), "obstacle"));
+}
+function thumbRobots() {
+  const cols = 16, rows = 6, cs = 12, x0 = 24, y0 = 4, g = [];
+  for (let c = 0; c <= cols; c++) g.push(U.line(x0 + c * cs, y0, x0 + c * cs, y0 + rows * cs, "s-grid thin"));
+  for (let r = 0; r <= rows; r++) g.push(U.line(x0, y0 + r * cs, x0 + cols * cs, y0 + r * cs, "s-grid thin"));
+  const by = y0 + rows * cs;
+  return thumb("Top-down map for a robot test: a planned path goes around an obstacle, and the floor next to the robot's start is a blind zone.", g,
+    U.poly(`${x0},${by} ${x0 + 62},${by} ${x0},${by - 36}`, "f-s4"), U.rect(x0 + 6 * cs + 1, y0 + 2 * cs + 1, 3 * cs - 2, 2 * cs - 2, "f-ink2", 2),
+    U.pl(`${x0 + 14},${by - 14} ${x0 + 14},${y0 + 10} ${x0 + cols * cs - 14},${y0 + 10}`, "s-s1 thick round nofill"), U.circ(x0 + 14, by - 14, 4.5, "f-s3"), U.circ(x0 + cols * cs - 14, y0 + 10, 4.5, "f-s2"),
+    legendItem(24, 96, (x, y) => U.line(x, y + 5, x + 11, y + 5, "s-s1 thick round"), "path"), legendItem(86, 96, (x, y) => U.rect(x, y, 10, 10, "f-ink2", 2), "obstacle"), legendItem(158, 96, (x, y) => U.rect(x, y, 10, 10, "f-s4", 2), "blind zone"));
+}
+function thumbShadows() {
+  const lamp = [70, 12], fy = 70, bx0 = 96, bx1 = 116, by0 = 36, by1 = 48;
+  const hit = (c) => lamp[0] + (c[0] - lamp[0]) * (fy - lamp[1]) / (c[1] - lamp[1]);
+  const cA = [bx0, by1], cB = [bx1, by0], xa = hit(cA), xb = hit(cB);
+  return thumb("Side view: a lamp lights a block floating above the floor. Two rays from the lamp just touch the block's corners and mark the edges of its shadow on the floor; part of that shadow lies on floor the camera can see.",
+    U.line(12, fy, 228, fy, "s-axis mid"), U.line(lamp[0], lamp[1], xa, fy, "s-s4 thin dash"), U.line(lamp[0], lamp[1], xb, fy, "s-s4 thin dash"),
+    E("rect", { x: xa, y: fy - 3, width: xb - xa, height: 6, class: "f-ink2", opacity: "0.5" }), U.rect(bx0, by0, bx1 - bx0, by1 - by0, "f-ink2", 2), U.circ(lamp[0], lamp[1], 6, "f-s4"),
+    U.line(108, 84, 220, 84, "s-s1 thick round"),
+    E("text", { x: 34, y: 16, class: "t-muted" }, "lamp"), E("text", { x: xb + 6, y: fy - 5, class: "t-muted" }, "shadow"), E("text", { x: 108, y: 100, class: "t-muted" }, "floor the camera sees"));
+}
+function thumbAlignment() {
+  const truth = [], t = 13 * Math.PI / 180, cx = 100, cy = 62;
+  for (let x = 40; x <= 164; x += 14) truth.push([x, 84]);
+  for (let y = 70; y >= 28; y -= 14) truth.push([164, y]);
+  const gen = truth.map(([x, y]) => [Math.round((cx + (x - cx) * Math.cos(t) - (y - cy) * Math.sin(t) + 22) * 10) / 10, Math.round((cy + (x - cx) * Math.sin(t) + (y - cy) * Math.cos(t) - 24) * 10) / 10]);
+  return thumb("Two point sets: a truth shape in blue and a generated copy that is rotated and shifted in orange, with arrows pulling each orange point toward its blue match.",
+    gen.map((g, i) => U.arrow(g[0], g[1] + 3, truth[i][0], truth[i][1] - 4, "s-ink2 thin", "f-ink2", 3.5)), truth.map((p) => U.circ(p[0], p[1], 3.6, "f-s1")), gen.map((p) => U.circ(p[0], p[1], 3.6, "f-s2")),
+    legendItem(24, 96, (x, y) => U.circ(x + 5, y + 5, 4, "f-s1"), "truth"), legendItem(86, 96, (x, y) => U.circ(x + 5, y + 5, 4, "f-s2"), "generated"));
+}
+const THUMBS = { Illumination: thumbIllumination, Robots: thumbRobots, Shadows: thumbShadows, Alignment: thumbAlignment };
+
 const cards = document.getElementById("cards");
 items.forEach((i) => cards.append(E("a", { class: "card link idea", href: i.href },
+  E("div", { class: "thumbwrap" }, THUMBS[i.id]()),
   E("div", { style: "display:flex;justify-content:space-between;align-items:center;gap:10px" }, E("span", { class: "muted small", style: "font-weight:600" }, i.id), V.badge(...i.badge)),
   E("h3", { style: "margin:0" }, i.q),
   E("div", { class: "row" }, E("b", {}, "How it was tested. "), i.how),

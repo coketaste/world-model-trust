@@ -9,6 +9,7 @@
 <meta property="og:title" content="Alignment · world-model-trust">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/misfit-demo.js"></script>
@@ -20,7 +21,7 @@
 <section class="hero" style="padding-bottom:8px">
   <p class="eyebrow">Experiment 4 of 4 · alignment</p>
   <h1>Getting stuck in the wrong answer</h1>
-  <p class="lede">To train a robot on a generated world, the world has to be lined up with what the robot really sees. Registration methods like ICP slide downhill and stop in the first valley, which can be the wrong one. Full-waveform inversion calls this <em>cycle skipping</em>, and optimal-transport misfits were introduced to avoid it. <span id="status"></span></p>
+  <p class="lede">To train a robot on a generated world, the world must be lined up with what the robot sees. ICP slides downhill and stops in the first valley, which can be the wrong one. Full-waveform inversion calls this <em>cycle skipping</em>, and optimal-transport misfits were introduced to avoid it. <span id="status"></span></p>
 </section>
 <aside class="glance" aria-label="At a glance">
   <div><div class="glance-label">What you will learn</div><p>Why aligning generated and real geometry can get stuck (cycle skipping), and whether optimal transport helps.</p></div>
@@ -28,20 +29,24 @@
 </aside>
 
 
-<h2 style="margin-top:1.2em">Cycle skipping in one dimension</h2>
-<p class="narrow">The "data" are a pattern of narrow bumps and a shifted copy. The plot shows how much each misfit changes as the shift grows. A local optimiser follows the curve downhill, so the number of valleys is the number of places it can get stuck. Narrow features make the L2 curve ripple; the optimal-transport curve stays one smooth bowl.</p>
+<h2 style="margin-top:1.2em">What each misfit looks at</h2>
+<div id="look"></div>
+
+<h2>Cycle skipping in one dimension</h2>
+<div id="basin"></div>
+<p class="narrow">Try it: a pattern of narrow bumps and a shifted copy. Each curve shows how the misfit changes as the shift grows. Every valley is a place a local optimiser can get stuck; narrow features make the L2 curve ripple, while the optimal-transport curve stays one smooth bowl.</p>
 <div class="filters" id="controls"></div>
 <div id="charts"></div>
 <div class="stats" id="minima"></div>
-<div class="callout"><strong>Why this matters for geometry</strong>Registering a generated world to real data has the same structure: a wrong starting scale, rotation or offset, and a misfit with many local minima. A Wasserstein misfit compares <em>where the mass is</em>, so it gives a useful pull even when the two clouds barely overlap.</div>
+<div class="callout"><strong>Why this matters for geometry</strong>Registering a generated world to real data has the same structure: a wrong starting scale, rotation or offset, and a rippled misfit. A Wasserstein misfit compares <em>where the mass is</em>, so it still pulls when the two clouds barely overlap.</div>
 
 <h2>The experiment</h2>
 <div class="grid g2">
   <div class="card"><h3>Question</h3><p class="small">Does an optimal-transport misfit give a convergence basin at least 1.5× as wide as trimmed ICP when aligning a generated world to reference geometry, under errors in scale, rotation and translation?</p></div>
-  <div class="card"><h3>Design (pre-specified)</h3><p class="small">12 synthetic-truth cases; world held out for tuning, 8 cases for evaluation. Perturbation levels up to 2× the proposal's "scale ±40%, rotation 30°, translation 1 unit", five draws per level. Methods: trimmed ICP, point-to-plane ICP, unbalanced entropic OT, an OT→ICP hybrid, and FPFH+RANSAC as a reference. Success: aligned within a quarter of the tolerance. Basin = the largest perturbation at which every draw succeeds.</p></div>
+  <div class="card"><h3>Design (pre-specified)</h3><p class="small">12 synthetic-truth cases (one world held out for tuning, 8 for evaluation). Perturbations up to 2× the proposal's "scale ±40%, rotation 30°, translation 1 unit", five draws per level. Methods: trimmed ICP, point-to-plane ICP, unbalanced entropic OT, an OT→ICP hybrid, and FPFH+RANSAC as a reference. Basin = the largest perturbation at which every draw lands within a quarter of the tolerance.</p></div>
 </div>
 <div id="results">
-  <div class="callout warn"><strong>Read this first: the result changed after a self-check</strong>As first run, optimal transport had 10 similarity updates against ICP's 100, and it looked much worse. A post-hoc rerun with matched compute (100 updates each) found the two about level, with an inconclusive comparison. The earlier negative verdict was largely a compute artefact. The numbers below are the first run; the chart further down shows how the basin grows with compute. Full details: <code>results/WP2-sensitivity.md</code>.</div>
+  <div class="callout warn"><strong>Read this first: the result changed after a self-check</strong>As first run, optimal transport had 10 similarity updates against ICP's 100 and looked much worse. A post-hoc rerun at matched compute (100 each) found the two about level, inconclusive. The earlier negative verdict was largely a compute artefact. The numbers below are the first run; a later chart shows how the basin grows with compute. Details: <code>results/WP2-sensitivity.md</code>.</div>
   <div class="callout warn" id="gate-callout" hidden><strong>Result: the success criterion is not met, and the first negative result was largely a compute artefact.</strong><span id="gate-text"></span></div>
   <div class="filters" id="rfilters" hidden></div>
   <div id="rcharts"></div>
@@ -62,6 +67,59 @@ V.nav("alignment.html");
 const E = V.el, D = window.WMT;
 document.getElementById("status").append(D.wp2 ? V.badge("mixed", "Inconclusive at matched compute") : V.badge("run", "Evaluation running"));
 
+/* ---------- figures: what each misfit looks at; what a basin is ---------- */
+(function () {
+  const W = 1000, H = 246, pw = 470, T = (i) => 55 + 60 * i, Sx = (i) => T(i) + 40, yS = 104, yT = 172, r = 7;
+  const kids = [];
+  const shorten = (x1, y1, x2, y2, d) => { const L = Math.hypot(x2 - x1, y2 - y1); return [x2 - (x2 - x1) * d / L, y2 - (y2 - y1) * d / L]; };
+  const panel = (ox, title, sub, pairs) => {
+    kids.push(E("text", { class: "t-strong", style: "font-size:15px", x: ox + 10, y: 24 }, title));
+    sub.forEach((l, k) => kids.push(E("text", { class: "t-muted", x: ox + 10, y: 44 + k * 15 }, l)));
+    pairs.forEach(([a, b]) => { const [ex, ey] = shorten(Sx(a) + ox, yS, T(b) + ox, yT, r + 5); kids.push(E("path", { class: "arrow-ink", d: `M${Sx(a) + ox},${yS + r + 2} L${ex},${ey}` })); });
+    for (let i = 0; i < 6; i++) kids.push(E("circle", { class: "f-ink2", cx: T(i) + ox, cy: yT, r }), E("circle", { class: "f-accent", cx: Sx(i) + ox, cy: yS, r }));
+  };
+  panel(0, "ICP: nearest neighbour", ["Each point grabs the closest target.", "Several can pick the same one."], [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 5]]);
+  panel(510, "Optimal transport: a plan", ["Every point is matched to exactly one", "target, so the whole shape is pulled."], [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5]]);
+  kids.push(E("text", { class: "t-muted", x: T(0), y: yT + 26, "text-anchor": "middle" }, "never picked"), E("text", { class: "t-muted", x: T(5), y: yT + 26, "text-anchor": "middle" }, "picked twice"));
+  kids.push(E("circle", { class: "f-accent", cx: 360, cy: 226, r }), E("text", { class: "t", x: 374, y: 230 }, "Generated world"), E("circle", { class: "f-ink2", cx: 530, cy: 226, r }), E("text", { class: "t", x: 544, y: 230 }, "Reference geometry"));
+  const svg = V.diagram(W, H, ...kids);
+  svg.style.minWidth = "720px";
+  const fig = V.figure(svg, E("span", {}, E("b", {}, "Same offset, two misfits. "), "ICP decides locally; a transport plan decides for the whole cloud at once. Schematic, not data."), "Two point rows: ICP arrows go to the nearest target, so one is picked twice and one never; the optimal-transport plan matches each point to one target");
+  fig.style.overflowX = "auto";
+  document.getElementById("look").append(fig);
+})();
+
+(function () {
+  const W = 1000, H = 232, pw = 470, N = 400, base = 188, amp = 104;
+  const f = [(u) => 0.6 * u * u + 0.16 * (1 - Math.cos(7 * Math.PI * u)), (u) => 0.9 * u * u];
+  const kids = [];
+  const panel = (ox, k, title, sub, u0, label) => {
+    const X = (u) => ox + 20 + (u + 1) / 2 * (pw - 40), Y = (u) => base - f[k](u) * amp;
+    let a = 0, b = 0;
+    if (k === 0) { const df = (u) => f[0](u + 1e-4) - f[0](u - 1e-4); a = 0; while (df(a + 0.001) > 0 || a < 0.01) a += 0.001; } else a = 1;
+    b = a;
+    const pts = Array.from({ length: N + 1 }, (_, i) => -1 + 2 * i / N);
+    kids.push(E("text", { class: "t-strong", style: "font-size:15px", x: ox + 10, y: 24 }, title), E("text", { class: "t-muted", x: ox + 10, y: 44 }, sub));
+    kids.push(E("rect", { class: "f-wash", x: X(-a), y: 70, width: X(a) - X(-a), height: base - 70, rx: 4 }));
+    kids.push(E("text", { class: "t-strong", x: X(0), y: 84, "text-anchor": "middle" }, k === 0 ? "Narrow basin" : "Wide basin"));
+    kids.push(E("path", { class: "nofill s-axis thin", d: `M${ox + 10},${base} L${ox + pw - 10},${base}` }));
+    kids.push(E("path", { class: "nofill s-ink thick round", d: pts.map((u, i) => `${i ? "L" : "M"}${X(u).toFixed(1)},${Y(u).toFixed(1)}`).join(" ") }));
+    kids.push(E("text", { class: "t-muted", x: X(0), y: base + 20, "text-anchor": "middle" }, "correct alignment"));
+    const end = k === 0 ? 4 / 7 : 0;
+    const walk = []; for (let i = 0; i <= 24; i++) { const u = u0 + (end - u0) * i / 24; walk.push(`${i ? "L" : "M"}${X(u).toFixed(1)},${(Y(u) - 16).toFixed(1)}`); }
+    kids.push(E("path", { class: "arrow-ink", d: walk.join(" ") }));
+    kids.push(E("circle", { class: "f-surface s-ink thick", cx: X(u0), cy: Y(u0) - 8, r: 8 }), E("circle", { class: "f-accent", cx: X(end), cy: Y(end) - 8, r: 8 }));
+    kids.push(E("text", { class: "t-strong", x: X(end), y: k === 0 ? Y(end) + 16 : Y(end) - 38, "text-anchor": "middle" }, label));
+  };
+  panel(0, 0, "L2 misfit: many valleys", "A start outside the narrow basin gets stuck.", 0.7, "stuck");
+  panel(510, 1, "Smooth misfit: one bowl", "Almost any start rolls to the right answer.", 0.7, "aligned");
+  const svg = V.diagram(W, H, ...kids);
+  svg.style.minWidth = "720px";
+  const fig = V.figure(svg, E("span", {}, E("b", {}, "The basin. "), "The shaded range is every starting error that ends at the right answer. The experiment measures its width."), "Two curves: a rippled misfit with a narrow basin where a start gets stuck, and a smooth bowl with a wide basin where it reaches the answer");
+  fig.style.overflowX = "auto";
+  document.getElementById("basin").append(fig);
+})();
+
 /* ---------- misfit toy ---------- */
 const st = { width: 0.2 };
 const ctl = document.getElementById("controls");
@@ -72,7 +130,7 @@ function draw() {
   const cv = MisfitDemo.curves(st.width), W = 760, H = 300, x0 = 46, x1 = W - 20, y0 = 14, y1 = H - 36;
   const sx = V.scale(-5, 5, x0, x1), sy = V.scale(0, 1, y1, y0);
   charts.replaceChildren();
-  const c = V.card(charts, { title: "Misfit against the shift between pattern and copy", sub: "Each curve is scaled to its own maximum. Lower is a better match; a valley away from zero is a trap.", legend: S.map((s) => ({ ...s })) });
+  const c = V.card(charts, { title: "Misfit against the shift between pattern and copy", sub: "Each curve is scaled to its own maximum. A valley away from zero is a trap.", legend: S.map((s) => ({ ...s })) });
   const svg = E("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Misfit curves for L2 and optimal transport against shift" }), g = E("g", { class: "grid" });
   [0, 0.5, 1].forEach((t) => { g.append(E("line", { x1: x0, x2: x1, y1: sy(t), y2: sy(t) })); svg.append(E("text", { x: x0 - 8, y: sy(t) + 4, "text-anchor": "end" }, t.toFixed(1))); });
   [-5, -2.5, 0, 2.5, 5].forEach((t) => svg.append(E("text", { x: sx(t), y: H - 14, "text-anchor": "middle" }, String(t))));
@@ -126,7 +184,7 @@ function renderResults(W2) {
     rc.replaceChildren();
     const v = W2[rs.v], keys = Object.keys(NAMES), tolName = rs.tol === "strict" ? "strict tolerance" : "coarse tolerance";
     // 1. success rate vs level
-    const c1 = V.card(rc, { title: "How often each method recovers the alignment", sub: `Share of runs that succeed at each perturbation level, variant ${rs.v}, ${tolName}. Level 1.0 is the proposal's ±40% scale, 30° rotation, 1 unit translation.`, legend: keys.map((k) => ({ label: NAMES[k], color: COLORS[k] })) });
+    const c1 = V.card(rc, { title: "How often each method recovers the alignment", sub: `Share of runs that succeed at each perturbation level (variant ${rs.v}, ${tolName}). Level 1.0 = ±40% scale, 30° rotation, 1 unit translation.`, legend: keys.map((k) => ({ label: NAMES[k], color: COLORS[k] })) });
     const W = 760, H = 300, x0 = 46, x1 = W - 24, y0 = 14, y1 = H - 40, n = W2.levels.length;
     const sx = (i) => x0 + (i / (n - 1)) * (x1 - x0), sy = V.scale(0, 1, y1, y0);
     const svg = E("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Success rate against perturbation level for each alignment method" }), g = E("g", { class: "grid" });
@@ -149,20 +207,20 @@ function renderResults(W2) {
     V.addTable(c1, ["Level", ...keys.map((k) => NAMES[k])], W2.levels.map((lv, i) => [String(lv), ...keys.map((k) => V.fmt.pct(v.curves[rs.tol][k][i], 0))]));
 
     // 2. basin width
-    const c2 = V.card(rc, { title: "Convergence basin by method", sub: `Mean over 8 evaluation cases of the largest perturbation level at which all five draws succeed. Longer is more robust. Variant ${rs.v}, ${tolName}.` });
+    const c2 = V.card(rc, { title: "Convergence basin by method", sub: `Mean over 8 cases of the largest level at which all five draws succeed. Longer is more robust. Variant ${rs.v}, ${tolName}.` });
     V.hbars(c2, { items: keys.map((k) => ({ label: NAMES[k], value: v.basins[rs.tol][k], tipLabel: "mean basin (level units)", strong: k === "ot" })), max: 0.5, valueFmt: (x) => V.fmt.n(x, 3), labelW: 170 });
     V.addTable(c2, ["Method", "Mean basin"], keys.map((k) => [NAMES[k], V.fmt.n(v.basins[rs.tol][k], 3)]));
   }
   paint();
 
   // 3. forest of OT - ICP (fixed, not filtered)
-  const fc = V.card(document.getElementById("rforest"), { title: "Optimal transport minus ICP, basin width, all variants (first run, unequal budgets)", sub: "Mean paired difference over 8 cases with a 95% bootstrap interval. Negative means OT has the narrower basin. Variant B strict is omitted: every method scored zero." });
+  const fc = V.card(document.getElementById("rforest"), { title: "Optimal transport minus ICP, basin width, all variants (first run, unequal budgets)", sub: "Mean paired difference over 8 cases, 95% bootstrap interval. Negative means OT has the narrower basin. Variant B strict omitted: every method scored zero." });
   const items = [["C", "strict"], ["C", "coarse"], ["A", "strict"], ["A", "coarse"], ["B", "coarse"]].map(([vv, t]) => { const x = W2[vv].comparisons[`${t}:ot_vs_icp`]; return { label: `Variant ${vv}, ${t}`, mean: x.diff, lo: x.diff_lo, hi: x.diff_hi }; });
   V.forest(fc, { items, domain: [-0.3, 0.1], d: 3 });
   V.addTable(fc, ["Variant and tolerance", "Mean difference", "CI low", "CI high"], items.map((i) => [i.label, V.fmt.signed(i.mean, 3), V.fmt.signed(i.lo, 3), V.fmt.signed(i.hi, 3)]));
 
   if (W2.sensitivity) {
-    const S = W2.sensitivity.strict, sc = V.card(document.getElementById("rforest"), { title: "Optimal transport's basin grows with its compute budget", sub: "Mean basin over 8 cases (5 draws each), clean check, strict tolerance. Post-hoc sensitivity run with a collision-free seed, so not draw-for-draw comparable with the first run. Longer is more robust." });
+    const S = W2.sensitivity.strict, sc = V.card(document.getElementById("rforest"), { title: "Optimal transport's basin grows with its compute budget", sub: "Mean basin over 8 cases (5 draws each), clean check, strict tolerance. Post-hoc run with a collision-free seed, so not draw-for-draw comparable with the first run." });
     const items = [["Trimmed ICP (100 updates)", "icp"], ["Point-to-plane ICP", "p2plane"], ["Optimal transport, 10 updates (first run)", "ot10"], ["Optimal transport, 30 updates", "ot30"], ["Optimal transport, 100 updates (matched)", "ot100"], ["Optimal transport 100, then ICP", "ot100+icp"]];
     document.getElementById("results").insertBefore(sc.root, document.getElementById("rfilters"));
     V.hbars(sc, { items: items.map(([l, k]) => ({ label: l, value: S.basins[k], tipLabel: "mean basin (level units)", strong: k === "ot100" })), max: 0.5, valueFmt: (x) => V.fmt.n(x, 3), labelW: 250 });

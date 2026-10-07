@@ -1,0 +1,31 @@
+/* Shared styling for diagrams and figures. Everything uses the site's colour tokens, so SVG diagrams follow the light/dark theme. */
+.fig-svg { margin: 20px 0; background: var(--surface); border: 1px solid var(--ring); border-radius: var(--radius); padding: 14px 16px 12px; }
+.fig-svg svg.diagram { width: 100%; height: auto; display: block; overflow: hidden; }
+.fig-svg figcaption { margin-top: 8px; font-size: 0.86rem; color: var(--ink2); line-height: 1.5; }
+.fig-svg figcaption b { color: var(--ink); }
+.fig-title { font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 650; margin: 0 0 6px; }
+.figrow { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin: 18px 0; }
+.figrow .fig-svg, .figrow figure.fig { margin: 0; }
+.thumb { display: block; width: 100%; height: auto; border-radius: 8px; background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+.hero-art { margin: 8px 0 0; }
+.hero-art svg { width: 100%; height: auto; display: block; }
+
+/* utility classes for theme-aware SVG (use these instead of hard-coded colours) */
+svg .t { fill: var(--ink2); font: 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
+svg .t-strong { fill: var(--ink); font: 600 12px system-ui, -apple-system, "Segoe UI", sans-serif; }
+svg .t-muted { fill: var(--muted); font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; }
+svg .t-big { fill: var(--ink); font: 650 15px system-ui, -apple-system, "Segoe UI", sans-serif; }
+svg .f-surface { fill: var(--surface); } svg .f-page { fill: var(--page); } svg .f-ink { fill: var(--ink); } svg .f-ink2 { fill: var(--ink2); } svg .f-grid { fill: var(--grid); }
+svg .f-wash { fill: var(--accent-wash); } svg .f-accent { fill: var(--accent); }
+svg .f-s1 { fill: var(--s1); } svg .f-s2 { fill: var(--s2); } svg .f-s3 { fill: var(--s3); } svg .f-s4 { fill: var(--s4); }
+svg .f-o1 { fill: var(--o1); } svg .f-o2 { fill: var(--o2); } svg .f-o3 { fill: var(--o3); } svg .f-o4 { fill: var(--o4); } svg .f-o5 { fill: var(--o5); }
+svg .s-ink { stroke: var(--ink); } svg .s-ink2 { stroke: var(--ink2); } svg .s-axis { stroke: var(--axis); } svg .s-grid { stroke: var(--grid); } svg .s-accent { stroke: var(--accent); }
+svg .s-s1 { stroke: var(--s1); } svg .s-s2 { stroke: var(--s2); } svg .s-s3 { stroke: var(--s3); } svg .s-s4 { stroke: var(--s4); }
+svg .s-o1 { stroke: var(--o1); } svg .s-o3 { stroke: var(--o3); } svg .s-o5 { stroke: var(--o5); }
+svg .nofill { fill: none; }
+svg .thin { stroke-width: 1; } svg .mid { stroke-width: 2; } svg .thick { stroke-width: 3; }
+svg .round { stroke-linecap: round; stroke-linejoin: round; }
+svg .dash { stroke-dasharray: 5 4; }
+svg .arrow-ink { stroke: var(--ink2); fill: none; stroke-width: 1.6; marker-end: url(#arr); }
+@media (prefers-reduced-motion: no-preference) { svg .pulse { animation: pulse 2.6s ease-in-out infinite; } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }

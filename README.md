@@ -57,6 +57,7 @@ The post-hoc sensitivity runs are `experiments/wp1_robot_benchmark/run_sensitivi
 
 ```
 python3 scripts/build_site_data.py       # refresh site/assets/data.js and lit.js from results/ and docs/literature/
+python3 scripts/make_figures.py         # regenerate the synthetic-room figures in site/assets/figs/ (about a minute, CPU)
 python3 -m http.server -d site 8000      # then open http://localhost:8000 (opening site/index.html directly also works)
 ```
 

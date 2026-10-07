@@ -9,6 +9,7 @@
 <meta property="og:title" content="Shadows · world-model-trust">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/shadow-geom.js"></script>
@@ -20,7 +21,7 @@
 <section class="hero" style="padding-bottom:8px">
   <p class="eyebrow">Experiment 3 of 4 · shadows as a second view</p>
   <h1>Can a shadow tell you how far away something is?</h1>
-  <p class="lede">From one photo, "near and small" looks identical to "far and large". Seismologists know the same trap: a reflection time cannot separate velocity from depth. They break it with <em>multiples</em>, energy that travelled a different path. A cast shadow is a second viewpoint from the light. <span id="gate-badge"></span></p>
+  <p class="lede">From one photo, "near and small" looks identical to "far and large". Seismologists know this trap: a reflection time cannot separate velocity from depth. They break it with <em>multiples</em>, energy that travelled a different path. A cast shadow is a second viewpoint, from the light. <span id="gate-badge"></span></p>
 </section>
 <aside class="glance" aria-label="At a glance">
   <div><div class="glance-label">What you will learn</div><p>Why one photo cannot tell near-and-small from far-and-large, and how a cast shadow acts like a second view.</p></div>
@@ -31,7 +32,8 @@
 <div class="grid g3" id="tiles" style="margin-top:22px"></div>
 
 <h2>See the ambiguity</h2>
-<p class="narrow">The grey disc is an occluder on a fixed line of sight from the camera. Drag the depth slider: the disc grows as it moves away, so the camera's view of it never changes (the silhouette angle stays put). The shadow on the floor does change. Whether that helps depends on whether the shadow falls on floor the camera can see.</p>
+<div id="amb"></div>
+<p class="narrow">Now drag it yourself. The grey disc sits on a fixed line of sight. As it moves away it grows, so the camera's view never changes, but the shadow on the floor does. Whether that helps depends on whether the shadow falls on floor the camera can see.</p>
 <div class="filters" id="geo-controls"></div>
 <div class="card" style="padding:12px 14px">
   <div class="legend" id="geo-legend"></div>
@@ -40,11 +42,11 @@
 </div>
 
 <h2>The Hessian spectrum, read like a geophysicist</h2>
-<p class="narrow">In seismic inversion, directions the data cannot see show up as near-zero eigenvalues of the Gauss–Newton Hessian. Here the Fisher information plays that role. Without a shadow, one eigenvalue sits at numerical zero: that is the depth–size direction. With the shadow term it rises to about 7, within a factor of five of the next eigenvalue (about 34): the direction becomes observable, though still the weakest.</p>
+<p class="narrow">Directions the data cannot see show up as near-zero eigenvalues of the Gauss–Newton Hessian; here Fisher information plays that role. Without a shadow one eigenvalue sits at numerical zero: the depth–size direction. With the shadow it rises to about 7, within a factor of five of the next one (about 34): observable, though still the weakest.</p>
 <div id="spectrum"></div>
 
 <h2>Where does it work?</h2>
-<p class="narrow">Fisher information was computed over a sweep of 1,080 setups: nine light azimuths, five elevations, four light sizes, two floor brightnesses and three depths. Each cell below shows how well depth is pinned down, as the standard deviation of log depth (0.1 means about ±10%). The stronger the colour, the more uncertain the depth (see the legend). Cells marked × miss your threshold.</p>
+<p class="narrow">Fisher information over 1,080 setups (nine light azimuths, five elevations, four light sizes, two floor brightnesses, three depths). Each cell shows how well depth is pinned down, as the standard deviation of log depth (0.1 is about ±10%). Stronger colour means more uncertainty; × marks cells that miss your threshold.</p>
 <div class="filters" id="heat-controls"></div>
 <div class="chartcard" id="heat-card">
   <header><h3>Depth uncertainty by light direction</h3><div class="tools" id="heat-tools"></div></header>
@@ -59,9 +61,9 @@
 <div id="charts"></div>
 
 <h2>What it does not show</h2>
-<div class="callout warn"><strong>Inverse crime.</strong>The data and the estimator use the same forward model. This shows local identifiability, not that the estimate would be accurate on real photos.</div>
-<div class="callout warn"><strong>No real shadows were tested.</strong>Splat worlds store appearance as colour, so the photos rendered from them have no separately modelled cast shadows, and any test there would be circular. Stage B was skipped on purpose.</div>
-<div class="callout warn"><strong>Textured floors hurt.</strong>When the unknown floor texture has a scale comparable to the shadow, information collapses (see the stress test above). Single-image shadow methods are most plausible for sunlit scenes or one dominant lamp.</div>
+<div class="callout warn"><strong>Inverse crime.</strong>Data and estimator share one forward model, so this shows local identifiability, not accuracy on real photos.</div>
+<div class="callout warn"><strong>No real shadows were tested.</strong>Splat worlds store appearance as colour, so rendered photos have no separate cast shadows and any test would be circular. Stage B was skipped on purpose.</div>
+<div class="callout warn"><strong>Textured floors hurt.</strong>Floor texture at a scale comparable to the shadow collapses the information (see the stress test above). Single-image shadow methods look most plausible for sunlit scenes or one dominant lamp.</div>
 <details><summary>Prior art and the seismic analogy</summary>
   <p>Methods that recover geometry from shadows or two-bounce light already exist, including ShadowNeuS (arXiv 2211.14086) and, with lidar, PlatoNeRF (arXiv 2312.14239); their exact capture requirements were not re-verified here. The claim in this page, one image under one natural light, is shown only in simulation.</p>
   <p>In reflection seismology a single traveltime cannot separate velocity from depth (Bickel 1990); offset (moveout) resolves it, just as camera baseline (parallax) resolves scale. A multiple is energy on a different path that illuminates what the primary arrivals do not, and its usefulness depends on whether that path lands inside the recorded aperture. For a shadow, that condition is "the shadow falls inside the frame".</p>
@@ -71,6 +73,38 @@
 <script>
 V.nav("shadows.html");
 const D = window.WMT.wp3, E = V.el, G = ShadowGeom;
+/* ---------- intro figure: near-small vs far-large, then add a lamp ---------- */
+(function () {
+  const W = 1000, H = 284, pw = 470, ray = 178, floor = 250, camX = 40, k = 14 / 110, nx = 150, fx = 270, rN = 14, rF = k * (fx - camX), lamp = [118, 44];
+  const shadow = (cx, r) => [ray - r, ray + r].map((py) => lamp[0] + (cx - lamp[0]) * (floor - lamp[1]) / (py - lamp[1])).sort((a, b) => a - b);
+  const kids = [];
+  const panel = (ox, title, withLamp) => {
+    kids.push(E("text", { class: "t-strong", x: ox + 10, y: 22, style: "font-size:15px" }, title));
+    kids.push(E("polygon", { class: "f-wash", points: `${ox + camX},${ray} ${ox + 442},${ray - k * (442 - camX)} ${ox + 442},${ray + k * (442 - camX)}` }));
+    kids.push(E("path", { class: "nofill s-axis thin", d: `M${ox + 10},${floor} L${ox + pw - 10},${floor}` }));
+    kids.push(E("rect", { class: "f-ink", x: ox + camX - 18, y: ray - 9, width: 18, height: 18, rx: 3 }), E("path", { class: "f-ink", d: `M${ox + camX},${ray - 6} L${ox + camX + 8},${ray - 11} L${ox + camX + 8},${ray + 11} L${ox + camX},${ray + 6} Z` }));
+    kids.push(E("rect", { class: "f-ink2", x: ox + 442, y: ray - k * 402, width: 8, height: 2 * k * 402, rx: 2 }), E("text", { class: "t-muted", x: ox + 446, y: ray - k * 402 - 7, "text-anchor": "middle" }, "photo"));
+    if (withLamp) {
+      [[nx, rN], [fx, rF]].forEach(([cx, r]) => { const [a, b] = shadow(cx, r); kids.push(E("polygon", { class: cx === nx ? "f-ink2" : "f-accent", points: `${ox + lamp[0]},${lamp[1]} ${ox + a},${floor} ${ox + b},${floor}`, style: "opacity:.14" })); });
+    }
+    kids.push(E("circle", { class: "f-ink2", cx: ox + nx, cy: ray, r: rN }), E("circle", { class: "f-accent", cx: ox + fx, cy: ray, r: rF, style: "opacity:.9" }));
+    kids.push(E("text", { class: "t-strong", x: ox + nx, y: ray - rN - 8, "text-anchor": "middle" }, "near, small"), E("text", { class: "t-strong", x: ox + fx, y: ray - rF - 8, "text-anchor": "middle" }, "far, large"));
+    if (withLamp) {
+      kids.push(E("circle", { class: "f-ink", cx: ox + lamp[0], cy: lamp[1], r: 8 }), E("text", { class: "t-strong", x: ox + lamp[0] + 14, y: lamp[1] + 4 }, "lamp"));
+      [[nx, rN, "f-ink2", "short, close"], [fx, rF, "f-accent", "long, far out"]].forEach(([cx, r, cl, lab]) => { const [a, b] = shadow(cx, r); kids.push(E("rect", { class: cl, x: ox + a, y: floor - 4, width: b - a, height: 8, rx: 2 }), E("text", { class: "t-muted", x: ox + (a + b) / 2, y: floor + 24, "text-anchor": "middle" }, lab)); });
+    } else {
+      kids.push(E("text", { class: "t-muted", x: ox + 240, y: floor + 24, "text-anchor": "middle" }, "both fill the same cone, so the photo is identical"));
+    }
+  };
+  panel(0, "One photo", false);
+  panel(510, "Add a lamp", true);
+  const svg = V.diagram(W, H, ...kids);
+  svg.style.minWidth = "720px";
+  const fig = V.figure(svg, E("span", {}, E("b", {}, "Side view. "), "A small disc near the camera and a large disc far away give the same photo. With a lamp, their shadows land in different places. Schematic."), "Side view: a near small disc and a far large disc fill the same camera cone; with a lamp, the near disc casts a short shadow and the far disc a long one");
+  fig.style.overflowX = "auto";
+  document.getElementById("amb").append(fig);
+})();
+
 document.getElementById("gate-badge").append(V.badge("mixed", "Success criterion met · in simulation only"));
 
 const tiles = document.getElementById("tiles");

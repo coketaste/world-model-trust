@@ -1,7 +1,7 @@
 /* Shared helpers: DOM builder, tooltip, nav, chart cards, table views, bar / dot / forest charts.
    Classic script (no modules) so pages also work from file://. Untrusted strings only ever go through textContent. */
 (function () {
-  const SVG_TAGS = new Set(["svg", "g", "path", "line", "rect", "circle", "text", "polygon", "polyline", "defs", "pattern", "title", "clipPath"]);
+  const SVG_TAGS = new Set(["svg", "g", "path", "line", "rect", "circle", "ellipse", "text", "tspan", "polygon", "polyline", "defs", "pattern", "title", "clipPath", "marker", "linearGradient", "radialGradient", "stop", "use", "mask"]);
   const NS = "http://www.w3.org/2000/svg";
 
   function el(tag, attrs, ...kids) {
@@ -263,5 +263,17 @@
   const refUrl = (id) => !id ? null : /^arxiv:/i.test(id) ? "https://arxiv.org/abs/" + id.slice(6) : /^doi:/i.test(id) ? "https://doi.org/" + id.slice(4)
     : /^\d{4}\.\d{4,5}(v\d+)?$/.test(id) ? "https://arxiv.org/abs/" + id : /^10\.\d{4,9}\//.test(id) ? "https://doi.org/" + id : null;
 
-  window.V = { el, scale, fmt, tip, attachTip, nav, badge, card, addTable, hbars, dotPlot, forest, seg, slider, refUrl };
+
+  /* diagram helpers: build a theme-aware inline SVG and wrap it in a captioned figure */
+  function diagram(w, h, ...children) {
+    const svg = el("svg", { class: "diagram", viewBox: `0 0 ${w} ${h}`, role: "img", preserveAspectRatio: "xMidYMid meet" });
+    svg.append(el("defs", {}, el("marker", { id: "arr", viewBox: "0 0 10 10", refX: "8", refY: "5", markerWidth: "7", markerHeight: "7", orient: "auto-start-reverse" }, el("path", { d: "M0,1 L9,5 L0,9 Z", fill: "var(--ink2)" }))), ...children.flat().filter(Boolean));
+    return svg;
+  }
+  function figure(svg, caption, label) {
+    if (label) svg.setAttribute("aria-label", label);
+    return el("figure", { class: "fig-svg" }, svg, caption ? el("figcaption", {}, caption) : null);
+  }
+
+  window.V = { el, scale, fmt, tip, attachTip, nav, badge, card, addTable, hbars, dotPlot, forest, seg, slider, refUrl , diagram, figure};
 })();

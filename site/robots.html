@@ -9,6 +9,7 @@
 <meta property="og:title" content="Robots · world-model-trust">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
 <script src="assets/data.js"></script>
 </head>
@@ -19,7 +20,7 @@
 <section class="hero" style="padding-bottom:8px">
   <p class="eyebrow">Experiment 2 of 4 · robot benchmark</p>
   <h1>Does a trust map keep the robot safe?</h1>
-  <p class="lede">A geometry score only matters if it changes what a robot does. So we let a simulated robot plan inside a generated world, then make it drive the same path in the true world and count collisions. <span id="gate-badge"></span></p>
+  <p class="lede">A geometry score only matters if it changes what a robot does. So a simulated robot plans inside the generated world, then drives that path in the true world while we count collisions. <span id="gate-badge"></span></p>
 </section>
 <aside class="glance" aria-label="At a glance">
   <div><div class="glance-label">What you will learn</div><p>Whether a trust map changes what a simulated robot does when it plans inside a generated world.</p></div>
@@ -28,12 +29,14 @@
 
 
 <h2 style="margin-top:1.2em">The setup</h2>
+<div id="how"></div>
 <div class="grid g2">
-  <div class="card"><h3>What the robot does</h3><p class="small">A 2D disc robot starts at the prompt camera. It plans on a floor-plane map built only from the generated splats, then executes the path in the truth map. A <b>collision</b> is touching a truth obstacle; a <b>fall</b> is entering a truth cell with no floor. 40 goals per case across 12 cases (480 goals): up to 20 in regions the photo saw, where any exist (95 of 480 goals, in 5 of 12 cases), and the rest in regions it did not.</p></div>
-  <div class="card"><h3>The policies compared</h3><p class="small"><b>No mask</b>: trust everything generated. <b>Frustum</b>, <b>visibility</b>, <b>ours</b>: treat low-confidence regions as unsafe. <b>Unknown = obstacle</b>: the standard conservative occupancy-mapping rule, and the baseline that matters. <b>Oracle</b>: plans on the true map, as a sanity check.</p></div>
+  <div class="card"><h3>Goals</h3><p class="small">40 goals per case, 12 cases (480 goals). Up to 20 per case lie in regions the photo saw (95 goals, 5 cases); the rest lie in regions it did not.</p></div>
+  <div class="card"><h3>The policies compared</h3><p class="small"><b>No mask</b> trusts everything. <b>Frustum</b>, <b>visibility</b> and <b>ours</b> treat low-confidence regions as unsafe. <b>Unknown = obstacle</b> is the standard conservative rule and the baseline that matters. <b>Oracle</b> plans on the true map.</p></div>
 </div>
+<div id="schematic"></div>
 
-<div class="callout warn"><strong>Read this first</strong>In the first run three of the policies show 0% of goals reached. That is a flaw in the test design (the robot's own blind zone traps every cautious policy), not evidence about trust maps. The explanation is below the charts.</div>
+<div class="callout warn"><strong>Read this first</strong>In the first run three policies reach 0% of goals. That is a flaw in the test design (the robot's blind zone traps every cautious policy), not evidence about trust maps. Explained below the charts.</div>
 <div class="filters" id="run-filters"></div>
 <p class="muted small" id="run-note"></p>
 <div id="bars"></div>
@@ -43,8 +46,14 @@
 <div id="forests"></div>
 
 <h2>Why the answer is inconclusive, not negative</h2>
-<div class="callout warn"><strong>As originally specified, the three trust policies completed nothing.</strong>That is a design artifact, not a finding about trust. Two causes: the floor-height estimator locked onto a wall or tabletop slab (floor height off by 0.15 scene units or more) in 8 of 12 cases, and the camera looks level so the floor within about 1.6–2 units of the start sits below the frustum, which traps every conservative policy at the start cell.</div>
-<div class="callout"><strong>The amended run was changed after seeing the outcome</strong>Four amendments (true floor height, free blind zone, free robot footprint, camera-based alignment) were made after run 1 and are logged in <code>prereg/RQ1.md</code>. The free blind zone was added only to the trust policies' maps, but a post-hoc check (results/WP1-sensitivity.md) found that the baseline's own map already treated those cells as free in all 12 cases, so it did not tilt the comparison. The amended maps do use the true floor height. That run cannot confirm the hypothesis; it only suggests that once the artifacts are removed, trust policies are indistinguishable from "unknown = obstacle", and unmasked planning is less safe.</div>
+<div class="callout warn"><strong>As originally specified, the three trust policies completed nothing.</strong>A design artifact, not a finding. The floor height was wrong in 8 of 12 cases, and a level camera cannot see the floor within about 1.6–2 units of the start, which traps every conservative policy there.</div>
+<div class="callout"><strong>The amended run was changed after seeing the outcome</strong>It cannot confirm the hypothesis. It only suggests that, with the artifacts removed, trust policies are indistinguishable from "unknown = obstacle", and unmasked planning is less safe.</div>
+<details><summary>The four amendments and the sensitivity check</summary>
+  <ul>
+    <li>Amendments after run 1: true floor height, free blind zone, free robot footprint, camera-based alignment. All are logged in <code>prereg/RQ1.md</code>.</li>
+    <li>The free blind zone was added only to the trust policies' maps. A post-hoc check (<code>results/WP1-sensitivity.md</code>) found the baseline's own map already treated those cells as free in all 12 cases, so it did not tilt the comparison.</li>
+  </ul>
+</details>
 
 <h2>What a better benchmark needs</h2>
 <div class="grid g3">
@@ -68,6 +77,75 @@ const NAMES = { no_mask: "No mask", frustum: "Frustum mask", visibility: "Visibi
 const ORDER = Object.keys(NAMES);
 let run = "preregistered";
 document.getElementById("gate-badge").append(V.badge("mixed", "Success criterion not met · inconclusive"));
+
+/* ---------- how the test works + schematic ---------- */
+(function () {
+  const W = 1000, H = 178, bw = 212, gap = 44, x0 = 10, y0 = 8, bh = 160;
+  const boxes = [
+    ["Generated world", ["Splats from one photo,", "turned into a floor-plane map."]],
+    ["Robot plans", ["A trust policy decides which", "cells are safe to cross."]],
+    ["Drives the true world", ["The same path, executed in", "the real scene's map."]],
+    ["Count failures", ["Collision: touches an obstacle.", "Fall: enters a cell with no floor."]],
+  ];
+  const glyph = [
+    (cx, cy) => [0, 1, 2, 3, 4].map((i) => E("rect", { class: i < 2 ? "f-o1" : i < 4 ? "f-o3" : "f-o5", x: cx - 60 + i * 24, y: cy - 16, width: 20, height: 32, rx: 3 })),
+    (cx, cy) => [E("path", { class: "nofill s-ink2 mid round", d: `M${cx - 56},${cy + 14} Q${cx - 14},${cy - 34} ${cx + 22},${cy - 4} T${cx + 58},${cy - 14}` }), E("circle", { class: "f-ink", cx: cx - 56, cy: cy + 14, r: 6 }), E("circle", { class: "nofill s-ink mid", cx: cx + 58, cy: cy - 14, r: 8 })],
+    (cx, cy) => [E("rect", { class: "f-grid", x: cx - 58, y: cy - 22, width: 116, height: 44, rx: 4 }), E("rect", { class: "f-ink2", x: cx + 4, y: cy - 22, width: 26, height: 22, rx: 2 }), E("path", { class: "nofill s-accent thick round", d: `M${cx - 50},${cy + 12} L${cx + 50},${cy + 12}` })],
+    (cx, cy) => [E("path", { class: "nofill s-ink thick round", d: `M${cx - 44},${cy - 16} L${cx - 20},${cy + 8} M${cx - 20},${cy - 16} L${cx - 44},${cy + 8}` }), E("rect", { class: "f-ink2", x: cx + 8, y: cy - 4, width: 12, height: 14, rx: 2 }), E("rect", { class: "f-ink2", x: cx + 26, y: cy - 16, width: 12, height: 26, rx: 2 })],
+  ];
+  const kids = [];
+  boxes.forEach(([title, lines], i) => {
+    const x = x0 + i * (bw + gap), cx = x + bw / 2;
+    kids.push(E("rect", { class: "f-wash s-axis thin", x, y: y0, width: bw, height: bh, rx: 12 }));
+    kids.push(E("circle", { class: "f-accent", cx: x + 20, cy: y0 + 20, r: 11 }), E("text", { class: "t-strong", x: x + 20, y: y0 + 24, "text-anchor": "middle", style: "fill:var(--surface)" }, String(i + 1)));
+    kids.push(...glyph[i](cx, y0 + 62));
+    kids.push(E("text", { class: "t-strong", x: cx, y: y0 + 112, "text-anchor": "middle" }, title));
+    lines.forEach((l, k) => kids.push(E("text", { class: "t-muted", x: cx, y: y0 + 130 + k * 15, "text-anchor": "middle" }, l)));
+    if (i < boxes.length - 1) kids.push(E("path", { class: "arrow-ink", d: `M${x + bw + 6},${y0 + bh / 2} L${x + bw + gap - 6},${y0 + bh / 2}` }));
+  });
+  const svg = V.diagram(W, H, ...kids);
+  svg.style.minWidth = "720px";
+  const fig = V.figure(svg, E("span", {}, E("b", {}, "How the test works. "), "The robot never sees the true world while planning. That is what makes it a test of the trust map."), "Four steps: generated world, robot plans with a trust policy, drives the path in the true world, count collisions and falls");
+  fig.style.overflowX = "auto";
+  document.getElementById("how").append(fig);
+})();
+
+(function () {
+  const W = 760, H = 304, rx0 = 10, ry0 = 10, rw = 740, rh = 284;
+  const S = [80, 240], G = [640, 50], ob = { x: 360, y: 100, w: 64, h: 58 };
+  const k = Math.tan(16 * Math.PI / 180), L = 700;
+  const wedge = `${S[0]},${S[1]} ${S[0] + L},${S[1] - k * L} ${S[0] + L},${S[1] + k * L}`;
+  const t = (ob.x - S[0]) / (G[0] - S[0]), hit = [ob.x, S[1] + (G[1] - S[1]) * t];
+  const kids = [
+    E("defs", {}, E("clipPath", { id: "rb-clip" }, E("rect", { x: rx0, y: ry0, width: rw, height: rh, rx: 6 }))),
+    E("rect", { class: "f-o1", x: rx0, y: ry0, width: rw, height: rh, rx: 6, style: "opacity:.28" }),
+    E("g", { "clip-path": "url(#rb-clip)" },
+      E("polygon", { class: "f-o3", points: wedge, style: "opacity:.34" }),
+      E("circle", { class: "f-surface s-ink2 thin dash", cx: S[0], cy: S[1], r: 92, style: "fill-opacity:.7" })),
+    E("rect", { class: "nofill s-axis thin", x: rx0, y: ry0, width: rw, height: rh, rx: 6 }),
+    E("rect", { class: "f-ink2", x: ob.x, y: ob.y, width: ob.w, height: ob.h, rx: 3 }),
+    E("path", { class: "nofill s-accent thick round dash", d: `M${S[0]},${S[1]} L${G[0]},${G[1]}` }),
+    E("circle", { class: "f-ink", cx: S[0], cy: S[1], r: 8 }),
+    E("circle", { class: "nofill s-ink thick", cx: G[0], cy: G[1], r: 11 }), E("circle", { class: "f-ink", cx: G[0], cy: G[1], r: 4 }),
+    E("path", { class: "nofill s-ink thick round", d: `M${hit[0] - 8},${hit[1] - 8} l16,16 M${hit[0] - 8},${hit[1] + 8} l16,-16` }),
+    E("text", { class: "t-strong", x: 26, y: 40 }, "Imagined"),
+    E("text", { class: "t-muted", x: 26, y: 57 }, "the generator filled this in"),
+    E("text", { class: "t-strong", x: 470, y: 270 }, "Seen in the photo"),
+    E("text", { class: "t-strong", x: ob.x + ob.w / 2, y: ob.y - 10, "text-anchor": "middle" }, "True obstacle"),
+    E("text", { class: "t-strong", x: G[0], y: G[1] - 22, "text-anchor": "middle" }, "Goal"),
+    E("text", { class: "t-strong", x: 26, y: 100 }, "Blind zone"),
+    E("text", { class: "t-muted", x: 26, y: 116 }, "below the camera's view:"),
+    E("text", { class: "t-muted", x: 26, y: 131 }, "cautious policies are trapped"),
+    E("text", { class: "t-strong", x: hit[0] + 18, y: hit[1] + 44 }, "No mask: drives into the"),
+    E("text", { class: "t-strong", x: hit[0] + 18, y: hit[1] + 60 }, "obstacle the world never showed"),
+    E("text", { class: "t-strong", x: S[0], y: S[1] + 30, "text-anchor": "middle" }, "Start"),
+  ];
+  const svg = V.diagram(W, H, ...kids);
+  const fig = V.figure(svg, E("span", {}, E("b", {}, "A schematic of one case. "), "Illustration only, not a result. Two failure modes compete: trusting everything, and distrusting so much the robot cannot leave its blind zone."), "Schematic floor plan: start in a blind zone, a goal, a true obstacle outside the photo's view, and the straight path that collides");
+  svg.style.minWidth = "560px";
+  fig.style.overflowX = "auto";
+  document.getElementById("schematic").append(fig);
+})();
 
 document.getElementById("run-filters").append(V.seg("Which run", [["preregistered", "As originally specified"], ["amended", "Amended (exploratory)"]], () => run, (k) => (run = k), render));
 

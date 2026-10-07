@@ -9,8 +9,19 @@
 <meta property="og:title" content="Ideas: what could a geophysicist contribute to spatial intelligence and physical AI?">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
+<script src="assets/icons.js"></script>
 <script src="assets/data.js"></script>
+<style>
+.idea-top { display: flex; align-items: center; gap: 14px; }
+.idea-icon { flex: none; width: 76px; padding: 6px 4px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.idea-top .tags { flex: 1; }
+.card.idea.flash { outline: 2px solid var(--accent); outline-offset: 3px; }
+details.more { margin: 0; padding: 6px 12px; }
+details.more summary { font-size: 0.86rem; }
+.scatter-legend { margin: 14px 0 0; }
+</style>
 </head>
 <body>
 <div id="nav"></div>
@@ -19,7 +30,7 @@
 <section class="hero" style="padding-bottom:8px">
   <p class="eyebrow">The brainstorm</p>
   <h1>Nine ways seismic ideas could help</h1>
-  <p class="lede">Each card pairs an open problem that World Labs or the wider field describes with a seismic-imaging idea, offered as a complementary idea (nothing here evaluates anyone's products), and says honestly what already exists, what this project tested, and what would come next. These are hypotheses to examine, not claims of new methods. New to the methods? Start with the <a href="geophysics.html#methods-in-pictures">illustrated primer</a>.</p>
+  <p class="lede">Each card pairs an open problem that World Labs or the wider field describes with a seismic-imaging idea, offered as a complement (nothing here evaluates anyone's products). These are hypotheses, not claims of new methods. New to the methods? Start with the <a href="geophysics.html#methods-in-pictures">illustrated primer</a>.</p>
 </section>
 
 <aside class="glance" aria-label="At a glance">
@@ -27,14 +38,14 @@
   <div><div class="glance-label">Key takeaway</div><p>The best-supported ideas are about <b>trust and identifiability</b>: saying what a generated world or a fitted physical parameter does and does not tell you. Most other ideas already have strong prior work.</p></div>
 </aside>
 
-<div class="callout"><strong>Two terms</strong><b>Spatial intelligence</b> here means understanding and generating 3D scenes from images, as World Labs' world models do. <b>Physical AI</b> means agents, such as robots, that act in the physical world and need those scenes to be trustworthy and physically meaningful.</div>
+<details><summary>Two terms used on this page</summary><p class="small"><b>Spatial intelligence</b> here means understanding and generating 3D scenes from images, as World Labs' world models do. <b>Physical AI</b> means agents, such as robots, that act in the physical world and need those scenes to be trustworthy and physically meaningful.</p></details>
 
+<div id="scatter"></div>
 <div class="filters" id="filters"></div>
 <p class="muted small" id="count" aria-live="polite"></p>
 <div class="grid g2" id="board"></div>
 
-<h2>How these were chosen</h2>
-<p class="narrow">Each idea has a documented need (quoted from World Labs' public pages where one exists) and a seismic method that plausibly applies. The "already exists" lines come from the <a href="literature.html">verified literature map</a>; "not found in this search" never means "does not exist". Ideas that look already covered are included on purpose, so that nothing is presented as new when it is not.</p>
+<details><summary>How these ideas were chosen</summary><p class="small">Each idea has a documented need (quoted from World Labs' public pages where one exists) and a seismic method that plausibly applies. The "already exists" lines come from the <a href="literature.html">verified literature map</a>; "not found in this search" never means "does not exist". Ideas that look already covered are included on purpose, so that nothing is presented as new when it is not.</p></details>
 <footer><p><a href="index.html">← Overview</a></p></footer>
 </main>
 <script>
@@ -106,17 +117,53 @@ seg("What it needs", [["all", "All"], ["none", "Nothing special"], ["credits", "
 
 const board = document.getElementById("board"), count = document.getElementById("count");
 const row = (k, v) => E("div", { class: "row" }, E("b", {}, k + ". "), v);
-const cards = IDEAS.map((i, n) => E("article", { class: "card idea" },
-  E("div", { class: "tags" }, V.badge(EVL[i.ev][1], EVL[i.ev][0]), ...i.themes.map((t) => E("span", { class: "tag" }, t === "spatial" ? "Spatial intelligence" : "Physical AI")), E("span", { class: "tag" }, NEEDS[i.needs])),
+const META = [
+  { icon: "trustmap", prior: 0.60, evid: 0.80 }, { icon: "ensemble", prior: 0.45, evid: 0.06 }, { icon: "shadow", prior: 0.55, evid: 0.55 },
+  { icon: "params", prior: 0.90, evid: 0.50 }, { icon: "wave", prior: 0.72, evid: 0.06 }, { icon: "inspect", prior: 0.25, evid: 0.06 },
+  { icon: "align", prior: 0.78, evid: 0.85 }, { icon: "robot", prior: 0.50, evid: 0.82 }, { icon: "migrate", prior: 0.95, evid: 0.06 }];
+IDEAS.forEach((it, k) => Object.assign(it, META[k]));
+const cards = IDEAS.map((i, n) => E("article", { class: "card idea", id: "idea-" + (n + 1) },
+  E("div", { class: "idea-top" }, E("span", { class: "idea-icon" }, Icons[i.icon]()),
+    E("div", { class: "tags" }, V.badge(EVL[i.ev][1], EVL[i.ev][0]), ...i.themes.map((t) => E("span", { class: "tag" }, t === "spatial" ? "Spatial intelligence" : "Physical AI")), E("span", { class: "tag" }, NEEDS[i.needs]))),
   E("h3", {}, (n + 1) + ". " + i.title),
-  row("The open problem", i.need), row("The seismic idea", i.seismic), row("Already exists", i.exists), row("This project", i.tested), row("Next step", i.next),
+  row("The open problem", i.need), row("The seismic idea", i.seismic), row("This project", i.tested),
+  E("details", { class: "more" }, E("summary", {}, "Prior work and next step"), row("Already exists", i.exists), row("Next step", i.next)),
   E("div", { class: "row" }, E("a", { href: i.link[0] }, i.link[1] + " →"))));
 function paint() {
   let shown = 0;
   cards.forEach((c, k) => { const i = IDEAS[k], ok = (st.theme === "all" || i.themes.includes(st.theme)) && (st.ev === "all" || i.ev === st.ev) && (st.needs === "all" || i.needs === st.needs); c.hidden = !ok; if (ok) shown++; });
   count.textContent = `${shown} of ${IDEAS.length} ideas shown`;
+  if (typeof updateDots === "function") updateDots();
 }
 board.append(...cards); paint();
+
+/* ---- overview figure: where each idea sits (the author's qualitative placement) ---- */
+var dotEls = [];
+function updateDots() { if (!dotEls || !dotEls.length) return; dotEls.forEach((g, k) => { g.style.opacity = cards[k].hidden ? "0.22" : "1"; }); }
+(function () {
+  const W = 760, H = 360, L = 78, Rm = 24, T = 18, B = 64, pw = W - L - Rm, ph = H - T - B, X = (v) => L + v * pw, Y = (v) => T + (1 - v) * ph;
+  const col = (i) => (i.themes.length > 1 ? "s3" : i.themes[0] === "spatial" ? "s1" : "s2");
+  const kids = [];
+  [0, 0.25, 0.5, 0.75, 1].forEach((v) => kids.push(E("line", { x1: X(v), x2: X(v), y1: T, y2: T + ph, class: "s-grid thin" }), E("line", { x1: L, x2: L + pw, y1: Y(v), y2: Y(v), class: "s-grid thin" })));
+  kids.push(E("line", { x1: L, x2: L + pw, y1: T + ph, y2: T + ph, class: "s-axis thin" }), E("line", { x1: L, x2: L, y1: T, y2: T + ph, class: "s-axis thin" }),
+    E("text", { x: L, y: H - 36, class: "t-muted" }, "open: little found"), E("text", { x: L + pw, y: H - 36, "text-anchor": "end", class: "t-muted" }, "crowded: much prior work"),
+    E("text", { x: L + pw / 2, y: H - 12, "text-anchor": "middle", class: "t" }, "How much prior work exists"),
+    E("text", { x: L - 10, y: T + 10, "text-anchor": "end", class: "t-muted" }, "tested here"), E("text", { x: L - 10, y: T + ph, "text-anchor": "end", class: "t-muted" }, "not tested"),
+    E("text", { transform: `translate(14 ${T + ph / 2}) rotate(-90)`, "text-anchor": "middle", class: "t" }, "Evidence in this project"));
+  const jump = (k) => { const c = cards[k]; if (c.hidden) return; c.scrollIntoView({ behavior: "smooth", block: "center" }); c.classList.add("flash"); setTimeout(() => c.classList.remove("flash"), 1800); };
+  IDEAS.forEach((i, k) => {
+    const cx = X(i.prior), cy = Y(i.evid);
+    const g = E("g", { style: "cursor:pointer" }, E("title", {}, `${k + 1}. ${i.title} (${EVL[i.ev][0].toLowerCase()})`), E("circle", { cx, cy, r: 17, style: "fill:transparent" }),
+      E("circle", { cx, cy, r: 9, class: "f-" + col(i), stroke: "var(--surface)", "stroke-width": 2 }), E("text", { x: cx + 15, y: cy + 4.5, class: "t-strong" }, String(k + 1)));
+    g.addEventListener("click", () => jump(k)); dotEls.push(g); kids.push(g);
+  });
+  const legend = E("div", { class: "legend scatter-legend" }, [["s1", "Spatial intelligence"], ["s2", "Physical AI"], ["s3", "Both"]].map(([c, t]) => E("span", {}, E("i", { class: "dot", style: `background:var(--${c})` }), t)));
+  const fig = V.figure(V.diagram(W, H, ...kids), E("span", {}, E("b", {}, "The author's qualitative placement, not a measurement. "), "Dots fade when the filters hide an idea; click a dot to jump to its card."), "Scatter of the nine ideas: prior work from open to crowded, against evidence in this project from not tested to tested.");
+  const word = (v) => (v < 0.34 ? "little prior work found" : v < 0.67 ? "some prior work" : "much prior work");
+  const text = E("details", { class: "more" }, E("summary", {}, "Text version of the figure"), E("ol", { class: "small" }, IDEAS.map((i, k) => E("li", {}, `${i.title}: ${EVL[i.ev][0].toLowerCase()}, ${word(i.prior)}.`))));
+  document.getElementById("scatter").append(legend, fig, text);
+  updateDots();
+})();
 </script>
 </body>
 </html>

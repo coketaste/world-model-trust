@@ -9,6 +9,7 @@
 <meta property="og:title" content="Illumination · world-model-trust">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/illumination-demo.js"></script>
@@ -20,16 +21,17 @@
 <section class="hero" style="padding-bottom:8px">
   <p class="eyebrow">Experiment 1 of 4 · illumination</p>
   <h1>The flashlight test</h1>
-  <p class="lede">Stand where the photo was taken and switch on a flashlight as wide as the camera's view. What it touches is <em>measured</em>. Everything behind you, outside the beam, or in the shadow of furniture was never in the photo: it is <em>imagined</em>. That is an illumination map. Applied to a generated 3D world, this site calls the result a <b>trust map</b>, computed from an <b>illumination score</b>.</p>
+  <p class="lede">Stand where the photo was taken and switch on a flashlight as wide as the camera's view. What it touches is <em>measured</em>; everything behind you, outside the beam, or hidden behind furniture was never in the photo. Applied to a generated 3D world, this site calls the result a <b>trust map</b>, computed from an <b>illumination score</b>.</p>
 </section>
 <aside class="glance" aria-label="At a glance">
   <div><div class="glance-label">What you will learn</div><p>How to tell which parts of a generated 3D world a photo actually constrains, using an interactive toy.</p></div>
   <div><div class="glance-label">Key takeaway</div><p>A single photo directly constrains only part of a 3D world; the rest is filled in by the model's learned prior. A seismic-style score for this is practically equal to plain visibility.</p></div>
 </aside>
 
+<div id="recipe"></div>
 
 <h2 style="margin-top:1.2em">Try it</h2>
-<p class="narrow">A 2D room with two pieces of furniture. Drag the camera, change its direction and field of view, and add a second photo. The dots are points on the walls and furniture, coloured by how well the photos constrain them.</p>
+<p class="narrow">A 2D room with two pieces of furniture. Drag the camera, change its direction and field of view, and add a second photo; the dots show how well the photos constrain each point.</p>
 
 <div class="filters" id="demo-controls"></div>
 <div class="card" style="padding:12px 14px; margin-top:8px">
@@ -37,26 +39,31 @@
   <svg id="demo" class="chart" viewBox="0 0 640 450" role="img" aria-label="Interactive 2D room showing which wall and furniture points the camera photo constrains" style="touch-action:none;overflow:hidden"></svg>
   <div class="stats" id="demo-stats" aria-live="polite"></div>
 </div>
-<div class="callout"><strong>Two ways to add a photo, two different gains</strong>Stepping sideways gives parallax, which measures distance for nearby points but barely adds coverage. Turning on the spot adds coverage but no parallax at all. A 360° panorama or Marble's multi-image mode is the second kind. You need both to get both.</div>
+<div class="callout"><strong>Two ways to add a photo</strong>Stepping sideways adds parallax (distance for nearby points); turning adds coverage, not parallax. You need both.</div>
+
+<h2>What it looks like in 3D (our own synthetic room)</h2>
+<p class="narrow">A synthetic room built for this site (about 118,000 splats, no third-party assets), rendered with this project's rasterizer.</p>
+<figure class="fig"><img src="assets/figs/synthetic-room_views.png" width="1260" height="375" alt="Three views of a synthetic room: the photo, the same room seen from the back, and that view coloured by trust tier, mostly light blue (imagined) with darker blue where the photo constrained the splats" loading="lazy">
+<figcaption><b>Same room, three views.</b> A: the photo. B: the room from the back. C: view B by tier; dark blue is what the photo constrained.<span class="src">Synthetic scene from <code>scripts/make_figures.py</code>; own work.</span></figcaption></figure>
+<figure class="fig"><img src="assets/figs/synthetic-room_map.png" width="1260" height="430" alt="A floor plan with the camera and its view wedge, and a side slice through the sofa showing the shadow zone behind it" loading="lazy">
+<figcaption><b>Where the photo looks, and what hides.</b> D: the photo constrains a wedge, not the floor nearest the camera and not what the sofa hides. E: the sofa's shadow zone, including a chest no ray reaches.</figcaption></figure>
+<figure class="fig"><img src="assets/figs/synthetic-room_corner.png" width="860" height="350" alt="The synthetic room from a high corner, in colour and coloured by trust tier" loading="lazy">
+<figcaption><b>From a high corner.</b> In colour, then by tier: a plausible space with no sign of which parts the photo supports.</figcaption></figure>
 
 <h2>Why one photo cannot fix distance</h2>
 <figure class="fig"><img src="assets/figs/schematic_one_eye_two_eyes.png" alt="Schematic: one camera ray with three candidate depths, and two cameras whose rays cross once" loading="lazy">
-<figcaption><b>Why one photo cannot fix distance.</b> Idealised schematic. Strictly, an object of known size changes its pixel footprint slightly with depth, so the exact unobservable direction is the joint depth-and-size scaling (near-and-small versus far-and-large), the velocity–depth ambiguity of reflection seismology. See the <a href="shadows.html">shadows page</a>.<span class="src">Source: the author's earlier illumination study (not part of this repository; own schematic).</span></figcaption></figure>
+<figcaption><b>Why one photo cannot fix distance.</b> Strictly, the unobservable direction is depth and size together (near-and-small versus far-and-large): the velocity–depth ambiguity of reflection seismology. See the <a href="shadows.html">shadows page</a>.</figcaption></figure>
 
 <h2>Does the maths beat plain visibility?</h2>
-<p class="narrow">To test an uncertainty score you need a known answer. We use a <em>practice exam</em>, as geophysicists do with synthetic Earth models: a public example 3D world (a splat file published for download) plays the real room, we photograph it, a stand-in generator (a public depth network plus a room-box prior) rebuilds it, and we grade every splat against the truth. AUROC asks: pick one badly wrong splat and one good one at random; how often does the score call the wrong one less trustworthy? 0.5 is a coin flip, 1.0 is perfect.</p>
+<p class="narrow">A practice exam with a known answer, as geophysicists run on synthetic Earth models: a public example 3D world plays the real room, a stand-in generator (a public depth network plus a room-box prior) rebuilds it from one photo, and every splat is graded against the truth. AUROC is how often the score ranks a badly wrong splat as less trustworthy than a good one (0.5 is a coin flip, 1.0 perfect).</p>
 <div id="charts"></div>
 <div class="grid g3" id="tiles"></div>
 <figure class="fig"><img src="assets/figs/sparsification.png" alt="Sparsification curves: error of remaining splats as the least trusted fraction is removed, for several scores" loading="lazy">
-<figcaption><b>Sparsification.</b> Remove the splats a score distrusts most and see whether the rest gets better. The illumination and visibility curves nearly overlap; the frame test and distance do clearly worse. This is the same message as the AUROC plot, from a second angle.<span class="src">Source: pooled over the 12 synthetic-truth cases; the author's earlier illumination study (not part of this repository). Stand-in generator, not Marble.</span></figcaption></figure>
-<div class="callout warn"><strong>Honest reading</strong>The illumination score clearly beats the "inside the photo frame?" test, and differs from "does any ray reach it?" (visibility) by only about 0.003 AUROC: detectable over twelve cases, negligible in practice. The value of the seismic framing here is conceptual: the tiers, the depth-versus-appearance split, and the survey-design thinking. It is not a better score.</div>
+<figcaption><b>Sparsification.</b> Remove the splats a score distrusts most and see whether the rest gets better. Illumination and visibility nearly overlap; the frame test and distance do clearly worse.<span class="src">Pooled over the 12 synthetic-truth cases; stand-in generator, not Marble.</span></figcaption></figure>
+<div class="callout warn"><strong>Honest reading</strong>The score clearly beats the in-frame test and differs from plain visibility by only about 0.003 AUROC: detectable, negligible. The value of the seismic framing is conceptual (tiers, shadow zones), not a better score.</div>
 
 <details><summary>Where these numbers come from, and the caveats</summary>
-  <p>Reproduced from the migrated code (<code>experiments/wp0_baseline/reproduce.py</code>) and matching the earlier recorded run to four decimals.</p>
-  <ul>
-    <li>The generator is a stand-in, not Marble. "Imagined means wrong" is partly built in because the filled-in geometry is our own box prior.</li>
-    <li>Twelve cases come from three truth worlds and four yaw angles each, so they are not independent.</li>
-  </ul>
+  <p>Reproduced by <code>experiments/wp0_baseline/reproduce.py</code>, matching the earlier recorded run to four decimals. The generator is a stand-in, not Marble, and "imagined means wrong" is partly built in because the filled-in geometry is our own box prior. The twelve cases come from three truth worlds and four yaw angles each, so they are not independent.</p>
 </details>
 
 <footer><p><a href="index.html">← Overview</a></p></footer>
@@ -64,6 +71,40 @@
 <script>
 V.nav("illumination.html");
 const D = window.WMT.wp0, E = V.el;
+
+/* ---------- the recipe, as a diagram ---------- */
+(function () {
+  const W = 1000, H = 196, bw = 176, gap = 30, x0 = 5, y0 = 8, bh = 180;
+  const steps = [
+    ["Render", ["Put a virtual camera", "where the photo was taken", "and render the world."]],
+    ["Measure", ["How much would the photo", "change if this splat", "changed? (the illumination)"]],
+    ["Threshold", ["Little or no sensitivity:", "the photo does not", "constrain that splat."]],
+    ["Assign tiers", ["Imagined, seen with depth", "from the prior, or seen", "with parallax."]],
+    ["Colour", ["Show the world with", "each splat coloured", "by its tier."]],
+  ];
+  const kids = [];
+  const glyph = [
+    (cx, cy) => [E("path", { class: "nofill s-ink2 mid round", d: `M${cx - 58},${cy} L${cx + 26},${cy - 28} L${cx + 26},${cy + 28} Z` }), E("rect", { class: "f-ink2", x: cx - 66, y: cy - 7, width: 12, height: 14, rx: 2 }), E("rect", { class: "f-o3", x: cx + 26, y: cy - 28, width: 8, height: 56, rx: 2 })],
+    (cx, cy) => [E("circle", { class: "f-o3", cx: cx - 42, cy, r: 16 }), E("circle", { class: "f-o3", cx, cy, r: 16, style: "opacity:.55" }), E("circle", { class: "f-o3", cx: cx + 42, cy, r: 16, style: "opacity:.15" })],
+    (cx, cy) => [...[0, 1, 2, 3, 4, 5, 6, 7].map((i) => E("rect", { class: i < 3 ? "f-o1" : "f-o4", x: cx - 64 + i * 16, y: cy - 14, width: 14, height: 28, rx: 2, style: `opacity:${0.35 + i * 0.09}` })), E("line", { class: "s-ink mid dash", x1: cx - 16, x2: cx - 16, y1: cy - 26, y2: cy + 26 })],
+    (cx, cy) => [E("rect", { class: "f-o1", x: cx - 66, y: cy - 16, width: 36, height: 32, rx: 6 }), E("rect", { class: "f-o3", x: cx - 18, y: cy - 16, width: 36, height: 32, rx: 6 }), E("rect", { class: "f-o5", x: cx + 30, y: cy - 16, width: 36, height: 32, rx: 6 })],
+    (cx, cy) => [E("rect", { class: "f-o1", x: cx - 58, y: cy - 30, width: 116, height: 60, rx: 6 }), E("path", { class: "f-o3", d: `M${cx - 28},${cy + 30} L${cx - 10},${cy - 8} L${cx + 34},${cy - 8} L${cx + 52},${cy + 30} Z` }), E("rect", { class: "f-o5", x: cx - 4, y: cy - 6, width: 26, height: 18, rx: 3 })],
+  ];
+  steps.forEach(([title, lines], i) => {
+    const x = x0 + i * (bw + gap), cx = x + bw / 2;
+    kids.push(E("rect", { class: "f-wash s-axis thin", x, y: y0, width: bw, height: bh, rx: 12 }));
+    kids.push(E("circle", { class: "f-accent", cx: x + 20, cy: y0 + 20, r: 11 }), E("text", { class: "t-strong", x: x + 20, y: y0 + 24, "text-anchor": "middle", style: "fill:var(--surface)" }, String(i + 1)));
+    kids.push(...glyph[i](cx, y0 + 70));
+    kids.push(E("text", { class: "t-strong", x: cx, y: y0 + 124, "text-anchor": "middle" }, title));
+    lines.forEach((l, k) => kids.push(E("text", { class: "t-muted", x: cx, y: y0 + 142 + k * 15, "text-anchor": "middle" }, l)));
+    if (i < steps.length - 1) kids.push(E("path", { class: "arrow-ink", d: `M${x + bw + 4},${y0 + bh / 2} L${x + bw + gap - 4},${y0 + bh / 2}` }));
+  });
+  const svg = V.diagram(W, H, ...kids);
+  svg.style.minWidth = "720px";
+  const fig = V.figure(svg, E("span", {}, E("b", {}, "The recipe. "), "Step 2 is the diagonal of the Gauss–Newton Hessian, the same quantity as a seismic illumination map."), "Five-step recipe: render from the prompt camera, measure each splat's sensitivity, apply a threshold, assign tiers, colour by tier");
+  fig.style.overflowX = "auto";
+  document.getElementById("recipe").append(fig);
+})();
 
 /* ---------- interactive demo ---------- */
 const state = { cx: 320, cy: 395, heading: -90, fov: 65, second: "none", par: 8 };

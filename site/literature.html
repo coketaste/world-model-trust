@@ -9,8 +9,10 @@
 <meta property="og:title" content="Literature · world-model-trust">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/figures.css">
 <script src="assets/viz.js"></script>
 <script src="assets/lit.js"></script>
+<script src="assets/analogy.js"></script>
 </head>
 <body>
 <div id="nav"></div>
@@ -29,6 +31,8 @@
 
 <div class="callout"><strong>How to read the evidence labels</strong><b>Verified</b> means title, first author, year and identifier were fetched from arXiv or Crossref and matched. <b>Partial</b> means a related version was verified but not the exact item. "Not found in this search" never means "does not exist": conference-only, industry and non-English work can be missed. Statements of opinion or hypothesis are marked as such in the source documents.</div>
 
+<div id="overview"></div>
+
 <div class="filters" id="filters"></div>
 <p class="muted small" id="count" aria-live="polite"></p>
 <div id="rows"></div>
@@ -44,7 +48,8 @@ V.nav("literature.html");
 const E = V.el, L = window.WMT_LIT || { imaging: [], physical: [] };
 
 /* ---------- normalise the two schemas ---------- */
-const human = (id) => id.replace(/[-_]+/g, " ").replace(/^./, (c) => c.toUpperCase());
+const NICE = { tomography: "Tomography", second_order: "Second-order methods", migration: "Migration", wave_sensor_splats: "Wave-sensor splats", multiples: "Imaging with multiples", adjoint_rendering: "Adjoint and differentiable rendering", geo_borrows_vision: "Geophysics borrowing from vision", cycle_skipping_ot: "Cycle skipping and optimal transport", illumination_fisher: "Illumination and Fisher information", ambiguity: "Velocity-depth ambiguity", uq: "Uncertainty quantification", survey_design: "Survey and experimental design", wave_robots_ml: "Wave physics for robots" };
+const human = (id) => NICE[id] || id.replace(/[-_]+/g, " ").replace(/^./, (c) => c.toUpperCase());
 function catOf(r, st) {
   if (r.topic) { /* physical-AI schema: gap = what remains open, evidence = strength of prior art */
     const t = ((r.gap || "") + " " + (r.evidence || "")).toLowerCase();
@@ -100,6 +105,12 @@ function render() {
   body.replaceChildren(...refs.map((x) => E("tr", {}, E("td", {}, x.key || ""), E("td", {}, x.authors || ""), E("td", { class: "num" }, x.year || "n.d."), E("td", {}, refUrl(x.id) ? E("a", { href: refUrl(x.id), rel: "noopener" }, x.title) : x.title), E("td", {}, E("span", { class: "tag " + (vs(x.verified) === "VERIFIED" ? "ok" : "part") }, vs(x.verified).toLowerCase())))));
 }
 render();
+
+/* ---------- status matrix: click a row to open it in the list below ---------- */
+Analogy.litMatrix(document.getElementById("overview"), ALL, (r) => {
+  q.value = r.title; st.q = r.title.toLowerCase(); render();
+  const first = rowsEl.querySelector("details"); if (first) { first.open = true; first.scrollIntoView({ block: "nearest" }); }
+});
 </script>
 </body>
 </html>
