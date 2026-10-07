@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Literature · world-model-trust</title>
+<meta name="description" content="A verified map from seismic-imaging concepts to their counterparts in vision, graphics and robotics, with searchable references.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Literature · world-model-trust">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/lit.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">Verified literature map</p>
+  <h1>What already exists</h1>
+  <p class="lede">Seismic imaging and spatial AI share much of their mathematics, and many bridges have already been built in both directions. This page pairs each seismic concept with its closest existing counterparts so that nothing in this project is presented as new when it is not. It describes work; it takes no position against anyone's.</p>
+</section>
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>What already exists for each seismic concept, and which references were verified against arXiv or Crossref.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>Most transfers are done or active. Open niches are narrow and mostly unproven.</p></div>
+</aside>
+
+
+<div class="callout"><strong>How to read the evidence labels</strong><b>Verified</b> means title, first author, year and identifier were fetched from arXiv or Crossref and matched. <b>Partial</b> means a related version was verified but not the exact item. "Not found in this search" never means "does not exist": conference-only, industry and non-English work can be missed. Statements of opinion or hypothesis are marked as such in the source documents.</div>
+
+<div class="filters" id="filters"></div>
+<p class="muted small" id="count" aria-live="polite"></p>
+<div id="rows"></div>
+
+<h2>All references</h2>
+<p class="narrow small muted">Every reference cited above, de-duplicated. First authors only, as returned by the APIs.</p>
+<div class="card tablewrap reflist"><table id="reftable"><thead><tr><th>Key</th><th>First author</th><th class="num">Year</th><th>Title</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+
+<footer><p><a href="index.html">← Overview</a> · Source: <code>docs/literature/LITERATURE-*.md</code> (machine-readable blocks rendered here by <code>scripts/build_site_data.py</code>)</p></footer>
+</main>
+<script>
+V.nav("literature.html");
+const E = V.el, L = window.WMT_LIT || { imaging: [], physical: [] };
+
+/* ---------- normalise the two schemas ---------- */
+const human = (id) => id.replace(/[-_]+/g, " ").replace(/^./, (c) => c.toUpperCase());
+function catOf(r, st) {
+  if (r.topic) { /* physical-AI schema: gap = what remains open, evidence = strength of prior art */
+    const t = ((r.gap || "") + " " + (r.evidence || "")).toLowerCase();
+    return /active|recent/.test(t) ? "Active" : /strong prior art|crowded/.test(t) ? "Done" : /components exist/.test(t) ? "Partly done" : /not found|untested|unproven|few found|not reported|rarely|gap narrow/.test(t) ? "Open" : "Other";
+  }
+  return /^(done|well known)/i.test(st) ? "Done" : /^partly|^partial/i.test(st) ? "Partly done" : /^active/i.test(st) ? "Active" : /open|not found/i.test(st) ? "Open" : "Other";
+}
+function norm(r, source) {
+  const phys = !!r.topic, st = phys ? "" : (r.status || "");
+  return { id: r.id, source, title: r.topic || r.title || human(r.id), seismic: r.seismic || "", refs1: r.seismic_refs || [], refs2: r.counterparts || r.works || [],
+    relation: r.relationship || r.relation || "", status: st, contribution: phys ? "" : (r.contribution || ""), open: phys ? (r.gap || "") : "", evidence: r.evidence || "", cat: catOf(r, st) };
+}
+const ALL = [...L.imaging.map((r) => norm(r, "imaging")), ...L.physical.map((r) => norm(r, "physical"))];
+const vs = (v) => (v === true ? "VERIFIED" : v === false ? "UNVERIFIED" : String(v || "UNVERIFIED").toUpperCase());
+const refUrl = V.refUrl;
+const refLine = (r) => E("li", {}, E("span", { class: "tag " + (vs(r.verified) === "VERIFIED" ? "ok" : "part"), style: "margin-right:8px" }, vs(r.verified).toLowerCase()),
+  `${r.authors || ""} (${r.year || "n.d."}). `, refUrl(r.id) ? E("a", { href: refUrl(r.id), rel: "noopener" }, r.title) : r.title, r.id ? E("span", { class: "muted small" }, "  " + r.id) : null);
+
+/* ---------- filters ---------- */
+const st = { q: "", src: "all", cat: "all", ver: "all" }, fl = document.getElementById("filters");
+const q = E("input", { type: "search", placeholder: "Search concepts, authors, titles", "aria-label": "Search" });
+q.addEventListener("input", () => { st.q = q.value.toLowerCase(); render(); });
+const q0 = new URLSearchParams(location.search).get("q"); if (q0) { q.value = q0; st.q = q0.toLowerCase(); }
+fl.append(E("label", {}, E("span", {}, "Search"), q));
+const mkSeg = (label, opts, key) => fl.append(V.seg(label, opts, () => st[key], (k) => (st[key] = k), render));
+mkSeg("Area", [["all", "All"], ["imaging", "Imaging methods"], ["physical", "Physical AI"]], "src");
+mkSeg("Status of the transfer", [["all", "All"], ["Done", "Done"], ["Partly done", "Partly"], ["Active", "Active"], ["Open", "Open"]], "cat");
+mkSeg("Evidence", [["all", "All"], ["verified", "Fully verified only"]], "ver");
+
+const rowsEl = document.getElementById("rows"), countEl = document.getElementById("count");
+const hay = (r) => [r.title, r.seismic, r.relation, r.status, r.open, r.contribution, ...r.refs1.concat(r.refs2).map((x) => `${x.authors} ${x.title} ${x.id} ${x.key}`)].join(" ").toLowerCase();
+function render() {
+  const list = ALL.filter((r) => (st.src === "all" || r.source === st.src) && (st.cat === "all" || r.cat === st.cat) && (!st.q || hay(r).includes(st.q))
+    && (st.ver === "all" || r.refs1.concat(r.refs2).every((x) => vs(x.verified) === "VERIFIED")));
+  countEl.textContent = ALL.length ? `${list.length} of ${ALL.length} concept rows shown` : "No literature data found. Run scripts/build_site_data.py after the review documents exist.";
+  rowsEl.replaceChildren(...list.map((r) => {
+    const n = r.refs1.length + r.refs2.length;
+    return E("details", { class: "lit" },
+      E("summary", {}, E("b", {}, r.title), E("span", { class: "tag" }, r.cat), E("span", { class: "tag" }, r.source === "imaging" ? "imaging" : "physical AI"), E("span", { class: "muted small" }, `${n} references`)),
+      E("div", { class: "body" },
+        r.seismic ? E("p", {}, E("b", {}, "Seismic side. "), r.seismic) : null,
+        E("p", {}, E("b", {}, "Relationship. "), r.relation),
+        r.status ? E("p", {}, E("b", {}, "Status of the transfer. "), r.status) : null,
+        r.open ? E("p", {}, E("b", {}, "What remains open (as found in this search). "), r.open) : null,
+        r.contribution ? E("p", {}, E("b", {}, "Possible contribution (hypothesis). "), r.contribution) : null,
+        r.evidence ? E("p", { class: "muted small" }, E("b", {}, "Evidence. "), r.evidence) : null,
+        r.refs1.length ? E("h4", {}, "Geophysics references") : null, r.refs1.length ? E("ul", {}, r.refs1.map(refLine)) : null,
+        E("h4", {}, "Existing counterparts"), E("ul", {}, r.refs2.map(refLine))));
+  }));
+  const seen = new Map(); ALL.forEach((r) => r.refs1.concat(r.refs2).forEach((x) => { if (!seen.has(x.id || x.key || x.title)) seen.set(x.id || x.key || x.title, x); }));
+  const body = document.querySelector("#reftable tbody");
+  const refs = [...seen.values()].filter((x) => !st.q || `${x.authors} ${x.title} ${x.id} ${x.key}`.toLowerCase().includes(st.q));
+  body.replaceChildren(...refs.map((x) => E("tr", {}, E("td", {}, x.key || ""), E("td", {}, x.authors || ""), E("td", { class: "num" }, x.year || "n.d."), E("td", {}, refUrl(x.id) ? E("a", { href: refUrl(x.id), rel: "noopener" }, x.title) : x.title), E("td", {}, E("span", { class: "tag " + (vs(x.verified) === "VERIFIED" ? "ok" : "part") }, vs(x.verified).toLowerCase())))));
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+285116000249dd82646bd3797488955587f49e0817f0800919eab5a08d4e2a28  prereg/RQ2.md
+2026-10-03T00:16:13Z
+45112e649240e138ab4ba73f14e43854397da313da0a332fd97da71e523ca947  prereg/RQ2.md
+2026-10-03T01:46:11Z
+6c3ea954960941cbc22222ff72ff645220f01b063fa688d5247079d54316b9ea  prereg/RQ2.md
+2026-10-03T01:57:16Z
+113a0629198963c8598bf8552bca6d3ed93649bfbe57715fafa1bad6f61a5c52  prereg/RQ2.md
+2026-10-03T02:24:21Z
+4c44e7aea42d811969abde2fa01ad7942080f92998625b4f01b025b1f854e458  prereg/RQ2.md
+2026-10-03T02:42:48Z
+
+d6983f42a6dff51b5397cf570dd2c37f69c3ec315062494da7ccb59c5115df38  prereg/RQ2.md
+editorial rewording (tone only), recorded 2026-10-07T10:42:43Z; no change to hypotheses, criteria or analyses
+
+b9306ce5708ad5242b702829e44d422536d5835a109b10791d4ff213970f6327  prereg/RQ2.md
+editorial (header placeholder), recorded 2026-10-07T11:27:51Z; no change to hypotheses, criteria or analyses
+
+66c70e18d3e099c8cccd831f295bcd18ede91f76102033fbdda68d48e7de8841  prereg/RQ2.md
+editorial (author line), recorded 2026-10-07T14:52:58Z; no change to hypotheses, criteria or analyses

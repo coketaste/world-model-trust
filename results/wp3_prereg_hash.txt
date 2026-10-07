@@ -1,0 +1,11 @@
+d67306e11f450bda99432f491c9b19f81ab72a9f394734dca65d29fe4bf86e3c  prereg/RQ3.md
+2026-10-02T23:33:10Z (recorded before first run)
+
+8b8577fc9f8c13bd5e3ec7b4abe2a849ef1591797b2205d62ef3ab2f56805215  prereg/RQ3.md
+final (after amendments), recorded 2026-10-05T18:18:41Z during review (post-hoc record)
+
+60e312111ed12a5af78d0c48aaf356271042ec288e1f688cdb7cc5ece16abd8b  prereg/RQ3.md
+editorial rewording (tone only), recorded 2026-10-07T10:42:43Z; no change to hypotheses, criteria or analyses
+
+bb27005d8e91f6f2d8be357b63abc8f764fdeee67635bdb225db0308134f1e65  prereg/RQ3.md
+editorial (author line), recorded 2026-10-07T14:52:58Z; no change to hypotheses, criteria or analyses

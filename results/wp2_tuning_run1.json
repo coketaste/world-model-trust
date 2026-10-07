@@ -1,0 +1,54 @@
+{
+  "grid": {
+    "ot_rho0.05_eps1.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    },
+    "ot_rho0.05_eps4.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    },
+    "ot_rho0.05_eps9.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    },
+    "ot_rho0.2_eps1.0": {
+      "strict": 0,
+      "coarse": 1,
+      "n": 48
+    },
+    "ot_rho0.2_eps4.0": {
+      "strict": 0,
+      "coarse": 1,
+      "n": 48
+    },
+    "ot_rho0.2_eps9.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    },
+    "ot_rho1.0_eps1.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    },
+    "ot_rho1.0_eps4.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    },
+    "ot_rho1.0_eps9.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 48
+    }
+  },
+  "selected": "ot_rho0.2_eps1.0",
+  "selected_cfg": {
+    "rho": 0.2,
+    "eps_start": 1.0
+  }
+}

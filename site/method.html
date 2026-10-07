@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method · world-model-trust</title>
+<meta name="description" content="How the experiments were run, the research commitments, a glossary, and the limits and permissions.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Method · world-model-trust">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+</head>
+<body data-autotoc>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">Method, rigour and reproduction</p>
+  <h1>How this was done, and how to check it</h1>
+  <p class="lede">Each research question was pre-specified with a numeric success criterion, compared against the strongest simple baseline, and reported with confidence intervals, including when it fails. Extra analyses are labelled exploratory.</p>
+</section>
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>How the experiments were run, what the results do and do not show, a glossary of terms, and what is and is not permitted or claimed.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>Criteria written down before each run, strong baselines, honest negative results; but a stand-in generator and small samples.</p></div>
+</aside>
+
+
+<h2 style="margin-top:1.2em">Research commitments</h2>
+<div class="grid g2">
+  <div class="card"><h3>Pre-specification</h3><p class="small">Hypothesis, baselines, metrics and a numeric success criterion are written in <code>prereg/</code> before each run, with a locally recorded hash and timestamp. The files were not committed beforehand, so the record is self-attested, not independently verifiable. Changes go in dated amendments.</p></div>
+  <div class="card"><h3>Strong baselines first</h3><p class="small">Our own illumination score came out practically equal to plain visibility, so every later idea must beat the simple baseline, not a straw man.</p></div>
+  <div class="card"><h3>Held-out by world</h3><p class="small">In the alignment experiment, hyper-parameters were tuned on one world and tested on two others. the robot and shadows experiments have no held-out split. Scores are not picked after seeing test results, and post-hoc changes are labelled.</p></div>
+  <div class="card"><h3>Statistics</h3><p class="small">Paired bootstrap over cases. A "win" needs an interval that excludes zero, and the effect size has to matter too.</p></div>
+  <div class="card"><h3>Negative results published</h3><p class="small">A success criterion that is not met is still a result. The robot benchmark is reported as inconclusive, with its design flaws listed.</p></div>
+  <div class="card"><h3>Circularity check</h3><p class="small">Each experiment states which parts of the "truth" are built in, and reports the fair-test numbers separately.</p></div>
+  <div class="card"><h3>Public information only</h3><p class="small">Everything here is built from public pages, public papers and public example files. The starting points are open problems that World Labs describes on its own pages; the ideas are offered as complementary, and nothing evaluates or compares any company's products.</p></div>
+</div>
+
+<h2 id="claims">What the results do and do not show</h2>
+<p class="narrow">Each claim and how far it goes. All numbers and wording were also checked independently against the raw data.</p>
+<div class="card tablewrap"><table>
+<thead><tr><th>Claim</th><th>Status</th><th>Basis and limit</th></tr></thead>
+<tbody>
+<tr><td>The illumination score beats an in-frame test.</td><td>Supported (12 of 12 cases)</td><td>Synthetic truth with a stand-in generator.</td></tr>
+<tr><td>The illumination score beats plain visibility.</td><td>Not supported in practice</td><td>Difference about 0.003 AUROC; consistent with existing visibility and Fisher methods.</td></tr>
+<tr><td>Trust maps keep a simulated robot safer than "unknown = obstacle".</td><td>Untested (inconclusive)</td><td>Underpowered benchmark; the amended run is exploratory.</td></tr>
+<tr><td>Optimal transport widens the alignment basin.</td><td>Success criterion not met; the first negative result is not robust</td><td>At matched compute the comparison is inconclusive (post-hoc rerun). Eight evaluation cases from two worlds, coarse transport inputs, small tuning grid.</td></tr>
+<tr><td>A cast shadow makes depth locally identifiable.</td><td>Supported in idealised simulation only</td><td>Inverse crime; no real shadows; weakens on textured floors and when the light is mislocated.</td></tr>
+<tr><td>Ensembles of real Marble worlds reveal uncertainty inside the filled-in regions.</td><td>Not run</td><td>Needs credits and World Labs' agreement.</td></tr>
+</tbody></table></div>
+
+<h2>Pipeline</h2>
+<div class="card tablewrap"><table>
+  <thead><tr><th>Stage</th><th>What happens</th><th>Code</th></tr></thead>
+  <tbody>
+    <tr><td>Truth world</td><td>A public example splat world (a file published for download) plays the "real room".</td><td><code>wmt.synth.load_truth</code></td></tr>
+    <tr><td>Prompt photo</td><td>Rendered from the truth at the origin, four yaw angles, 65° field of view.</td><td><code>wmt.raster</code></td></tr>
+    <tr><td>Stand-in generator</td><td>A metric depth network lifts pixels to splats; a room-box prior invents the rest.</td><td><code>wmt.synth.generate</code></td></tr>
+    <tr><td>Confidence</td><td>Per-splat illumination (Gauss–Newton Hessian diagonal) from the prompt camera, plus position Fisher information.</td><td><code>wmt.raster.render</code></td></tr>
+    <tr><td>Alignment</td><td>Trimmed similarity ICP on seen splats only, to bring the generated world into the truth frame.</td><td><code>wmt.align</code></td></tr>
+    <tr><td>Grading</td><td>Error of every splat against the truth surface; AUROC, sparsification, calibration.</td><td><code>wmt.benchmark</code>, <code>wmt.stats</code></td></tr>
+  </tbody></table></div>
+
+<h2 id="glossary">Glossary</h2>
+<div class="card tablewrap"><table>
+  <thead><tr><th>Term</th><th>Plain meaning</th></tr></thead>
+  <tbody>
+    <tr><td>Gaussian splat</td><td>A soft, semi-transparent, coloured blob. A splat world can contain hundreds of thousands to millions of them.</td></tr>
+    <tr><td>Illumination</td><td>How strongly the photo constrains a splat; the diagonal of JᵀJ, as in seismic imaging.</td></tr>
+    <tr><td>AUROC</td><td>Chance that the score ranks a randomly chosen wrong splat as less trustworthy than a good one. 0.5 is a coin flip.</td></tr>
+    <tr><td>Fisher information</td><td>How much the data change if a parameter moves; its inverse bounds how well the parameter can be estimated.</td></tr>
+    <tr><td>Null direction</td><td>A change to the model that leaves the data unchanged. Near-and-small versus far-and-large is one.</td></tr>
+    <tr><td>Convergence basin</td><td>How wrong the starting guess can be before the optimiser stops finding the right answer.</td></tr>
+    <tr><td>Stand-in generator</td><td>Our own simple world generator used as a controlled test bed. It is not Marble.</td></tr>
+  </tbody></table></div>
+
+<h2>Reproduce</h2>
+<pre><code>python3 -m venv venv &amp;&amp; venv/bin/pip install -e ".[dev,depth]"
+venv/bin/python scripts/fetch_data.py                    # public example exports, SHA-256 verified
+venv/bin/python -m pytest -q
+venv/bin/python experiments/wp0_baseline/reproduce.py    # ~5 min on CPU
+venv/bin/python scripts/build_site_data.py               # regenerate this site's data from results/</code></pre>
+<p class="small muted">No GPU needed. The site is plain static files in <code>site/</code>; open <code>site/index.html</code> directly or serve the folder.</p>
+
+<h2>Limits and permissions</h2>
+<div class="callout warn"><strong>Not Marble</strong>All numbers use a stand-in generator. Testing real Marble output (the planned ensemble study) needs paid API credits and, first, written confirmation from World Labs that this research use is acceptable under their terms.</div>
+<div class="callout warn"><strong>No third-party assets</strong>World Labs and Spark files are not redistributed. The data script downloads public example files from their public locations; check World Labs' terms before reusing them. Every image on this site is this project's own plot, schematic or render.</div>
+<footer><p><a href="index.html">← Overview</a></p></footer>
+</main>
+<script>V.nav("method.html");</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+/* Styles for the geophysics primer widgets only (linked from geophysics.html). Colours come from the site's CSS variables. */
+.wg { margin: 22px 0; scroll-margin-top: 72px; }
+.wg h3 { margin: 0 0 6px; }
+.wg h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--ink2); }
+.wg-idea { font-size: 1.02rem; max-width: 52em; margin: 0 0 8px; }
+.wg-controls { padding-top: 6px; }
+.wg-panels { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 10px 0; }
+.wg-panels.two { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.wg-panel { margin: 0; }
+.wg-panel figcaption { margin-top: 6px; font-size: 0.8rem; color: var(--ink2); line-height: 1.4; }
+.wg-grid { width: 100%; height: auto; display: block; aspect-ratio: 1; border: 1px solid var(--ring); border-radius: 6px; background: var(--surface); overflow: hidden; }
+.wg-svg { width: 100%; height: auto; display: block; overflow: hidden; }
+.wg-readout { margin: 10px 0 4px; padding: 10px 14px; background: var(--accent-wash); border-radius: 8px; font-size: 0.9rem; }
+.wg-caption { margin: 6px 0 12px; max-width: 60em; }
+.wg-notes { margin-top: 14px; gap: 18px; }
+.wg-notes ul { margin: 0; padding-left: 1.1em; }
+.wg-notes li { margin-bottom: 4px; }
+.primer-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+.primer-toc a { border: 1px solid var(--ring); border-radius: 999px; padding: 4px 12px; font-size: 0.85rem; text-decoration: none; color: var(--ink2); background: var(--surface); }
+.primer-toc a:hover { border-color: var(--accent); color: var(--ink); }
+.purpose { font-size: 1.05rem; padding: 12px 16px; border-left: 3px solid var(--accent); background: var(--accent-wash); border-radius: 0 10px 10px 0; max-width: 56em; }
+.glossary dt { font-weight: 650; margin-top: 10px; }
+.glossary dd { margin: 2px 0 0; color: var(--ink2); }

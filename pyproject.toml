@@ -1,0 +1,20 @@
+[project]
+name = "wmt"
+version = "0.1.0"
+description = "Trust in generated 3D worlds: inverse-problem methods (research PoC)"
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "scipy", "matplotlib", "pillow"]
+
+[project.optional-dependencies]
+depth = ["torch", "transformers"]
+dev = ["pytest"]
+wp2 = ["open3d", "libusb-package"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

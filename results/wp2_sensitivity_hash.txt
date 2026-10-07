@@ -1,0 +1,4 @@
+2026-10-05T18:27:05Z
+301e991b5b64b24680e63591ecee8f1287742a67df8c7b1d5368838570802bbd  WP2-sensitivity.md
+(hash covers the file as written before any sensitivity run; only the Plan section existed)
+verification (added after the runs): the plan is the first 5048 bytes of results/WP2-sensitivity.md; their sha256 equals the value above (checked 2026-10-05).

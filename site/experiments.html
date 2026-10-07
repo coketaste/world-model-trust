@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The experiments · world-model-trust</title>
+<meta name="description" content="Four small pre-specified experiments testing seismic-imaging ideas on generated 3D worlds, with plain-language results and honest limits.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="The experiments: testing seismic ideas on generated 3D worlds">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">The evidence</p>
+  <h1>Four small experiments</h1>
+  <p class="lede">The ideas on the previous pages are cheap to state and easy to over-believe. So four of them were tried on small, controlled tests where the right answer is known. They are proofs of concept on a stand-in generator, not tests of Marble, and each result is reported whichever way it went.</p>
+</section>
+
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will find</div><p>One card per experiment: the question in plain words, how it was tested, and what came out, with a link to the full page.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>One idea was practically a tie with a simple baseline, two were inconclusive, and one worked only in an idealised simulation. That is useful: it shows where to look next.</p></div>
+</aside>
+
+<div class="grid g2" id="cards"></div>
+
+<h2>How to read these results</h2>
+<div class="grid g2">
+  <div class="card"><h3>A stand-in generator, not Marble</h3><p class="small">The "generated world" is built by a public depth network plus a simple room-box rule. It lets us know the truth. It says nothing about how Marble itself behaves; testing that needs paid access and permission.</p></div>
+  <div class="card"><h3>Known truth, held out where possible</h3><p class="small">A public example world plays the real room. Scores are graded against it. The alignment study tuned on one world and tested on two others; the other experiments have no held-out split.</p></div>
+  <div class="card"><h3>What "pre-specified" means here</h3><p class="small">Each question's hypothesis and success criterion were written down before its run, with a locally recorded hash. They were not committed beforehand, so the record is self-attested. Changes are listed as dated amendments, and extra analyses are labelled exploratory.</p></div>
+  <div class="card"><h3>Small samples</h3><p class="small">Twelve cases from three worlds is a proof of concept. Intervals are indicative, and cases from the same world are not independent.</p></div>
+</div>
+<footer><p><a href="index.html">← Overview</a></p></footer>
+</main>
+<script>
+V.nav("experiments.html");
+const E = V.el, D = window.WMT, f = V.fmt;
+const wp1 = D.wp1.amended;
+const items = [
+ { id: "Illumination", q: "Can we tell which parts of a generated 3D world the photo actually constrains?", how: "A public example 3D world plays the truth. A stand-in generator rebuilds it from one rendered photo, and every splat is graded against the truth.",
+   res: `The seismic-style illumination score is practically equal to plain visibility (AUROC ${f.n(D.wp0.pooled.ours, 3)} against ${f.n(D.wp0.pooled.visibility, 3)}) and beats an in-frame test (${f.n(D.wp0.pooled.frustum, 3)}) in 12 of 12 cases.`, badge: ["mixed", "Matches a simple baseline"], href: "illumination.html", means: "The value is the framing (shadow zones, tiers), not a better score." },
+ { id: "Robots", q: "Does a trust map keep a simulated robot safer?", how: "A 2D robot plans inside the generated world, then drives the same path in the true world; collisions and falls are counted.",
+   res: "Inconclusive. As specified, the conservative policies completed nothing because of design artifacts. After post-hoc fixes they matched the standard \"unknown = obstacle\" rule but did not beat it.", badge: ["mixed", "Inconclusive"], href: "robots.html", means: "A trust map has to change outcomes to matter; this benchmark could not show that." },
+ { id: "Shadows", q: "Can a cast shadow tell you how far away an object is?", how: "Fisher-information analysis of an occluder with and without a shadow, over 1,080 lighting setups.",
+   res: `In an idealised simulation, yes: without a shadow depth is exactly unobservable; with one it is locally identifiable (std of log depth about ${f.n(D.wp3.S2.std_logd, 3)}), if the shadow falls in frame. It weakens on textured floors.`, badge: ["mixed", "Simulation only"], href: "shadows.html", means: "A multiples-style argument, shown only in simulation." },
+ { id: "Alignment", q: "Does an optimal-transport misfit line up generated and real geometry better than ICP?", how: "Eight held-out cases, perturbations up to ±40% scale, 30° and one unit, five methods compared.",
+   res: D.wp2 && D.wp2.sensitivity ? `Not as a firm result. At its original, smaller compute budget one formulation was far narrower than ICP (clean check ${f.n(D.wp2.C.basins.strict.ot, 3)} against ${f.n(D.wp2.C.basins.strict.icp, 3)}); with equal compute the two are about level (${f.n(D.wp2.sensitivity.strict.basins.ot100, 3)} against ${f.n(D.wp2.sensitivity.strict.basins.icp, 3)}, inconclusive).` : "Pending.", badge: ["mixed", "Inconclusive at matched compute"], href: "alignment.html", means: "The first negative result was largely a compute artefact. Optimal-transport registration exists elsewhere; this is one formulation, not a verdict." }
+];
+const cards = document.getElementById("cards");
+items.forEach((i) => cards.append(E("a", { class: "card link idea", href: i.href },
+  E("div", { style: "display:flex;justify-content:space-between;align-items:center;gap:10px" }, E("span", { class: "muted small", style: "font-weight:600" }, i.id), V.badge(...i.badge)),
+  E("h3", { style: "margin:0" }, i.q),
+  E("div", { class: "row" }, E("b", {}, "How it was tested. "), i.how),
+  E("div", { class: "row" }, E("b", {}, "What came out. "), i.res),
+  E("div", { class: "row muted" }, E("b", {}, "What it means. "), i.means))));
+</script>
+</body>
+</html>

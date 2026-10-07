@@ -1,0 +1,58 @@
+{
+  "T1": {
+    "known texture": {
+      "ratio": 0.0005215882237540781,
+      "std_logd_at_nu0p02": 0.012482005995912602,
+      "align": 0.9998642678030565
+    },
+    "scale 4.0 m (21 nodes)": {
+      "ratio": 0.0001457548451218744,
+      "std_logd_at_nu0p02": 0.02675572123283547,
+      "align": 0.9999862248608493
+    },
+    "scale 2.0 m (52 nodes)": {
+      "ratio": 3.56865934494564e-05,
+      "std_logd_at_nu0p02": 0.07075484426373502,
+      "align": 0.9999791833501992
+    },
+    "scale 1.0 m (153 nodes)": {
+      "ratio": 3.163355105399607e-05,
+      "std_logd_at_nu0p02": 0.10987670092422688,
+      "align": 0.9999864280856896
+    },
+    "scale 0.5 m (452 nodes)": {
+      "ratio": 5.4241340280086495e-06,
+      "std_logd_at_nu0p02": 0.2934456847537056,
+      "align": 0.9999997815911633
+    }
+  },
+  "shadow_footprint": {
+    "n_px": 118,
+    "x_extent_m": 1.1830985915492953,
+    "z_extent_m": 0.44608149571190525,
+    "max_darkening": 0.4472585742441194
+  },
+  "T2": [
+    {
+      "light_error_m": 0.05,
+      "median_abs_bias_logd": 0.0020720105282420946,
+      "max_abs_bias_logd": 0.005632583479437197
+    },
+    {
+      "light_error_m": 0.1,
+      "median_abs_bias_logd": 0.005728728460019705,
+      "max_abs_bias_logd": 0.010470790720344568
+    },
+    {
+      "light_error_m": 0.3,
+      "median_abs_bias_logd": 0.02115590994079284,
+      "max_abs_bias_logd": 0.038306451570827064
+    },
+    {
+      "light_error_m": 1.0,
+      "median_abs_bias_logd": 0.037231653631930955,
+      "max_abs_bias_logd": 0.06516084095042353
+    }
+  ],
+  "fisher_std_known_ref": 0.004933512032618253
+}

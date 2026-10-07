@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What could a geophysicist contribute to spatial intelligence and physical AI? · world-model-trust</title>
+<meta name="description" content="An independent brainstorm and set of small experiments exploring how seismic-imaging methods could contribute to spatial intelligence and physical AI, with verified prior work and honest results.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="What could a geophysicist contribute to spatial intelligence and physical AI?">
+<meta property="og:description" content="Seismic-imaging methods meet generated 3D worlds and robots: ideas, small experiments, and what already exists.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero">
+  <p class="eyebrow">An independent brainstorm and proof-of-concept notebook · not affiliated with World Labs</p>
+  <h1>What could a geophysicist contribute to spatial intelligence and physical AI?</h1>
+  <p class="lede">Companies such as World Labs build models that generate and reconstruct 3D worlds for people and robots. Seismic imaging has spent decades on a closely related problem: recovering a hidden 3D structure from sparse, indirect measurements, and saying honestly what the data do and do not tell you. This site explores how those methods could help, tries the ideas on small experiments, and checks what already exists.</p>
+  <p class="narrow" style="margin-top:14px">This project starts from open problems that World Labs describes on its own public pages (for example, as its taxonomy post puts it, that “AI-generated geometry can look correct while containing self-intersections or wrong scale that produce nonsensical physics”, or that “Object shape, weight, and friction may be uncertain”) and asks whether ideas from geophysics could complement that work. It uses public information and small stand-in experiments only, and does not evaluate or compare any company's products. Much of the relevant prior work comes from the vision and robotics communities, which the <a href="literature.html">literature page</a> credits. The ideas are hypotheses to examine, and comments or corrections from World Labs or anyone else are welcome.</p>
+  <p style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px">
+    <a class="card link" href="ideas.html" style="padding:12px 18px"><b>See the ideas →</b></a>
+    <a class="card link" href="geophysics.html" style="padding:12px 18px"><b>Learn the methods →</b></a>
+    <a class="card link" href="experiments.html" style="padding:12px 18px"><b>Check the evidence →</b></a>
+  </p>
+</section>
+
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">The question</div><p>Which seismic-imaging ideas (illumination and resolution, tomography, migration, multiples, full-waveform inversion, uncertainty) could improve how generated 3D worlds are built, trusted and used by robots?</p></div>
+  <div><div class="glance-label">The short answer so far</div><p>Almost every idea tried here already has verified prior work. What a geophysicist brings is mostly <b>discipline</b>: saying what the data constrain, testing against known truth, calibrating, and reporting negative results.</p></div>
+</aside>
+
+<section id="bridge">
+  <h2>From a need to a seismic idea</h2>
+  <p class="narrow">Each row pairs an open problem that generated worlds and robots have with the seismic idea that speaks to it, and says where this project stands. The <a href="ideas.html">Ideas</a> page has the full brainstorm.</p>
+  <div class="card tablewrap bridge"><table>
+    <thead><tr><th>An open problem</th><th>The seismic idea</th><th>Where it stands</th></tr></thead>
+    <tbody id="bridge-rows"></tbody>
+  </table></div>
+</section>
+
+<section id="found">
+  <h2>What small experiments showed</h2>
+  <p class="narrow">Four experiments on a controlled test bed where the right answer is known. They use a stand-in generator, not Marble itself, and each result is reported whichever way it went.</p>
+  <div class="grid g2" id="cards"></div>
+  </section>
+
+<section id="guide">
+  <h2>Where to start</h2>
+  <div class="grid g3">
+    <a class="card link" href="ideas.html"><div class="step"><span class="n">1</span><div><h3 style="margin:0 0 4px">I have five minutes</h3><p class="muted small" style="margin:0">Read the Ideas board, then the Experiments summary.</p></div></div></a>
+    <a class="card link" href="geophysics.html"><div class="step"><span class="n">2</span><div><h3 style="margin:0 0 4px">I want to understand the methods</h3><p class="muted small" style="margin:0">Interactive pictures of tomography, migration, ambiguity, multiples and inversion.</p></div></div></a>
+    <a class="card link" href="method.html"><div class="step"><span class="n">3</span><div><h3 style="margin:0 0 4px">I want to check the work</h3><p class="muted small" style="margin:0">How the experiments were run, what the results do and do not show, and the limits.</p></div></div></a>
+  </div>
+</section>
+
+<section id="honest">
+  <h2>What this site does not claim</h2>
+  <div class="callout warn"><strong>No new algorithm.</strong>Second-order optimisation, Fisher-information uncertainty, optimal-transport registration, shape-from-shadows and migration for non-line-of-sight imaging all already exist. The <a href="literature.html">literature map</a> lists them.</div>
+  <div class="callout warn"><strong>Nothing here tests Marble itself.</strong>Testing real Marble output needs paid API credits and, first, World Labs' agreement that this research use is acceptable.</div>
+  <div class="callout warn"><strong>Proofs of concept, not products.</strong>Small samples, a stand-in generator and idealised simulations. The <a href="method.html#claims">Method page</a> lists what each result does and does not show.</div>
+</section>
+
+<footer><p>Pages are generated from <code>results/</code> by <code>scripts/build_site_data.py</code>. Numbers are proofs of concept on a stand-in generator. New to a term? See the <a href="method.html#glossary">glossary</a>.</p></footer>
+</main>
+<script>
+V.nav("index.html");
+const E = V.el, D = window.WMT, f = V.fmt;
+const wp1 = D.wp1.amended;
+
+const rows = [
+ ["Which parts of a generated world come directly from the input, and which are filled in by the model?", "Illumination and resolution analysis: show how strongly the data constrain each point.", ["mixed", "Tested: practically equal to visibility"], "illumination.html"],
+ ["One photo cannot tell near-and-small from far-and-large.", "The velocity–depth ambiguity, and imaging with multiples (a cast shadow as a second view).", ["mixed", "Tested in simulation only"], "shadows.html"],
+ ["How different could the filled-in part be?", "Ensembles and posterior sampling to quantify uncertainty.", ["run", "Not run: needs credits and permission"], "ideas.html"],
+ ["Which physical parameters of an object can a robot actually identify?", "Full-waveform-style inversion with resolution analysis and experimental design.", ["mixed", "Synthetic study; heavily covered by others"], "geophysics.html"],
+ ["Line up a generated world with real data.", "Misfit design to avoid local minima (cycle skipping).", ["mixed", "Tested: inconclusive at matched compute"], "alignment.html"],
+ ["Will a trust map keep a robot safe?", "Blind tests against known truth and quality control.", ["mixed", "Tested: inconclusive"], "robots.html"]
+];
+document.getElementById("bridge-rows").append(...rows.map(([need, idea, b, href]) => E("tr", {}, E("td", {}, need), E("td", {}, idea), E("td", {}, E("a", { href }, V.badge(...b))))));
+
+const cards = document.getElementById("cards");
+[
+ ["Illumination", "mixed", "Matches a simple baseline", `A seismic-style "illumination score" ranks which parts of a rebuilt 3D world are unreliable about as well as a simple "can a ray reach it?" check (${f.n(D.wp0.pooled.ours, 3)} against ${f.n(D.wp0.pooled.visibility, 3)}, where 1.0 is perfect and 0.5 is chance), and clearly better than "is it inside the photo's frame?" (${f.n(D.wp0.pooled.frustum, 3)}).`, "illumination.html"],
+ ["Robots", "mixed", "Inconclusive", `In a simulated test, no way of using the map beat the standard rule "treat the unknown as an obstacle" (${f.pct(wp1.policies.ours.fail_rate, 1)} against ${f.pct(wp1.policies.unknown_obstacle.fail_rate, 1)} failures in an exploratory run). The test was too small to settle the question.`, "robots.html"],
+ ["Alignment", D.wp2 ? "mixed" : "run", D.wp2 ? "Inconclusive at matched compute" : "Running", D.wp2 && D.wp2.sensitivity ? `Lining up a generated 3D shape with a real one: a newer matching method looked far worse than the standard one at first, but with equal computing effort the two are about level (${f.n(D.wp2.sensitivity.strict.basins.ot100, 3)} against ${f.n(D.wp2.sensitivity.strict.basins.icp, 3)}).` : "Pending.", "alignment.html"],
+ ["Shadows", "mixed", "Simulation only", `In an idealised simulation, a cast shadow lets you work out an object's distance from a single photo, if the shadow is in view. Without a shadow the distance cannot be determined at all (the measurement carries no information about it).`, "shadows.html"]
+].forEach(([t, k, b, x, h]) => cards.append(E("a", { class: "card link", href: h },
+  E("div", { style: "display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px" }, E("b", {}, t), V.badge(k, b)), E("p", { class: "muted small", style: "margin:0" }, x))));
+</script>
+</body>
+</html>

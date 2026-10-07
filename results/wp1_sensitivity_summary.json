@@ -1,0 +1,1602 @@
+{
+  "S0": {
+    "means": {
+      "no_mask": {
+        "fail_rate": 0.08125,
+        "completion": 0.2520833333333333,
+        "planned_rate": 0.3333333333333333,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      },
+      "frustum": {
+        "fail_rate": 0.049999999999999996,
+        "completion": 0.1708333333333333,
+        "planned_rate": 0.22083333333333333,
+        "path_ratio_common": 1.000831060662,
+        "n_common_cases_path_ratio": 3
+      },
+      "visibility": {
+        "fail_rate": 0.049999999999999996,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22916666666666666,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "ours": {
+        "fail_rate": 0.04791666666666666,
+        "completion": 0.1708333333333333,
+        "planned_rate": 0.21875,
+        "path_ratio_common": 1.000831060662,
+        "n_common_cases_path_ratio": 3
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.04583333333333333,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22499999999999998,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      }
+    },
+    "vs_uo": {
+      "no_mask": {
+        "fail_rate": {
+          "mean": 0.03541666666666667,
+          "lo": 0.008333333333333333,
+          "hi": 0.07083333333333336,
+          "wins": 5,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.03541666666666667,
+            "lo": 0.004843750000000006,
+            "hi": 0.08125000000000002,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.07291666666666667,
+          "lo": 0.027083333333333338,
+          "hi": 0.13124999999999998,
+          "wins": 8,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.07291666666666667,
+            "lo": 0.02291666666666667,
+            "hi": 0.14375,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": false,
+        "benefit": true,
+        "gate": false
+      },
+      "frustum": {
+        "fail_rate": {
+          "mean": 0.00416666666666667,
+          "lo": 0.0,
+          "hi": 0.012500000000000011,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.00416666666666667,
+            "lo": 0.0,
+            "hi": 0.01666666666666668,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.008333333333333337,
+          "lo": -0.02500000000000001,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.008333333333333337,
+            "lo": -0.03333333333333335,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0009426433654523189,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0009426433654523189,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "visibility": {
+        "fail_rate": {
+          "mean": 0.00416666666666667,
+          "lo": 0.0,
+          "hi": 0.012500000000000011,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.00416666666666667,
+            "lo": 0.0,
+            "hi": 0.01666666666666668,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "ours": {
+        "fail_rate": {
+          "mean": 0.002083333333333335,
+          "lo": 0.0,
+          "hi": 0.0062500000000000056,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.002083333333333335,
+            "lo": 0.0,
+            "hi": 0.00833333333333334,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.008333333333333337,
+          "lo": -0.02500000000000001,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.008333333333333337,
+            "lo": -0.03333333333333335,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0009426433654523189,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0009426433654523189,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "oracle": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.8208333333333333,
+          "lo": 0.625,
+          "hi": 1.0,
+          "wins": 12,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.8208333333333333,
+            "lo": 0.56875,
+            "hi": 1.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": true,
+        "gate": true
+      }
+    },
+    "strata": {
+      "seen": {
+        "n_cases": 5,
+        "n_goals": 95,
+        "means": {
+          "no_mask": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.21666666666666665
+          },
+          "frustum": {
+            "completion": 0.5,
+            "fail_rate": 0.19
+          },
+          "visibility": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.19
+          },
+          "ours": {
+            "completion": 0.5,
+            "fail_rate": 0.18
+          },
+          "unknown_obstacle": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.16999999999999998
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.04666666666666666,
+              "lo": 0.0,
+              "hi": 0.1,
+              "wins": 2,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": -0.040000000000000015,
+              "lo": -0.12000000000000004,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.019999999999999997,
+              "lo": 0.0,
+              "hi": 0.059999999999999984,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.019999999999999997,
+              "lo": 0.0,
+              "hi": 0.059999999999999984,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": -0.040000000000000015,
+              "lo": -0.12000000000000004,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.010000000000000009,
+              "lo": 0.0,
+              "hi": 0.030000000000000027,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.4600000000000001,
+              "lo": 0.09000000000000001,
+              "hi": 0.8300000000000001,
+              "wins": 5,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          }
+        }
+      },
+      "unseen": {
+        "n_cases": 12,
+        "n_goals": 385,
+        "means": {
+          "no_mask": {
+            "completion": 0.22458333333333333,
+            "fail_rate": 0.05541666666666667
+          },
+          "frustum": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "visibility": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "ours": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "unknown_obstacle": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.09125000000000001,
+              "lo": 0.03500000000000002,
+              "hi": 0.15791666666666665,
+              "wins": 8,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": 0.04083333333333334,
+              "lo": 0.008333333333333333,
+              "hi": 0.09416666666666668,
+              "wins": 5,
+              "n": 12,
+              "excludes_zero": true
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.8666666666666667,
+              "lo": 0.6791666666666667,
+              "hi": 1.0,
+              "wins": 12,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          }
+        }
+      }
+    },
+    "n_goals": 480,
+    "n_seen_goals": 95,
+    "cases_with_seen": 5,
+    "uo_completes_anything_in_cases": 3
+  },
+  "S1": {
+    "means": {
+      "no_mask": {
+        "fail_rate": 0.08125,
+        "completion": 0.2520833333333333,
+        "planned_rate": 0.3333333333333333,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      },
+      "frustum": {
+        "fail_rate": 0.049999999999999996,
+        "completion": 0.1708333333333333,
+        "planned_rate": 0.22083333333333333,
+        "path_ratio_common": 1.000831060662,
+        "n_common_cases_path_ratio": 3
+      },
+      "visibility": {
+        "fail_rate": 0.049999999999999996,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22916666666666666,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "ours": {
+        "fail_rate": 0.04791666666666666,
+        "completion": 0.1708333333333333,
+        "planned_rate": 0.21875,
+        "path_ratio_common": 1.000831060662,
+        "n_common_cases_path_ratio": 3
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.04583333333333333,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22499999999999998,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      }
+    },
+    "vs_uo": {
+      "no_mask": {
+        "fail_rate": {
+          "mean": 0.03541666666666667,
+          "lo": 0.008333333333333333,
+          "hi": 0.07083333333333336,
+          "wins": 5,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.03541666666666667,
+            "lo": 0.004843750000000006,
+            "hi": 0.08125000000000002,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.07291666666666667,
+          "lo": 0.027083333333333338,
+          "hi": 0.13124999999999998,
+          "wins": 8,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.07291666666666667,
+            "lo": 0.02291666666666667,
+            "hi": 0.14375,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": false,
+        "benefit": true,
+        "gate": false
+      },
+      "frustum": {
+        "fail_rate": {
+          "mean": 0.00416666666666667,
+          "lo": 0.0,
+          "hi": 0.012500000000000011,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.00416666666666667,
+            "lo": 0.0,
+            "hi": 0.01666666666666668,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.008333333333333337,
+          "lo": -0.02500000000000001,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.008333333333333337,
+            "lo": -0.03333333333333335,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0009426433654523189,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0009426433654523189,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "visibility": {
+        "fail_rate": {
+          "mean": 0.00416666666666667,
+          "lo": 0.0,
+          "hi": 0.012500000000000011,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.00416666666666667,
+            "lo": 0.0,
+            "hi": 0.01666666666666668,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "ours": {
+        "fail_rate": {
+          "mean": 0.002083333333333335,
+          "lo": 0.0,
+          "hi": 0.0062500000000000056,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.002083333333333335,
+            "lo": 0.0,
+            "hi": 0.00833333333333334,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.008333333333333337,
+          "lo": -0.02500000000000001,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.008333333333333337,
+            "lo": -0.03333333333333335,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0009426433654523189,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0009426433654523189,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "oracle": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.8208333333333333,
+          "lo": 0.625,
+          "hi": 1.0,
+          "wins": 12,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.8208333333333333,
+            "lo": 0.56875,
+            "hi": 1.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": true,
+        "gate": true
+      }
+    },
+    "strata": {
+      "seen": {
+        "n_cases": 5,
+        "n_goals": 95,
+        "means": {
+          "no_mask": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.21666666666666665
+          },
+          "frustum": {
+            "completion": 0.5,
+            "fail_rate": 0.19
+          },
+          "visibility": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.19
+          },
+          "ours": {
+            "completion": 0.5,
+            "fail_rate": 0.18
+          },
+          "unknown_obstacle": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.16999999999999998
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.04666666666666666,
+              "lo": 0.0,
+              "hi": 0.1,
+              "wins": 2,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": -0.040000000000000015,
+              "lo": -0.12000000000000004,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.019999999999999997,
+              "lo": 0.0,
+              "hi": 0.059999999999999984,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.019999999999999997,
+              "lo": 0.0,
+              "hi": 0.059999999999999984,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": -0.040000000000000015,
+              "lo": -0.12000000000000004,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.010000000000000009,
+              "lo": 0.0,
+              "hi": 0.030000000000000027,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.4600000000000001,
+              "lo": 0.09000000000000001,
+              "hi": 0.8300000000000001,
+              "wins": 5,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          }
+        }
+      },
+      "unseen": {
+        "n_cases": 12,
+        "n_goals": 385,
+        "means": {
+          "no_mask": {
+            "completion": 0.22458333333333333,
+            "fail_rate": 0.05541666666666667
+          },
+          "frustum": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "visibility": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "ours": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "unknown_obstacle": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.09125000000000001,
+              "lo": 0.03500000000000002,
+              "hi": 0.15791666666666665,
+              "wins": 8,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": 0.04083333333333334,
+              "lo": 0.008333333333333333,
+              "hi": 0.09416666666666668,
+              "wins": 5,
+              "n": 12,
+              "excludes_zero": true
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.8666666666666667,
+              "lo": 0.6791666666666667,
+              "hi": 1.0,
+              "wins": 12,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          }
+        }
+      }
+    },
+    "n_goals": 480,
+    "n_seen_goals": 95,
+    "cases_with_seen": 5,
+    "uo_completes_anything_in_cases": 3
+  },
+  "S1b": {
+    "means": {
+      "no_mask": {
+        "fail_rate": 0.08125,
+        "completion": 0.2520833333333333,
+        "planned_rate": 0.3333333333333333,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_cases_path_ratio": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_cases_path_ratio": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_cases_path_ratio": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.04583333333333333,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22499999999999998,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      }
+    },
+    "vs_uo": {
+      "no_mask": {
+        "fail_rate": {
+          "mean": 0.03541666666666667,
+          "lo": 0.008333333333333333,
+          "hi": 0.07083333333333336,
+          "wins": 5,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.03541666666666667,
+            "lo": 0.004843750000000006,
+            "hi": 0.08125000000000002,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.07291666666666667,
+          "lo": 0.027083333333333338,
+          "hi": 0.13124999999999998,
+          "wins": 8,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.07291666666666667,
+            "lo": 0.02291666666666667,
+            "hi": 0.14375,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": false,
+        "benefit": true,
+        "gate": false
+      },
+      "frustum": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.17916666666666667,
+          "lo": -0.375,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.17916666666666667,
+            "lo": -0.43125,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": NaN,
+          "lo": NaN,
+          "hi": NaN,
+          "wins": 0,
+          "n": 0,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": NaN,
+            "lo": NaN,
+            "hi": NaN,
+            "n": 0
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "visibility": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.17916666666666667,
+          "lo": -0.375,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.17916666666666667,
+            "lo": -0.43125,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": NaN,
+          "lo": NaN,
+          "hi": NaN,
+          "wins": 0,
+          "n": 0,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": NaN,
+            "lo": NaN,
+            "hi": NaN,
+            "n": 0
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "ours": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.17916666666666667,
+          "lo": -0.375,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.17916666666666667,
+            "lo": -0.43125,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": NaN,
+          "lo": NaN,
+          "hi": NaN,
+          "wins": 0,
+          "n": 0,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": NaN,
+            "lo": NaN,
+            "hi": NaN,
+            "n": 0
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "oracle": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.8208333333333333,
+          "lo": 0.625,
+          "hi": 1.0,
+          "wins": 12,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.8208333333333333,
+            "lo": 0.56875,
+            "hi": 1.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": true,
+        "gate": true
+      }
+    },
+    "strata": {
+      "seen": {
+        "n_cases": 5,
+        "n_goals": 95,
+        "means": {
+          "no_mask": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.21666666666666665
+          },
+          "frustum": {
+            "completion": 0.0,
+            "fail_rate": 0.0
+          },
+          "visibility": {
+            "completion": 0.0,
+            "fail_rate": 0.0
+          },
+          "ours": {
+            "completion": 0.0,
+            "fail_rate": 0.0
+          },
+          "unknown_obstacle": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.16999999999999998
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.04666666666666666,
+              "lo": 0.0,
+              "hi": 0.1,
+              "wins": 2,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": -0.5399999999999999,
+              "lo": -0.9099999999999999,
+              "hi": -0.16999999999999998,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": -0.5399999999999999,
+              "lo": -0.9099999999999999,
+              "hi": -0.16999999999999998,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": -0.5399999999999999,
+              "lo": -0.9099999999999999,
+              "hi": -0.16999999999999998,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.4600000000000001,
+              "lo": 0.09000000000000001,
+              "hi": 0.8300000000000001,
+              "wins": 5,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          }
+        }
+      },
+      "unseen": {
+        "n_cases": 12,
+        "n_goals": 385,
+        "means": {
+          "no_mask": {
+            "completion": 0.22458333333333333,
+            "fail_rate": 0.05541666666666667
+          },
+          "frustum": {
+            "completion": 0.0,
+            "fail_rate": 0.0
+          },
+          "visibility": {
+            "completion": 0.0,
+            "fail_rate": 0.0
+          },
+          "ours": {
+            "completion": 0.0,
+            "fail_rate": 0.0
+          },
+          "unknown_obstacle": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.09125000000000001,
+              "lo": 0.03500000000000002,
+              "hi": 0.15791666666666665,
+              "wins": 8,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": 0.04083333333333334,
+              "lo": 0.008333333333333333,
+              "hi": 0.09416666666666668,
+              "wins": 5,
+              "n": 12,
+              "excludes_zero": true
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": -0.13333333333333333,
+              "lo": -0.3208333333333333,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": -0.13333333333333333,
+              "lo": -0.3208333333333333,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": -0.13333333333333333,
+              "lo": -0.3208333333333333,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.8666666666666667,
+              "lo": 0.6791666666666667,
+              "hi": 1.0,
+              "wins": 12,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          }
+        }
+      }
+    },
+    "n_goals": 480,
+    "n_seen_goals": 95,
+    "cases_with_seen": 5,
+    "uo_completes_anything_in_cases": 3
+  },
+  "S0_reproduction_max_abs_diff": 0.0
+}

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alignment · world-model-trust</title>
+<meta name="description" content="Why registration gets stuck in the wrong answer, and whether an optimal-transport misfit helps: a toy and the results.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Alignment · world-model-trust">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/misfit-demo.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">Experiment 4 of 4 · alignment</p>
+  <h1>Getting stuck in the wrong answer</h1>
+  <p class="lede">To train a robot on a generated world, the world has to be lined up with what the robot really sees. Registration methods like ICP slide downhill and stop in the first valley, which can be the wrong one. Full-waveform inversion calls this <em>cycle skipping</em>, and optimal-transport misfits were introduced to avoid it. <span id="status"></span></p>
+</section>
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>Why aligning generated and real geometry can get stuck (cycle skipping), and whether optimal transport helps.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>One optimal-transport formulation looked far worse than ICP, but it had a tenth of the update budget; at matched compute the two are about level (inconclusive). Point-to-plane ICP did better, a classical result.</p></div>
+</aside>
+
+
+<h2 style="margin-top:1.2em">Cycle skipping in one dimension</h2>
+<p class="narrow">The "data" are a pattern of narrow bumps and a shifted copy. The plot shows how much each misfit changes as the shift grows. A local optimiser follows the curve downhill, so the number of valleys is the number of places it can get stuck. Narrow features make the L2 curve ripple; the optimal-transport curve stays one smooth bowl.</p>
+<div class="filters" id="controls"></div>
+<div id="charts"></div>
+<div class="stats" id="minima"></div>
+<div class="callout"><strong>Why this matters for geometry</strong>Registering a generated world to real data has the same structure: a wrong starting scale, rotation or offset, and a misfit with many local minima. A Wasserstein misfit compares <em>where the mass is</em>, so it gives a useful pull even when the two clouds barely overlap.</div>
+
+<h2>The experiment</h2>
+<div class="grid g2">
+  <div class="card"><h3>Question</h3><p class="small">Does an optimal-transport misfit give a convergence basin at least 1.5× as wide as trimmed ICP when aligning a generated world to reference geometry, under errors in scale, rotation and translation?</p></div>
+  <div class="card"><h3>Design (pre-specified)</h3><p class="small">12 synthetic-truth cases; world held out for tuning, 8 cases for evaluation. Perturbation levels up to 2× the proposal's "scale ±40%, rotation 30°, translation 1 unit", five draws per level. Methods: trimmed ICP, point-to-plane ICP, unbalanced entropic OT, an OT→ICP hybrid, and FPFH+RANSAC as a reference. Success: aligned within a quarter of the tolerance. Basin = the largest perturbation at which every draw succeeds.</p></div>
+</div>
+<div id="results">
+  <div class="callout warn"><strong>Read this first: the result changed after a self-check</strong>As first run, optimal transport had 10 similarity updates against ICP's 100, and it looked much worse. A post-hoc rerun with matched compute (100 updates each) found the two about level, with an inconclusive comparison. The earlier negative verdict was largely a compute artefact. The numbers below are the first run; the chart further down shows how the basin grows with compute. Full details: <code>results/WP2-sensitivity.md</code>.</div>
+  <div class="callout warn" id="gate-callout" hidden><strong>Result: the success criterion is not met, and the first negative result was largely a compute artefact.</strong><span id="gate-text"></span></div>
+  <div class="filters" id="rfilters" hidden></div>
+  <div id="rcharts"></div>
+  <div id="rforest"></div>
+  <div class="grid g2" id="rnotes"></div>
+</div>
+<details><summary>Caveats stated before the run</summary>
+  <ul>
+    <li>In the main variants the "reference" is itself an ICP solution, so ICP has a built-in advantage. A third variant uses an exact known transform to remove that circularity and is trusted more if they disagree.</li>
+    <li>The generator is a stand-in, not Marble; real generator output would have different statistics for the parts it fills in.</li>
+    <li>The OT inputs are subsampled, so its final accuracy is coarser than ICP's. The OT→ICP hybrid is reported to separate basin width from final accuracy.</li>
+  </ul>
+</details>
+<footer><p><a href="index.html">← Overview</a> · Source: <code>prereg/RQ2.md</code>, <code>results/WP2.md</code></p></footer>
+</main>
+<script>
+V.nav("alignment.html");
+const E = V.el, D = window.WMT;
+document.getElementById("status").append(D.wp2 ? V.badge("mixed", "Inconclusive at matched compute") : V.badge("run", "Evaluation running"));
+
+/* ---------- misfit toy ---------- */
+const st = { width: 0.2 };
+const ctl = document.getElementById("controls");
+ctl.append(V.slider("Feature width (narrower = more cycle skipping)", () => st.width, (v) => (st.width = v), 0.12, 0.7, 0.02, "", draw, (v) => v.toFixed(2)));
+const charts = document.getElementById("charts"), minima = document.getElementById("minima");
+const S = [{ key: "l2", label: "L2 misfit", color: "var(--s1)" }, { key: "w2", label: "Optimal-transport (Wasserstein-2) misfit", color: "var(--s2)" }];
+function draw() {
+  const cv = MisfitDemo.curves(st.width), W = 760, H = 300, x0 = 46, x1 = W - 20, y0 = 14, y1 = H - 36;
+  const sx = V.scale(-5, 5, x0, x1), sy = V.scale(0, 1, y1, y0);
+  charts.replaceChildren();
+  const c = V.card(charts, { title: "Misfit against the shift between pattern and copy", sub: "Each curve is scaled to its own maximum. Lower is a better match; a valley away from zero is a trap.", legend: S.map((s) => ({ ...s })) });
+  const svg = E("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Misfit curves for L2 and optimal transport against shift" }), g = E("g", { class: "grid" });
+  [0, 0.5, 1].forEach((t) => { g.append(E("line", { x1: x0, x2: x1, y1: sy(t), y2: sy(t) })); svg.append(E("text", { x: x0 - 8, y: sy(t) + 4, "text-anchor": "end" }, t.toFixed(1))); });
+  [-5, -2.5, 0, 2.5, 5].forEach((t) => svg.append(E("text", { x: sx(t), y: H - 14, "text-anchor": "middle" }, String(t))));
+  svg.prepend(g);
+  svg.append(E("text", { x: (x0 + x1) / 2, y: H - 0, "text-anchor": "middle" }, "shift between pattern and copy"));
+  S.slice().reverse().forEach((s) => svg.append(E("polyline", { points: cv.map((o) => `${sx(o.shift)},${sy(o[s.key])}`).join(" "), fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" })));
+  const line = E("line", { y1: y0, y2: y1, stroke: "var(--axis)", "stroke-width": 1, style: "opacity:0" }), dots = S.map((s) => E("circle", { r: 4, fill: s.color, stroke: "var(--surface)", "stroke-width": 2, style: "opacity:0" }));
+  svg.append(line, ...dots);
+  const hit = E("rect", { class: "hit", x: x0, y: y0, width: x1 - x0, height: y1 - y0 });
+  const showIdx = (i, cx, cy) => {
+    const o = cv[i];
+    line.setAttribute("x1", sx(o.shift)); line.setAttribute("x2", sx(o.shift)); line.style.opacity = 1;
+    dots.forEach((d, k) => { d.setAttribute("cx", sx(o.shift)); d.setAttribute("cy", sy(o[S[k].key])); d.style.opacity = 1; });
+    V.tip.show("shift " + o.shift.toFixed(2), S.map((s) => ({ value: V.fmt.n(o[s.key], 2), label: s.label, color: s.color })), cx, cy);
+  };
+  const move = (e) => {
+    const b = svg.getBoundingClientRect(), px = ((e.clientX - b.left) / b.width) * W, i = Math.max(0, Math.min(cv.length - 1, Math.round(((px - x0) / (x1 - x0)) * (cv.length - 1))));
+    showIdx(i, e.clientX, e.clientY);
+  };
+  hit._items = cv.map((_, i) => () => { const b = svg.getBoundingClientRect(); showIdx(i, b.left + b.width / 2, b.top + b.height / 2); });
+  hit.addEventListener("pointermove", move); hit.addEventListener("pointerleave", () => { line.style.opacity = 0; dots.forEach((d) => (d.style.opacity = 0)); V.tip.hide(); });
+  svg.append(hit); c.body.append(svg);
+  V.addTable(c, ["Shift", "L2 misfit", "OT misfit"], cv.filter((_, i) => i % 4 === 0).map((o) => [V.fmt.n(o.shift, 2), V.fmt.n(o.l2, 3), V.fmt.n(o.w2, 3)]));
+  const m1 = MisfitDemo.localMinima(cv.map((o) => o.l2)), m2 = MisfitDemo.localMinima(cv.map((o) => o.w2));
+  minima.replaceChildren(E("div", {}, E("b", {}, String(m1)), E("span", {}, "valleys in the L2 curve (one is the true answer; the others are places an optimiser can stall)")), E("div", {}, E("b", {}, String(m2)), E("span", {}, "valley in the optimal-transport curve (the true answer only)")));
+}
+draw();
+
+/* ---------- WP2 results ---------- */
+const res = document.getElementById("results");
+if (!D.wp2) res.prepend(E("div", { class: "callout" }, E("strong", {}, "Results pending"), "The pre-specified evaluation is still running."));
+else renderResults(D.wp2);
+
+function renderResults(W2) {
+  const f = (x, d = 2) => V.fmt.n(x, d);
+  const C = W2.C, A = W2.A, rc = document.getElementById("rcharts");
+  document.getElementById("gate-callout").hidden = false;
+  const SN = W2.sensitivity && W2.sensitivity.strict, vo = SN && SN.vs_icp.ot100;
+  document.getElementById("gate-text").textContent = ` The pre-specified success criterion needed an OT basin at least 1.5 times ICP's. As first run, OT's mean basin in the clean check (variant C) was ${f(C.basins.strict.ot, 3)} against ${f(C.basins.strict.icp, 3)} for ICP. But OT had a tenth of ICP's update budget.` + (SN ? ` At a matched budget of 100 updates the post-hoc rerun gives OT ${f(SN.basins.ot100, 3)} against ICP ${f(SN.basins.icp, 3)}: a difference of ${V.fmt.signed(vo.diff, 3)} with a 95% interval (${V.fmt.signed(vo.diff_lo, 3)} to ${V.fmt.signed(vo.diff_hi, 3)}) that includes zero, so the comparison is inconclusive. The criterion is still not met (ratio ${f(vo.ratio)}, interval ${f(vo.ratio_lo)} to ${f(vo.ratio_hi)}).` : "");
+
+  const NAMES = { icp: "Trimmed ICP", p2plane: "Point-to-plane ICP", ot: "Optimal transport", "ot+icp": "OT, then ICP" };
+  const COLORS = { icp: "var(--s1)", p2plane: "var(--s2)", ot: "var(--s3)", "ot+icp": "var(--s4)" };
+  const VARS = [["C", "C · exact reference (independent check)"], ["A", "A · primary (ICP reference)"], ["B", "B · with filled-in splats"]];
+  const rs = { v: "C", tol: "strict" }, fl = document.getElementById("rfilters");
+  fl.hidden = false;
+  const mkSeg = (label, opts, get, set) => fl.append(V.seg(label, opts, get, set, paint));
+  mkSeg("Variant", VARS, () => rs.v, (k) => (rs.v = k));
+  mkSeg("Success tolerance", [["strict", "Strict (tight alignment)"], ["coarse", "Coarse (right basin)"]], () => rs.tol, (k) => (rs.tol = k));
+
+  function paint() {
+    rc.replaceChildren();
+    const v = W2[rs.v], keys = Object.keys(NAMES), tolName = rs.tol === "strict" ? "strict tolerance" : "coarse tolerance";
+    // 1. success rate vs level
+    const c1 = V.card(rc, { title: "How often each method recovers the alignment", sub: `Share of runs that succeed at each perturbation level, variant ${rs.v}, ${tolName}. Level 1.0 is the proposal's ±40% scale, 30° rotation, 1 unit translation.`, legend: keys.map((k) => ({ label: NAMES[k], color: COLORS[k] })) });
+    const W = 760, H = 300, x0 = 46, x1 = W - 24, y0 = 14, y1 = H - 40, n = W2.levels.length;
+    const sx = (i) => x0 + (i / (n - 1)) * (x1 - x0), sy = V.scale(0, 1, y1, y0);
+    const svg = E("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Success rate against perturbation level for each alignment method" }), g = E("g", { class: "grid" });
+    [0, 0.25, 0.5, 0.75, 1].forEach((t) => { g.append(E("line", { x1: x0, x2: x1, y1: sy(t), y2: sy(t) })); svg.append(E("text", { x: x0 - 8, y: sy(t) + 4, "text-anchor": "end" }, Math.round(t * 100) + "%")); });
+    W2.levels.forEach((lv, i) => svg.append(E("text", { x: sx(i), y: H - 20, "text-anchor": "middle" }, String(lv))));
+    svg.append(E("text", { x: (x0 + x1) / 2, y: H - 2, "text-anchor": "middle" }, "perturbation level"));
+    svg.prepend(g);
+    keys.forEach((k) => {
+      const ys = v.curves[rs.tol][k];
+      svg.append(E("polyline", { points: ys.map((y, i) => `${sx(i)},${sy(y)}`).join(" "), fill: "none", stroke: COLORS[k], "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      ys.forEach((y, i) => svg.append(E("circle", { cx: sx(i), cy: sy(y), r: 4, fill: COLORS[k], stroke: "var(--surface)", "stroke-width": 2 })));
+    });
+    const cross = E("line", { y1: y0, y2: y1, stroke: "var(--axis)", "stroke-width": 1, style: "opacity:0" }), hit = E("rect", { class: "hit", x: x0 - 10, y: y0, width: x1 - x0 + 20, height: y1 - y0 });
+    const showR = (i, cx, cy) => { cross.setAttribute("x1", sx(i)); cross.setAttribute("x2", sx(i)); cross.style.opacity = 1; V.tip.show("level " + W2.levels[i], keys.map((k) => ({ value: V.fmt.pct(v.curves[rs.tol][k][i], 0), label: NAMES[k], color: COLORS[k] })), cx, cy); };
+    const moveR = (e) => { const b = svg.getBoundingClientRect(), px = ((e.clientX - b.left) / b.width) * W, i = Math.max(0, Math.min(n - 1, Math.round(((px - x0) / (x1 - x0)) * (n - 1)))); showR(i, e.clientX, e.clientY); };
+    hit.addEventListener("pointermove", moveR);
+    hit._items = W2.levels.map((_, i) => () => { const b = svg.getBoundingClientRect(); showR(i, b.left + b.width / 2, b.top + b.height / 2); });
+    hit.addEventListener("pointerleave", () => { cross.style.opacity = 0; V.tip.hide(); });
+    svg.append(cross, hit); c1.body.append(svg);
+    V.addTable(c1, ["Level", ...keys.map((k) => NAMES[k])], W2.levels.map((lv, i) => [String(lv), ...keys.map((k) => V.fmt.pct(v.curves[rs.tol][k][i], 0))]));
+
+    // 2. basin width
+    const c2 = V.card(rc, { title: "Convergence basin by method", sub: `Mean over 8 evaluation cases of the largest perturbation level at which all five draws succeed. Longer is more robust. Variant ${rs.v}, ${tolName}.` });
+    V.hbars(c2, { items: keys.map((k) => ({ label: NAMES[k], value: v.basins[rs.tol][k], tipLabel: "mean basin (level units)", strong: k === "ot" })), max: 0.5, valueFmt: (x) => V.fmt.n(x, 3), labelW: 170 });
+    V.addTable(c2, ["Method", "Mean basin"], keys.map((k) => [NAMES[k], V.fmt.n(v.basins[rs.tol][k], 3)]));
+  }
+  paint();
+
+  // 3. forest of OT - ICP (fixed, not filtered)
+  const fc = V.card(document.getElementById("rforest"), { title: "Optimal transport minus ICP, basin width, all variants (first run, unequal budgets)", sub: "Mean paired difference over 8 cases with a 95% bootstrap interval. Negative means OT has the narrower basin. Variant B strict is omitted: every method scored zero." });
+  const items = [["C", "strict"], ["C", "coarse"], ["A", "strict"], ["A", "coarse"], ["B", "coarse"]].map(([vv, t]) => { const x = W2[vv].comparisons[`${t}:ot_vs_icp`]; return { label: `Variant ${vv}, ${t}`, mean: x.diff, lo: x.diff_lo, hi: x.diff_hi }; });
+  V.forest(fc, { items, domain: [-0.3, 0.1], d: 3 });
+  V.addTable(fc, ["Variant and tolerance", "Mean difference", "CI low", "CI high"], items.map((i) => [i.label, V.fmt.signed(i.mean, 3), V.fmt.signed(i.lo, 3), V.fmt.signed(i.hi, 3)]));
+
+  if (W2.sensitivity) {
+    const S = W2.sensitivity.strict, sc = V.card(document.getElementById("rforest"), { title: "Optimal transport's basin grows with its compute budget", sub: "Mean basin over 8 cases (5 draws each), clean check, strict tolerance. Post-hoc sensitivity run with a collision-free seed, so not draw-for-draw comparable with the first run. Longer is more robust." });
+    const items = [["Trimmed ICP (100 updates)", "icp"], ["Point-to-plane ICP", "p2plane"], ["Optimal transport, 10 updates (first run)", "ot10"], ["Optimal transport, 30 updates", "ot30"], ["Optimal transport, 100 updates (matched)", "ot100"], ["Optimal transport 100, then ICP", "ot100+icp"]];
+    document.getElementById("results").insertBefore(sc.root, document.getElementById("rfilters"));
+    V.hbars(sc, { items: items.map(([l, k]) => ({ label: l, value: S.basins[k], tipLabel: "mean basin (level units)", strong: k === "ot100" })), max: 0.5, valueFmt: (x) => V.fmt.n(x, 3), labelW: 250 });
+    V.addTable(sc, ["Method", "Mean basin", "Minus ICP [95% CI]"], items.map(([l, k]) => { const v = S.vs_icp[k]; return [l, V.fmt.n(S.basins[k], 3), v ? V.fmt.signed(v.diff, 3) + " [" + V.fmt.signed(v.diff_lo, 3) + ", " + V.fmt.signed(v.diff_hi, 3) + "]" : "reference"]; }));
+  }
+  const notes = document.getElementById("rnotes"), p2 = C.comparisons["strict:p2plane_vs_icp"];
+  notes.append(
+    E("div", { class: "card" }, E("h3", {}, "An unplanned side result"), E("p", { class: "small" }, `Point-to-plane ICP (our own similarity version) had a wider basin than the plain trimmed ICP in the clean check: ratio ${f(p2.ratio)} (95% CI ${f(p2.ratio_lo)} to ${f(p2.ratio_hi)}) at the same final accuracy. Point-to-plane refinement is a classical improvement over point-to-point matching, so this is a sanity check rather than a discovery. It was not pre-specified, so treat it as exploratory.`)),
+    E("div", { class: "card" }, E("h3", {}, "Global matching failed too"), E("p", { class: "small" }, `FPFH feature matching with RANSAC succeeded in ${W2.fpfh_success_runs} of ${W2.fpfh_total_runs} runs. Its features are not scale invariant, and these starting errors include large scale changes. Its voxel size was not tuned.`)),
+    E("div", { class: "card" }, E("h3", {}, "Why OT lost at first"), E("p", { class: "small" }, "A matched-budget rerun found the main reason was compute: giving optimal transport 100 similarity updates, as ICP had, closes the gap, while more Sinkhorn iterations do not help. Other factors may remain: the transport stage used only about 600 source and 1,500 target points, close to the strict tolerance. Entropic blur biases scale, and with only part of the room visible the plan can be pulled toward wrong walls. The 1D convexity result that motivates Wasserstein misfits does not obviously carry over to a 3D partial-overlap problem with a seven-parameter group.")),
+    E("div", { class: "card" }, E("h3", {}, "What this does not rule out"), E("p", { class: "small" }, "Only 8 cases from 2 worlds, a stand-in generator, and one OT formulation with a small tuning grid. Optimal transport between image or depth distributions, or per-ray 1D transport, would be a fairer test of the seismic idea and was not tried.")));
+}
+window.addEventListener("themechange", draw);
+</script>
+</body>
+</html>

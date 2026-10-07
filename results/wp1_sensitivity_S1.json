@@ -1,0 +1,1660 @@
+{
+  "variant": "S1",
+  "config": {
+    "trust_blind": true,
+    "uo_blind": true
+  },
+  "aggregate": {
+    "means": {
+      "no_mask": {
+        "fail_rate": 0.08125,
+        "completion": 0.2520833333333333,
+        "planned_rate": 0.3333333333333333,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      },
+      "frustum": {
+        "fail_rate": 0.049999999999999996,
+        "completion": 0.1708333333333333,
+        "planned_rate": 0.22083333333333333,
+        "path_ratio_common": 1.000831060662,
+        "n_common_cases_path_ratio": 3
+      },
+      "visibility": {
+        "fail_rate": 0.049999999999999996,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22916666666666666,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "ours": {
+        "fail_rate": 0.04791666666666666,
+        "completion": 0.1708333333333333,
+        "planned_rate": 0.21875,
+        "path_ratio_common": 1.000831060662,
+        "n_common_cases_path_ratio": 3
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.04583333333333333,
+        "completion": 0.17916666666666667,
+        "planned_rate": 0.22499999999999998,
+        "path_ratio_common": 1.0017737040274524,
+        "n_common_cases_path_ratio": 3
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_cases_path_ratio": 3
+      }
+    },
+    "vs_uo": {
+      "no_mask": {
+        "fail_rate": {
+          "mean": 0.03541666666666667,
+          "lo": 0.008333333333333333,
+          "hi": 0.07083333333333336,
+          "wins": 5,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.03541666666666667,
+            "lo": 0.004843750000000006,
+            "hi": 0.08125000000000002,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.07291666666666667,
+          "lo": 0.027083333333333338,
+          "hi": 0.13124999999999998,
+          "wins": 8,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.07291666666666667,
+            "lo": 0.02291666666666667,
+            "hi": 0.14375,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": false,
+        "benefit": true,
+        "gate": false
+      },
+      "frustum": {
+        "fail_rate": {
+          "mean": 0.00416666666666667,
+          "lo": 0.0,
+          "hi": 0.012500000000000011,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.00416666666666667,
+            "lo": 0.0,
+            "hi": 0.01666666666666668,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.008333333333333337,
+          "lo": -0.02500000000000001,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.008333333333333337,
+            "lo": -0.03333333333333335,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0009426433654523189,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0009426433654523189,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "visibility": {
+        "fail_rate": {
+          "mean": 0.00416666666666667,
+          "lo": 0.0,
+          "hi": 0.012500000000000011,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.00416666666666667,
+            "lo": 0.0,
+            "hi": 0.01666666666666668,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "ours": {
+        "fail_rate": {
+          "mean": 0.002083333333333335,
+          "lo": 0.0,
+          "hi": 0.0062500000000000056,
+          "wins": 1,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": 0.002083333333333335,
+            "lo": 0.0,
+            "hi": 0.00833333333333334,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": -0.008333333333333337,
+          "lo": -0.02500000000000001,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.008333333333333337,
+            "lo": -0.03333333333333335,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0009426433654523189,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0009426433654523189,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": false,
+        "gate": false
+      },
+      "oracle": {
+        "fail_rate": {
+          "mean": -0.04583333333333333,
+          "lo": -0.13124999999999998,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 12,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.04583333333333333,
+            "lo": -0.1645833333333333,
+            "hi": 0.0,
+            "n": 12
+          }
+        },
+        "completion": {
+          "mean": 0.8208333333333333,
+          "lo": 0.625,
+          "hi": 1.0,
+          "wins": 12,
+          "n": 12,
+          "excludes_zero": true,
+          "bonferroni_98_33": {
+            "mean": 0.8208333333333333,
+            "lo": 0.56875,
+            "hi": 1.0,
+            "n": 12
+          }
+        },
+        "path_ratio_common": {
+          "mean": -0.0017737040274522868,
+          "lo": -0.0028279300963569565,
+          "hi": 0.0,
+          "wins": 0,
+          "n": 3,
+          "excludes_zero": false,
+          "bonferroni_98_33": {
+            "mean": -0.0017737040274522868,
+            "lo": -0.0028279300963569565,
+            "hi": 0.0,
+            "n": 3
+          }
+        },
+        "safety_noninferior": true,
+        "benefit": true,
+        "gate": true
+      }
+    },
+    "strata": {
+      "seen": {
+        "n_cases": 5,
+        "n_goals": 95,
+        "means": {
+          "no_mask": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.21666666666666665
+          },
+          "frustum": {
+            "completion": 0.5,
+            "fail_rate": 0.19
+          },
+          "visibility": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.19
+          },
+          "ours": {
+            "completion": 0.5,
+            "fail_rate": 0.18
+          },
+          "unknown_obstacle": {
+            "completion": 0.5399999999999999,
+            "fail_rate": 0.16999999999999998
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.04666666666666666,
+              "lo": 0.0,
+              "hi": 0.1,
+              "wins": 2,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": -0.040000000000000015,
+              "lo": -0.12000000000000004,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.019999999999999997,
+              "lo": 0.0,
+              "hi": 0.059999999999999984,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.019999999999999997,
+              "lo": 0.0,
+              "hi": 0.059999999999999984,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": -0.040000000000000015,
+              "lo": -0.12000000000000004,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.010000000000000009,
+              "lo": 0.0,
+              "hi": 0.030000000000000027,
+              "wins": 1,
+              "n": 5,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.4600000000000001,
+              "lo": 0.09000000000000001,
+              "hi": 0.8300000000000001,
+              "wins": 5,
+              "n": 5,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.16999999999999998,
+              "lo": -0.51,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 5,
+              "excludes_zero": false
+            }
+          }
+        }
+      },
+      "unseen": {
+        "n_cases": 12,
+        "n_goals": 385,
+        "means": {
+          "no_mask": {
+            "completion": 0.22458333333333333,
+            "fail_rate": 0.05541666666666667
+          },
+          "frustum": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "visibility": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "ours": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "unknown_obstacle": {
+            "completion": 0.13333333333333333,
+            "fail_rate": 0.014583333333333332
+          },
+          "oracle": {
+            "completion": 1.0,
+            "fail_rate": 0.0
+          }
+        },
+        "vs_uo": {
+          "no_mask": {
+            "completion": {
+              "mean": 0.09125000000000001,
+              "lo": 0.03500000000000002,
+              "hi": 0.15791666666666665,
+              "wins": 8,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": 0.04083333333333334,
+              "lo": 0.008333333333333333,
+              "hi": 0.09416666666666668,
+              "wins": 5,
+              "n": 12,
+              "excludes_zero": true
+            }
+          },
+          "frustum": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "visibility": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "ours": {
+            "completion": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            },
+            "fail_rate": {
+              "mean": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          },
+          "oracle": {
+            "completion": {
+              "mean": 0.8666666666666667,
+              "lo": 0.6791666666666667,
+              "hi": 1.0,
+              "wins": 12,
+              "n": 12,
+              "excludes_zero": true
+            },
+            "fail_rate": {
+              "mean": -0.014583333333333332,
+              "lo": -0.03541666666666667,
+              "hi": 0.0,
+              "wins": 0,
+              "n": 12,
+              "excludes_zero": false
+            }
+          }
+        }
+      }
+    },
+    "n_goals": 480,
+    "n_seen_goals": 95,
+    "cases_with_seen": 5,
+    "uo_completes_anything_in_cases": 3
+  },
+  "per_case": [
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.925,
+        "planned_rate": 0.925,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.85,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 36
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.9,
+        "planned_rate": 0.9,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.85,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.95,
+        "path_ratio_common": 1.002493181986,
+        "n_common_with_uo": 36
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.9,
+        "planned_rate": 0.9,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.85,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.95,
+        "path_ratio_common": 1.002493181986,
+        "n_common_with_uo": 36
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.9,
+        "planned_rate": 0.9,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.85,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.95,
+        "path_ratio_common": 1.002493181986,
+        "n_common_with_uo": 36
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.9,
+        "planned_rate": 0.9,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.85,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.95,
+        "path_ratio_common": 1.002493181986,
+        "n_common_with_uo": 36
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 1.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 36
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.325,
+        "planned_rate": 0.325,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.325,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.075,
+        "planned_rate": 0.075,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.075,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.725,
+        "planned_rate": 0.725,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.95,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.5,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 29
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.725,
+        "planned_rate": 0.725,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.95,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.5,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 29
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.725,
+        "planned_rate": 0.725,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.95,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.5,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 29
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.725,
+        "planned_rate": 0.725,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.95,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.5,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 29
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.725,
+        "planned_rate": 0.725,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.95,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.5,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 29
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 1.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 29
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.05,
+        "fail_given_planned": 0.25,
+        "completion": 0.15,
+        "planned_rate": 0.2,
+        "collisions": 0.05,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.05,
+        "completion_unseen": 0.15,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.125,
+        "fail_given_planned": 0.8333333333333334,
+        "completion": 0.025,
+        "planned_rate": 0.15,
+        "collisions": 0.125,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.125,
+        "completion_unseen": 0.025,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.075,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.075,
+        "collisions": 0.075,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.075,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.075,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.075,
+        "collisions": 0.075,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.075,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.075,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.075,
+        "collisions": 0.075,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.075,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.075,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.075,
+        "collisions": 0.075,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.075,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.05,
+        "fail_given_planned": 0.5,
+        "completion": 0.05,
+        "planned_rate": 0.1,
+        "collisions": 0.05,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.05,
+        "completion_unseen": 0.05,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.675,
+        "fail_given_planned": 0.8181818181818182,
+        "completion": 0.15,
+        "planned_rate": 0.825,
+        "collisions": 0.675,
+        "falls": 0.0,
+        "fail_seen": 0.95,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.4,
+        "completion_unseen": 0.3,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.525,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.525,
+        "collisions": 0.525,
+        "falls": 0.0,
+        "fail_seen": 0.95,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.1,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.525,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.525,
+        "collisions": 0.525,
+        "falls": 0.0,
+        "fail_seen": 0.95,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.1,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.5,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.5,
+        "collisions": 0.5,
+        "falls": 0.0,
+        "fail_seen": 0.9,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.1,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.475,
+        "fail_given_planned": 1.0,
+        "completion": 0.0,
+        "planned_rate": 0.475,
+        "collisions": 0.475,
+        "falls": 0.0,
+        "fail_seen": 0.85,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.1,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 1.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.525,
+        "planned_rate": 0.525,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.9,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.15,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 21
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.425,
+        "planned_rate": 0.425,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.7,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.15,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 17
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.525,
+        "planned_rate": 0.525,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.9,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.15,
+        "path_ratio_common": 1.002827930096357,
+        "n_common_with_uo": 21
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.425,
+        "planned_rate": 0.425,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.7,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.15,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 17
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 0.525,
+        "planned_rate": 0.525,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.9,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.15,
+        "path_ratio_common": 1.002827930096357,
+        "n_common_with_uo": 21
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 1.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": 1.0,
+        "n_common_with_uo": 21
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.075,
+        "fail_given_planned": 0.5,
+        "completion": 0.075,
+        "planned_rate": 0.15,
+        "collisions": 0.075,
+        "falls": 0.0,
+        "fail_seen": 0.13333333333333333,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.04,
+        "completion_unseen": 0.12,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 0.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": 0.0,
+        "completion_seen": 1.0,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    },
+    {
+      "no_mask": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "frustum": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "visibility": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "ours": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "unknown_obstacle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": NaN,
+        "completion": 0.0,
+        "planned_rate": 0.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 0.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      },
+      "oracle": {
+        "fail_rate": 0.0,
+        "fail_given_planned": 0.0,
+        "completion": 1.0,
+        "planned_rate": 1.0,
+        "collisions": 0.0,
+        "falls": 0.0,
+        "fail_seen": NaN,
+        "completion_seen": NaN,
+        "fail_unseen": 0.0,
+        "completion_unseen": 1.0,
+        "path_ratio_common": NaN,
+        "n_common_with_uo": 0
+      }
+    }
+  ],
+  "cases": [
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 0,
+      "n_goals": 40,
+      "n_seen": 20,
+      "blind_cells": 185
+    },
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 90,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 246
+    },
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 180,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 158
+    },
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 270,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 245
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 0,
+      "n_goals": 40,
+      "n_seen": 20,
+      "blind_cells": 202
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 90,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 249
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 180,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 102
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 270,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 134
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 0,
+      "n_goals": 40,
+      "n_seen": 20,
+      "blind_cells": 168
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 90,
+      "n_goals": 40,
+      "n_seen": 20,
+      "blind_cells": 168
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 180,
+      "n_goals": 40,
+      "n_seen": 15,
+      "blind_cells": 102
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 270,
+      "n_goals": 40,
+      "n_seen": 0,
+      "blind_cells": 114
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Illumination · world-model-trust</title>
+<meta name="description" content="An interactive flashlight test and 3D views showing which parts of a generated 3D world a photo actually constrains.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Illumination · world-model-trust">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/illumination-demo.js"></script>
+</head>
+<body data-autotoc>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">Experiment 1 of 4 · illumination</p>
+  <h1>The flashlight test</h1>
+  <p class="lede">Stand where the photo was taken and switch on a flashlight as wide as the camera's view. What it touches is <em>measured</em>. Everything behind you, outside the beam, or in the shadow of furniture was never in the photo: it is <em>imagined</em>. That is an illumination map. Applied to a generated 3D world, this site calls the result a <b>trust map</b>, computed from an <b>illumination score</b>.</p>
+</section>
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>How to tell which parts of a generated 3D world a photo actually constrains, using an interactive toy.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>A single photo directly constrains only part of a 3D world; the rest is filled in by the model's learned prior. A seismic-style score for this is practically equal to plain visibility.</p></div>
+</aside>
+
+
+<h2 style="margin-top:1.2em">Try it</h2>
+<p class="narrow">A 2D room with two pieces of furniture. Drag the camera, change its direction and field of view, and add a second photo. The dots are points on the walls and furniture, coloured by how well the photos constrain them.</p>
+
+<div class="filters" id="demo-controls"></div>
+<div class="card" style="padding:12px 14px; margin-top:8px">
+  <div class="legend" id="demo-legend"></div>
+  <svg id="demo" class="chart" viewBox="0 0 640 450" role="img" aria-label="Interactive 2D room showing which wall and furniture points the camera photo constrains" style="touch-action:none;overflow:hidden"></svg>
+  <div class="stats" id="demo-stats" aria-live="polite"></div>
+</div>
+<div class="callout"><strong>Two ways to add a photo, two different gains</strong>Stepping sideways gives parallax, which measures distance for nearby points but barely adds coverage. Turning on the spot adds coverage but no parallax at all. A 360° panorama or Marble's multi-image mode is the second kind. You need both to get both.</div>
+
+<h2>Why one photo cannot fix distance</h2>
+<figure class="fig"><img src="assets/figs/schematic_one_eye_two_eyes.png" alt="Schematic: one camera ray with three candidate depths, and two cameras whose rays cross once" loading="lazy">
+<figcaption><b>Why one photo cannot fix distance.</b> Idealised schematic. Strictly, an object of known size changes its pixel footprint slightly with depth, so the exact unobservable direction is the joint depth-and-size scaling (near-and-small versus far-and-large), the velocity–depth ambiguity of reflection seismology. See the <a href="shadows.html">shadows page</a>.<span class="src">Source: the author's earlier illumination study (not part of this repository; own schematic).</span></figcaption></figure>
+
+<h2>Does the maths beat plain visibility?</h2>
+<p class="narrow">To test an uncertainty score you need a known answer. We use a <em>practice exam</em>, as geophysicists do with synthetic Earth models: a public example 3D world (a splat file published for download) plays the real room, we photograph it, a stand-in generator (a public depth network plus a room-box prior) rebuilds it, and we grade every splat against the truth. AUROC asks: pick one badly wrong splat and one good one at random; how often does the score call the wrong one less trustworthy? 0.5 is a coin flip, 1.0 is perfect.</p>
+<div id="charts"></div>
+<div class="grid g3" id="tiles"></div>
+<figure class="fig"><img src="assets/figs/sparsification.png" alt="Sparsification curves: error of remaining splats as the least trusted fraction is removed, for several scores" loading="lazy">
+<figcaption><b>Sparsification.</b> Remove the splats a score distrusts most and see whether the rest gets better. The illumination and visibility curves nearly overlap; the frame test and distance do clearly worse. This is the same message as the AUROC plot, from a second angle.<span class="src">Source: pooled over the 12 synthetic-truth cases; the author's earlier illumination study (not part of this repository). Stand-in generator, not Marble.</span></figcaption></figure>
+<div class="callout warn"><strong>Honest reading</strong>The illumination score clearly beats the "inside the photo frame?" test, and differs from "does any ray reach it?" (visibility) by only about 0.003 AUROC: detectable over twelve cases, negligible in practice. The value of the seismic framing here is conceptual: the tiers, the depth-versus-appearance split, and the survey-design thinking. It is not a better score.</div>
+
+<details><summary>Where these numbers come from, and the caveats</summary>
+  <p>Reproduced from the migrated code (<code>experiments/wp0_baseline/reproduce.py</code>) and matching the earlier recorded run to four decimals.</p>
+  <ul>
+    <li>The generator is a stand-in, not Marble. "Imagined means wrong" is partly built in because the filled-in geometry is our own box prior.</li>
+    <li>Twelve cases come from three truth worlds and four yaw angles each, so they are not independent.</li>
+  </ul>
+</details>
+
+<footer><p><a href="index.html">← Overview</a></p></footer>
+</main>
+<script>
+V.nav("illumination.html");
+const D = window.WMT.wp0, E = V.el;
+
+/* ---------- interactive demo ---------- */
+const state = { cx: 320, cy: 395, heading: -90, fov: 65, second: "none", par: 8 };
+const ctl = document.getElementById("demo-controls");
+ctl.append(V.slider("Direction", () => state.heading, (v) => (state.heading = v), -180, 180, 5, "°", draw));
+ctl.append(V.slider("Field of view", () => state.fov, (v) => (state.fov = v), 30, 120, 5, "°", draw));
+ctl.append(V.slider("Parallax needed to count as measured", () => state.par, (v) => (state.par = v), 2, 20, 1, "°", draw));
+ctl.append(V.seg("Second photo", [["none", "One photo"], ["step", "Step sideways"], ["turn", "Turn 90°"]], () => state.second, (k) => (state.second = k), draw));
+
+const TIERS = [["var(--o1)", "Imagined"], ["var(--o3)", "Seen, depth from prior"], ["var(--o5)", "Seen with parallax"]];
+document.getElementById("demo-legend").append(...TIERS.map(([c, t]) => E("span", {}, E("i", { class: "dot", style: `background:${c}` }), t)));
+
+const svg = document.getElementById("demo"), R = Demo.ROOM;
+const gWedge = E("g", { "clip-path": "url(#roomclip)", style: "pointer-events:none" }), gPts = E("g", { style: "pointer-events:none" }), gCam = E("g");
+svg.append(E("defs", {}, E("clipPath", { id: "roomclip" }, E("rect", { x: R.x0, y: R.y0, width: R.x1 - R.x0, height: R.y1 - R.y0 }))));
+svg.append(
+  E("rect", { x: R.x0, y: R.y0, width: R.x1 - R.x0, height: R.y1 - R.y0, fill: "none", stroke: "var(--axis)", "stroke-width": 1 }),
+  ...Demo.OBSTACLES.map((o) => E("rect", { x: o.x, y: o.y, width: o.w, height: o.h, fill: "var(--grid)" })), gWedge, gPts, gCam);
+const stats = document.getElementById("demo-stats");
+const camEl = E("circle", { r: 8, fill: "var(--ink)", stroke: "var(--surface)", "stroke-width": 2, style: "cursor:grab", tabindex: "0", role: "application", "aria-label": "Camera: drag it, or use the arrow keys to move it around the room" });
+const cam2El = E("circle", { r: 6, fill: "var(--ink2)", stroke: "var(--surface)", "stroke-width": 2 });
+const clampX = (x) => Math.max(R.x0 + 8, Math.min(R.x1 - 70, x)), clampY = (y) => Math.max(R.y0 + 8, Math.min(R.y1 - 8, y));
+const blocked = (x, y) => Demo.OBSTACLES.some((o) => x > o.x - 10 && x < o.x + o.w + 10 && y > o.y - 10 && y < o.y + o.h + 10);
+let dragging = false;
+camEl.addEventListener("pointerdown", (e) => { camEl.setPointerCapture(e.pointerId); dragging = true; });
+camEl.addEventListener("pointerup", () => { dragging = false; });
+camEl.addEventListener("pointercancel", () => { dragging = false; });
+camEl.addEventListener("lostpointercapture", () => { dragging = false; });
+camEl.addEventListener("pointermove", (e) => {
+  if (!dragging) return;
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  const q = pt.matrixTransform(svg.getScreenCTM().inverse());
+  const nx = clampX(q.x), ny = clampY(q.y); if (!blocked(nx, ny)) { state.cx = nx; state.cy = ny; draw(); }
+});
+camEl.addEventListener("keydown", (e) => {
+  const d = { ArrowLeft: [-12, 0], ArrowRight: [12, 0], ArrowUp: [0, -12], ArrowDown: [0, 12] }[e.key];
+  if (d) { e.preventDefault(); const nx = clampX(state.cx + d[0]), ny = clampY(state.cy + d[1]); if (!blocked(nx, ny)) { state.cx = nx; state.cy = ny; draw(); } }
+});
+gCam.append(camEl, cam2El);
+
+function cams() {
+  const a = { x: state.cx, y: state.cy, heading: state.heading, fov: state.fov };
+  if (state.second === "step") { const x2 = [a.x + 60, a.x - 60].map((x) => Math.max(R.x0 + 10, Math.min(R.x1 - 10, x))).find((x) => !blocked(x, a.y)); return [a, { ...a, x: x2 === undefined ? a.x : x2 }]; }
+  if (state.second === "turn") return [a, { ...a, heading: ((a.heading + 90 + 180) % 360) - 180 }];
+  return [a];
+}
+function wedge(c) {
+  const L = 900, a0 = (c.heading - c.fov / 2) * Math.PI / 180, a1 = (c.heading + c.fov / 2) * Math.PI / 180;
+  return E("polygon", { points: `${c.x},${c.y} ${c.x + L * Math.cos(a0)},${c.y + L * Math.sin(a0)} ${c.x + L * Math.cos(a1)},${c.y + L * Math.sin(a1)}`, fill: "var(--accent-wash)" });
+}
+function draw() {
+  const cs = cams(), res = Demo.compute(cs, state.par);
+  gWedge.replaceChildren(...cs.map(wedge));
+  gPts.replaceChildren(...res.pts.map((p) => E("circle", { cx: p.x, cy: p.y, r: 2.8, fill: TIERS[p.tier][0] })));
+  camEl.setAttribute("cx", cs[0].x); camEl.setAttribute("cy", cs[0].y);
+  cam2El.setAttribute("cx", cs[1] ? cs[1].x : -50); cam2El.setAttribute("cy", cs[1] ? cs[1].y : -50);
+  const pct = (v) => (100 * v).toFixed(0) + "%";
+  stats.replaceChildren(
+    ...[[pct(res.imagined), "imagined in total"], [pct(res.outside), "outside the frame"], [pct(res.hidden), "inside the frame but hidden (shadow zone)"],
+      [pct(res.hiddenOfInFrame), "of in-frame points are actually hidden"], [pct(res.parallax), "with measured depth (parallax)"]].map(([b, s]) => E("div", {}, E("b", {}, b), E("span", {}, s))));
+}
+draw();
+
+/* ---------- WP0 charts ---------- */
+const S = [{ key: "ours", label: "Illumination map (ours)", color: "var(--s1)" }, { key: "visibility", label: "Visibility (any ray reaches it)", color: "var(--s2)" }, { key: "frustum", label: "Inside the photo frame?", color: "var(--s3)" }];
+const nice = (w) => w.replace(/_/g, " ").split(" ").slice(0, 2).join(" ");
+const rows = D.cases.map((c) => ({ label: `${nice(c.world)} · ${c.yaw}°`, values: c }));
+const charts = document.getElementById("charts");
+const c1 = V.card(charts, { title: "Predicting which splats are wrong, case by case", sub: "AUROC on each of 12 cases (3 truth worlds × 4 camera directions). Higher is better; 0.5 is chance.", legend: S.map((s) => ({ label: s.label, color: s.color, shape: "dot" })) });
+V.dotPlot(c1, { rows, series: S, domain: [0.5, 1], tickFmt: (t) => t.toFixed(1) });
+V.addTable(c1, ["Case", ...S.map((s) => s.label)], D.cases.map((c) => [`${nice(c.world)} · ${c.yaw}°`, ...S.map((s) => V.fmt.n(c[s.key], 3))]));
+
+const b = D.bootstrap;
+const c2 = V.card(charts, { title: "Paired differences, with 95% confidence intervals", sub: "Mean AUROC difference over the 12 cases, 10,000 bootstrap resamples. An interval that excludes zero is statistically detectable; the effect size still has to matter." });
+V.forest(c2, { items: [
+  { label: "Illumination − visibility", mean: b.ours_vs_visibility.mean, lo: b.ours_vs_visibility.lo, hi: b.ours_vs_visibility.hi, color: "var(--s1)", extra: [{ value: `${b.ours_vs_visibility.wins}/${b.ours_vs_visibility.n}`, label: "cases where illumination wins" }] },
+  { label: "Illumination − frame test", mean: b.ours_vs_frustum.mean, lo: b.ours_vs_frustum.lo, hi: b.ours_vs_frustum.hi, color: "var(--s1)", extra: [{ value: `${b.ours_vs_frustum.wins}/${b.ours_vs_frustum.n}`, label: "cases where illumination wins" }] }],
+  domain: [-0.02, 0.14], d: 3 });
+V.addTable(c2, ["Comparison", "Mean ΔAUROC", "CI low", "CI high", "Wins"], [["Illumination − visibility", V.fmt.signed(b.ours_vs_visibility.mean, 4), V.fmt.signed(b.ours_vs_visibility.lo, 4), V.fmt.signed(b.ours_vs_visibility.hi, 4), `${b.ours_vs_visibility.wins}/12`], ["Illumination − frame test", V.fmt.signed(b.ours_vs_frustum.mean, 4), V.fmt.signed(b.ours_vs_frustum.lo, 4), V.fmt.signed(b.ours_vs_frustum.hi, 4), `${b.ours_vs_frustum.wins}/12`]]);
+
+const tiles = document.getElementById("tiles");
+[["Pooled AUROC, illumination", V.fmt.n(D.pooled.ours, 3), "rank-normalised over 12 cases"], ["Pooled AUROC, visibility", V.fmt.n(D.pooled.visibility, 3), "difference of about 0.003"], ["Pooled AUROC, frame test", V.fmt.n(D.pooled.frustum, 3), "beaten in 12 of 12 cases"]]
+  .forEach(([l, v, n]) => tiles.append(E("div", { class: "card tile" }, E("div", { class: "label" }, l), E("div", { class: "value" }, v), E("div", { class: "note" }, n))));
+window.addEventListener("themechange", draw);
+</script>
+</body>
+</html>

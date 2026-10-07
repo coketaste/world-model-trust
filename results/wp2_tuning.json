@@ -1,0 +1,89 @@
+{
+  "grid": {
+    "ot_rho0.05_eps0.5": {
+      "strict": 1,
+      "coarse": 6,
+      "n": 72
+    },
+    "ot_rho0.05_eps1.0": {
+      "strict": 0,
+      "coarse": 4,
+      "n": 72
+    },
+    "ot_rho0.05_eps2.0": {
+      "strict": 0,
+      "coarse": 4,
+      "n": 72
+    },
+    "ot_rho0.05_eps4.0": {
+      "strict": 0,
+      "coarse": 4,
+      "n": 72
+    },
+    "ot_rho0.1_eps0.5": {
+      "strict": 0,
+      "coarse": 5,
+      "n": 72
+    },
+    "ot_rho0.1_eps1.0": {
+      "strict": 0,
+      "coarse": 6,
+      "n": 72
+    },
+    "ot_rho0.1_eps2.0": {
+      "strict": 0,
+      "coarse": 6,
+      "n": 72
+    },
+    "ot_rho0.1_eps4.0": {
+      "strict": 0,
+      "coarse": 5,
+      "n": 72
+    },
+    "ot_rho0.2_eps0.5": {
+      "strict": 0,
+      "coarse": 5,
+      "n": 72
+    },
+    "ot_rho0.2_eps1.0": {
+      "strict": 0,
+      "coarse": 5,
+      "n": 72
+    },
+    "ot_rho0.2_eps2.0": {
+      "strict": 0,
+      "coarse": 5,
+      "n": 72
+    },
+    "ot_rho0.2_eps4.0": {
+      "strict": 0,
+      "coarse": 4,
+      "n": 72
+    },
+    "ot_rho0.5_eps0.5": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 72
+    },
+    "ot_rho0.5_eps1.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 72
+    },
+    "ot_rho0.5_eps2.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 72
+    },
+    "ot_rho0.5_eps4.0": {
+      "strict": 0,
+      "coarse": 0,
+      "n": 72
+    }
+  },
+  "selected": "ot_rho0.05_eps0.5",
+  "selected_cfg": {
+    "rho": 0.05,
+    "eps_start": 0.5
+  }
+}

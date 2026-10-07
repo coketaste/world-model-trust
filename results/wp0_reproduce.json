@@ -1,0 +1,122 @@
+{
+  "pooled_auroc": {
+    "ours": 0.8346,
+    "visibility": 0.8317,
+    "frustum": 0.7428
+  },
+  "recorded": {
+    "ours": 0.8346,
+    "visibility": 0.8317,
+    "frustum": 0.7428
+  },
+  "diff": {
+    "ours": 0.0,
+    "visibility": 0.0,
+    "frustum": 0.0
+  },
+  "reproduced": true,
+  "bootstrap": {
+    "ours_vs_visibility": {
+      "mean": 0.0032583333333333353,
+      "lo": 0.0011333333333333009,
+      "hi": 0.005533333333333344,
+      "wins": 9,
+      "n": 12,
+      "excludes_zero": true
+    },
+    "ours_vs_frustum": {
+      "mean": 0.08641666666666666,
+      "lo": 0.051057083333333336,
+      "hi": 0.12326791666666662,
+      "wins": 12,
+      "n": 12,
+      "excludes_zero": true
+    }
+  },
+  "per_case": [
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 0,
+      "auroc_ours": 0.8,
+      "auroc_visibility": 0.7979,
+      "auroc_frustum": 0.6126
+    },
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 90,
+      "auroc_ours": 0.9531,
+      "auroc_visibility": 0.9519,
+      "auroc_frustum": 0.9516
+    },
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 180,
+      "auroc_ours": 0.9563,
+      "auroc_visibility": 0.9511,
+      "auroc_frustum": 0.892
+    },
+    {
+      "world": "rustic_kitchen_with_natural_light",
+      "yaw": 270,
+      "auroc_ours": 0.8505,
+      "auroc_visibility": 0.8436,
+      "auroc_frustum": 0.8325
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 0,
+      "auroc_ours": 0.7454,
+      "auroc_visibility": 0.7485,
+      "auroc_frustum": 0.5596
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 90,
+      "auroc_ours": 0.9161,
+      "auroc_visibility": 0.9077,
+      "auroc_frustum": 0.8003
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 180,
+      "auroc_ours": 0.7996,
+      "auroc_visibility": 0.7944,
+      "auroc_frustum": 0.6794
+    },
+    {
+      "world": "warm_traditional_kitchen_interior",
+      "yaw": 270,
+      "auroc_ours": 0.8569,
+      "auroc_visibility": 0.8461,
+      "auroc_frustum": 0.7623
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 0,
+      "auroc_ours": 0.7879,
+      "auroc_visibility": 0.7882,
+      "auroc_frustum": 0.7406
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 90,
+      "auroc_ours": 0.9258,
+      "auroc_visibility": 0.9232,
+      "auroc_frustum": 0.9253
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 180,
+      "auroc_ours": 0.6867,
+      "auroc_visibility": 0.6881,
+      "auroc_frustum": 0.6375
+    },
+    {
+      "world": "elegant_library_with_fireplace",
+      "yaw": 270,
+      "auroc_ours": 0.8274,
+      "auroc_visibility": 0.8259,
+      "auroc_frustum": 0.675
+    }
+  ]
+}

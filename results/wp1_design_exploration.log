@@ -1,0 +1,12 @@
+rustic_kitchen_with_natural_light n 381215 extent x [-1.787  1.506] z [-1.823  4.023] y [-1.244  1.092] floor_y (np.float64(0.9749999999999999), np.int64(33003)) frac big(>1) 0.0
+  truth floor cells 974 cells within r<4 of origin occupied frac 0.375625
+warm_traditional_kitchen_interior n 345458 extent x [-1.24   1.341] z [-2.013  4.469] y [-1.218  0.987] floor_y (np.float64(0.9749999999999999), np.int64(70043)) frac big(>1) 1.4473539475131564e-05
+  truth floor cells 1179 cells within r<4 of origin occupied frac 0.478125
+elegant_library_with_fireplace n 342281 extent x [-1.791  2.128] z [-4.955  4.143] y [-2.16   0.787] floor_y (np.float64(0.7749999999999999), np.int64(62598)) frac big(>1) 2.921576131891633e-05
+  truth floor cells 2076 cells within r<4 of origin occupied frac 0.746875
+elegant_library_with G floor_y 0.7749999999999999 sim scale 0.63 coverage pct [0.182 3.644 5.696] seen frac 0.5362870820084559 absstd pct(seen) [0.028 0.049 0.115]
+  G floor cells 1045 ; max splat scale 0.045
+rustic_kitchen_with_ G floor_y 0.9749999999999999 sim scale 0.696 coverage pct [0.053 3.077 5.498] seen frac 0.5122691204907648 absstd pct(seen) [0.062 0.093 0.288]
+  G floor cells 1907 ; max splat scale 0.045
+warm_traditional_kit G floor_y 0.9749999999999999 sim scale 0.661 coverage pct [0.15  3.829 5.5  ] seen frac 0.6507005467141813 absstd pct(seen) [0.042 0.069 0.102]
+  G floor cells 1282 ; max splat scale 0.045

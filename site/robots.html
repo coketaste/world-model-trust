@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Robots · world-model-trust</title>
+<meta name="description" content="Whether a trust map changes what a simulated robot does in a generated world: setup, results and honest limits.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Robots · world-model-trust">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">Experiment 2 of 4 · robot benchmark</p>
+  <h1>Does a trust map keep the robot safe?</h1>
+  <p class="lede">A geometry score only matters if it changes what a robot does. So we let a simulated robot plan inside a generated world, then make it drive the same path in the true world and count collisions. <span id="gate-badge"></span></p>
+</section>
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>Whether a trust map changes what a simulated robot does when it plans inside a generated world.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>Inconclusive: the benchmark was underpowered, and no trust policy beat the standard "unknown = obstacle" rule.</p></div>
+</aside>
+
+
+<h2 style="margin-top:1.2em">The setup</h2>
+<div class="grid g2">
+  <div class="card"><h3>What the robot does</h3><p class="small">A 2D disc robot starts at the prompt camera. It plans on a floor-plane map built only from the generated splats, then executes the path in the truth map. A <b>collision</b> is touching a truth obstacle; a <b>fall</b> is entering a truth cell with no floor. 40 goals per case across 12 cases (480 goals): up to 20 in regions the photo saw, where any exist (95 of 480 goals, in 5 of 12 cases), and the rest in regions it did not.</p></div>
+  <div class="card"><h3>The policies compared</h3><p class="small"><b>No mask</b>: trust everything generated. <b>Frustum</b>, <b>visibility</b>, <b>ours</b>: treat low-confidence regions as unsafe. <b>Unknown = obstacle</b>: the standard conservative occupancy-mapping rule, and the baseline that matters. <b>Oracle</b>: plans on the true map, as a sanity check.</p></div>
+</div>
+
+<div class="callout warn"><strong>Read this first</strong>In the first run three of the policies show 0% of goals reached. That is a flaw in the test design (the robot's own blind zone traps every cautious policy), not evidence about trust maps. The explanation is below the charts.</div>
+<div class="filters" id="run-filters"></div>
+<p class="muted small" id="run-note"></p>
+<div id="bars"></div>
+
+<h2>Compared with "unknown = obstacle"</h2>
+<p class="narrow">The success criterion pre-specified before the run: a trust policy must match the baseline's safety (failure-rate difference with a small upper bound) <em>and</em> be better on completion or path length. Each point is a mean paired difference over 12 cases with a 95% bootstrap interval.</p>
+<div id="forests"></div>
+
+<h2>Why the answer is inconclusive, not negative</h2>
+<div class="callout warn"><strong>As originally specified, the three trust policies completed nothing.</strong>That is a design artifact, not a finding about trust. Two causes: the floor-height estimator locked onto a wall or tabletop slab (floor height off by 0.15 scene units or more) in 8 of 12 cases, and the camera looks level so the floor within about 1.6–2 units of the start sits below the frustum, which traps every conservative policy at the start cell.</div>
+<div class="callout"><strong>The amended run was changed after seeing the outcome</strong>Four amendments (true floor height, free blind zone, free robot footprint, camera-based alignment) were made after run 1 and are logged in <code>prereg/RQ1.md</code>. The free blind zone was added only to the trust policies' maps, but a post-hoc check (results/WP1-sensitivity.md) found that the baseline's own map already treated those cells as free in all 12 cases, so it did not tilt the comparison. The amended maps do use the true floor height. That run cannot confirm the hypothesis; it only suggests that once the artifacts are removed, trust policies are indistinguishable from "unknown = obstacle", and unmasked planning is less safe.</div>
+
+<h2>What a better benchmark needs</h2>
+<div class="grid g3">
+  <div class="card"><h3>A real floor estimate</h3><p class="small muted">Use the exported ground-plane offset, or fit the floor robustly, instead of the most common height.</p></div>
+  <div class="card"><h3>A camera that sees the floor</h3><p class="small muted">Pitch the prompt camera down, or start the robot where the floor is in frame.</p></div>
+  <div class="card"><h3>More power</h3><p class="small muted">Many more worlds and goals; "unknown = obstacle" completed anything in only a few cases here.</p></div>
+</div>
+<details><summary>Circularity audit</summary>
+  <ul>
+    <li>The generated world's filled-in region is our own room-box prior, so "unseen means obstacle or hole" is partly built in.</li>
+    <li>The truth world is a public example splat world whose exported surfaces can be less complete in areas the camera did not cover, and the robot can fail there regardless of the generator.</li>
+    <li>Oracle completed 100% of goals with 0 failures in all 12 cases, so the executor and truth map behave as intended.</li>
+  </ul>
+</details>
+<footer><p><a href="index.html">← Overview</a> · Source: <code>results/WP1.md</code>, <code>src/wmt/wp1_nav.py</code></p></footer>
+</main>
+<script>
+V.nav("robots.html");
+const D = window.WMT.wp1, E = V.el;
+const NAMES = { no_mask: "No mask", frustum: "Frustum mask", visibility: "Visibility mask", ours: "Ours (illumination)", unknown_obstacle: "Unknown = obstacle", oracle: "Oracle (truth map)" };
+const ORDER = Object.keys(NAMES);
+let run = "preregistered";
+document.getElementById("gate-badge").append(V.badge("mixed", "Success criterion not met · inconclusive"));
+
+document.getElementById("run-filters").append(V.seg("Which run", [["preregistered", "As originally specified"], ["amended", "Amended (exploratory)"]], () => run, (k) => (run = k), render));
+
+const bars = document.getElementById("bars"), forests = document.getElementById("forests"), note = document.getElementById("run-note");
+function render() {
+  const d = D[run];
+  note.textContent = run === "preregistered"
+    ? "Exactly the originally specified design. The three trust policies are safe but complete no goals."
+    : "After four post-hoc design fixes. Exploratory: it cannot confirm the hypothesis.";
+  bars.replaceChildren(); forests.replaceChildren();
+  const measure = (key, sk, uk, title, sub, max) => {
+    const c = V.card(bars, { title, sub });
+    V.hbars(c, { items: ORDER.map((p) => ({ label: NAMES[p], value: d.policies[p][key], strong: p === "unknown_obstacle", tipLabel: "mean over the cases with such goals", extra: [{ value: V.fmt.pct(d.policies[p][sk], 0), label: "in regions the photo saw (5 cases only)" }, { value: V.fmt.pct(d.policies[p][uk], 0), label: "in regions it did not" }].filter((r) => r.value !== "n/a") })), max, valueFmt: (v) => V.fmt.pct(v, 1), labelW: 170 });
+    V.addTable(c, ["Policy", "Mean", "Seen goals (5 cases)", "Unseen goals"], ORDER.map((p) => [NAMES[p], V.fmt.pct(d.policies[p][key], 1), V.fmt.pct(d.policies[p][sk], 1), V.fmt.pct(d.policies[p][uk], 1)]));
+  };
+  measure("completion", "completion_seen", "completion_unseen", "Goals reached", "Share of the 480 goals reached without a failure. Higher is better.", 1);
+  measure("fail_rate", "fail_seen", "fail_unseen", "Goals ending in a collision or fall", "Share of goals where the executed path hit something in the true world. Lower is better.", Math.max(0.1, ...ORDER.map((p) => d.policies[p].fail_rate)) * 1.15);
+
+  const pol = ["no_mask", "frustum", "visibility", "ours"];
+  const f = (key, title, sub, dom) => {
+    const c = V.card(forests, { title, sub });
+    V.forest(c, { items: pol.map((p) => { const x = d.vs_uo[p][key]; return { label: NAMES[p], mean: x.mean, lo: x.lo, hi: x.hi }; }), domain: dom, d: 3 });
+    V.addTable(c, ["Policy", "Mean difference", "CI low", "CI high"], pol.map((p) => { const x = d.vs_uo[p][key]; return [NAMES[p], V.fmt.signed(x.mean, 4), V.fmt.signed(x.lo, 4), V.fmt.signed(x.hi, 4)]; }));
+  };
+  const span = (key) => { const v = pol.flatMap((p) => [d.vs_uo[p][key].lo, d.vs_uo[p][key].hi, 0]); const m = Math.max(0.05, ...v.map(Math.abs)) * 1.15; return [-m, m]; };
+  f("completion", "Goals reached, minus the baseline", "Positive means the policy reaches more goals than \"unknown = obstacle\".", span("completion"));
+  f("fail_rate", "Failure rate, minus the baseline", "Negative means safer than the baseline; positive means less safe.", span("fail_rate"));
+}
+render();
+window.addEventListener("themechange", render);
+</script>
+</body>
+</html>

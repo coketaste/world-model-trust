@@ -1,0 +1,31 @@
+# secrets
+.env
+*.key
+
+# environments and caches
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.ipynb_checkpoints/
+node_modules/
+
+# data fetched by scripts (never commit third-party assets)
+data/
+*.spz
+*.ply
+*.glb
+*.npz
+
+# large outputs; keep small summary tables in results/
+out/
+
+# regenerable run cache
+results/wp2_cache/
+
+# raw per-job outputs of the WP2 sensitivity run (aggregated in wp2_sensitivity_runs.json)
+results/wp2_sensitivity_job_*.json
+
+# build artifacts
+*.egg-info/

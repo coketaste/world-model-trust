@@ -1,0 +1,13 @@
+timestamp: 2026-10-03T00:01:52Z
+ba4d9c3a6d5a7b49e07d54b6476f170314dd37abb228979aa53d5c7341977bce  prereg/RQ1.md
+timestamp: 2026-10-03T01:40:44Z  (prereg after amendments A1-A3 appended; run 1 was executed against line 2's hash)
+1d2c7d444133395ed37466ca5095f3bb6e43b91c8f561b813435168befea5ed2  prereg/RQ1.md
+
+0f576ba9fc5f9df012be0f8dfea702a2c787ac5dd8dffc572fe52db8564da2d1  prereg/RQ1.md
+final (after amendments), recorded 2026-10-05T18:18:41Z during review (post-hoc record)
+
+f7347da24feaddf7da1fe556045a976d0e013038ca6ede4653bfe6c1404ebfa9  prereg/RQ1.md
+editorial rewording (tone only), recorded 2026-10-07T10:42:43Z; no change to hypotheses, criteria or analyses
+
+999e1842bd3c765167f8677ac34d929cd27505ceaac336124a19bef0df8f89dc  prereg/RQ1.md
+editorial (author line), recorded 2026-10-07T14:52:58Z; no change to hypotheses, criteria or analyses

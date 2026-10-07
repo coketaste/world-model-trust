@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geophysics · world-model-trust</title>
+<meta name="description" content="Seismic imaging methods explained with small interactive pictures, and where they might help spatial AI and robots.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/primer.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/lit.js"></script>
+<script src="assets/geo-tomography.js"></script>
+<script src="assets/geo-migration.js"></script>
+<script src="assets/geo-moveout.js"></script>
+<script src="assets/geo-multiples.js"></script>
+<script src="assets/geo-primer-a.js"></script>
+<script src="assets/geo-primer-b.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">The geophysics behind the project</p>
+  <h1>What can a seismic background add?</h1>
+  <p class="lede">Seismic imaging is the craft of seeing inside something you cannot open, using waves that bounce and bend. Spatial AI faces a similar problem: it builds 3D scenes from a few views and must fill in the rest. This page explains the main seismic methods in pictures you can play with, then asks where they might help.</p>
+  <p class="purpose"><b>Purpose.</b> To brainstorm how seismic imaging experience (migration, tomography, imaging with multiples, full-waveform inversion, resolution and uncertainty analysis) could contribute to spatial intelligence and physical AI, including robots, and to be honest about what already exists. It starts from open problems that World Labs describes on its own public pages and offers complementary ideas, using public information only. It is not an evaluation of anyone's product.</p>
+  <nav class="primer-toc" aria-label="On this page"><a href="#documented">Open problems</a><a href="#methods-in-pictures">Methods in pictures</a><a href="#toolkit">Your toolkit, mapped</a><a href="#glossary">Plain-language glossary</a><a href="#lessons">What the experiments taught</a><a href="#niches">Open niches</a></nav>
+</section>
+
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>How five core seismic methods work (tomography, migration, moveout, multiples and full-waveform inversion), shown with small models you can change, and where each one might help spatial AI and robots.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>Most seismic ideas already have counterparts in vision and robotics. The best-supported contribution is a way of thinking: ask what the data cannot constrain, test against known truth, and report negative results.</p></div>
+</aside>
+
+<h2 id="documented">Open problems World Labs describes</h2>
+<p class="narrow">These are the starting points for the ideas on this site: open problems that World Labs' own posts and documentation describe for the field. Quotes are short and attributed. They come from public pages and were retrieved through a summarising tool, so check the primary page before reusing them.</p>
+<div class="grid g3" id="quotes"></div>
+
+
+<div class="callout"><strong>The honest summary so far</strong>Almost every seismic idea tested here has a verified counterpart in vision, graphics or robotics, and some are mature. What a geophysicist brings is less a new algorithm than a discipline: asking what the data cannot constrain, testing against known truth, calibrating, and reporting negative results. The experiments (a baseline reproduction, three pre-specified tests and an earlier beam-inversion study) support that framing; none supports a claim of a new method.</div>
+
+<h2 id="methods-in-pictures">Seismic methods in pictures</h2>
+<p class="narrow">Five small models, each with a control to change. They are teaching models: simplified on purpose, and each says where it stops being realistic. Together they explain most of the vocabulary used on the rest of the site.</p>
+<nav class="primer-toc" aria-label="The five illustrations"><a href="#w-tomo">1 · Tomography and illumination</a><a href="#w-migration">2 · Migration</a><a href="#w-moveout">3 · Velocity–depth ambiguity</a><a href="#w-multiples">4 · Multiples and shadow zones</a><a href="#w-fwi">5 · The FWI loop</a></nav>
+<div id="primer"></div>
+
+<h2 id="toolkit">Your toolkit, mapped</h2>
+<p class="narrow">Pick a seismic skill. Each panel says, in plain terms, what the skill is, what already exists on the vision and robotics side (from the verified literature map), what this project tested, and what is still only a hypothesis.</p>
+<div class="filters"><div class="seg" id="skills" role="group" aria-label="Seismic skill" style="flex-wrap:wrap"></div></div>
+<div class="card" id="panel" aria-live="polite" style="margin-top:12px"></div>
+
+<h2 id="glossary">Plain-language glossary</h2>
+<dl class="glossary card" id="gloss"></dl>
+
+<h2 id="lessons">What the experiments taught</h2>
+<div class="grid g2" id="lessons-grid"></div>
+<figure class="fig"><img src="assets/figs/beam_inversion.png" alt="Four panels: recovered Young's modulus against truth, a calibration frequency response, a held-out displacement waveform, and held-out error with an ideal and an incorrect support model" loading="lazy">
+<figcaption><b>A synthetic physical-parameter inversion (the earlier beam study).</b> Geometry and a noisy mass are supplied; stiffness and damping are inferred from vibration data and then used to predict a held-out force location, sensor location and pulse. Inversion and a simple modal baseline both beat nominal values by a wide margin. <b>The lesson for model error:</b> with an incorrect support model the held-out waveform error stays near 2%, yet the intrinsic stiffness is off by about 25%. A fitted effective parameter can predict well and still be the wrong material property, which is a familiar identifiability and model-discrepancy phenomenon, not a new result.<span class="src">Source: the author's earlier beam study (not part of this repository). Synthetic, same beam theory for truth and inference, simple peak and half-power modal baseline, not real-world validation and not a full 3D elastic FWI.</span></figcaption></figure>
+
+<h2 id="niches">Where the open niches look plausible, and where they do not</h2>
+<p class="narrow">A ledger drawn from the verified physical-AI literature. "Covered" means published work already does it. "Open" means not found in an arXiv abstract search, which is not proof of absence.</p>
+<div class="card tablewrap"><table>
+<thead><tr><th>Area</th><th>Already covered</th><th>What remains open</th><th>Our evidence</th></tr></thead>
+<tbody id="ledger"></tbody></table></div>
+
+
+<h2>Ways to contribute, and what each needs</h2>
+<div class="grid g2">
+  <div class="card"><h3>Needs no permission</h3><ul class="small" style="padding-left:1.1em;margin:0">
+    <li>Open evaluation methods and blind tests on synthetic or public data.</li>
+    <li>Identifiability and experimental-design analysis for real-to-sim parameters.</li>
+    <li>Wave-based acoustics on measured geometry using public room datasets.</li>
+    <li>Feedback and corrections from anyone, including World Labs, via GitHub issues.</li></ul></div>
+  <div class="card"><h3>Needs credits and written permission</h3><ul class="small" style="padding-left:1.1em;margin:0">
+    <li>Ensembles of real Marble generations from one photo (an estimated $8–13 for a measured-room study plus about $4–6 more for an ensemble, from the earlier study's estimates).</li>
+    <li>Any use of Marble itself, including its public API: read World Labs' current terms of service in full and obtain their agreement first.</li>
+    <li>Any work that needs access to unreleased models.</li></ul></div>
+</div>
+<footer><p><a href="index.html">← Overview</a> · See the <a href="literature.html">verified literature map</a> and the <a href="method.html">method and limits</a>.</p></footer>
+</main>
+<script>
+V.nav("geophysics.html");
+const E = V.el, D = window.WMT, LIT = window.WMT_LIT || { imaging: [], physical: [] };
+const rowById = {}; LIT.imaging.concat(LIT.physical).forEach((r) => (rowById[r.id] = r));
+const refUrl = V.refUrl;
+const f = V.fmt;
+const sens = D.wp2 && D.wp2.sensitivity && D.wp2.sensitivity.strict;
+const stat = (r) => r.status || (r.gap ? "Remaining gap: " + r.gap : "");
+
+/* ---------- the five illustrations ---------- */
+const primer = document.getElementById("primer");
+GeoPrimerA.tomography(primer); GeoPrimerA.migration(primer); GeoPrimerB.moveoutWidget(primer); GeoPrimerB.multiplesWidget(primer); GeoPrimerB.fwiWidget(primer);
+
+/* ---------- toolkit mapping ---------- */
+const SKILLS = [
+ { name: "Tomography", rows: ["tomography"], link: "#w-tomo",
+   seismic: "Use how long waves take to cross the ground to work out how fast they travel in each place, much as a CT scan works out density from X-ray absorption along many paths.",
+   tested: "Not tested directly. Earlier learning checkpoints rebuilt NeRF and Gaussian-splat scenes from scratch, which solve the same kind of inverse problem. The first illustration above shows the key limit: angular coverage.",
+   hyp: "Experience with sparse, badly covered ray data (finite-frequency effects, regularisation) could inform sparse-view 3D reconstruction. Untested.", ev: "Low" },
+ { name: "Migration", rows: ["migration", "wave_sensor_splats", "b2c"], link: "#w-migration",
+   seismic: "Take echoes recorded at the surface and move each one back to where it came from, so reflectors land in the right place and point scatterers collapse to points. Variants include Kirchhoff, f-k (Stolt), reverse-time and least-squares migration.",
+   tested: "Not tested. Migration needs a time axis and wave phase, which an ordinary photograph does not have.",
+   hyp: "For sensors that do record time or phase (transient light, radar, sonar, ultrasound), iterative migration and velocity-model building could help when data are sparse or noisy. Relevance to RGB world models is indirect.", ev: "Low" },
+ { name: "Imaging with multiples", rows: ["multiples"], link: "#w-multiples",
+   seismic: "A multiple is a wave that bounces more than once. Multiples are usually removed as noise, but they also travel paths that primary reflections do not, so some methods use them to light up areas the primaries miss.",
+   tested: `Shadows experiment: a cast shadow acts like a second viewpoint. Without it the depth–size direction is exactly unobservable (smallest-to-largest eigenvalue ratio ${f.sci(D.wp3.S1.ratio)}). With it, depth is locally identifiable (std of log depth about ${f.n(D.wp3.S2.std_logd, 3)}), but only if the shadow falls in frame. Idealised simulation only.`,
+   hyp: "An illumination and aperture framework for deciding when a second light path, such as a shadow, adds a real constraint.", ev: "Low–medium (simulation)", page: "shadows.html" },
+ { name: "Full-waveform inversion and the adjoint", rows: ["adjoint_rendering", "second_order", "b1a", "b1b"], link: "#w-fwi",
+   seismic: "Adjust a model until simulated waveforms match the recorded ones, using an adjoint calculation to learn which way to change the model.",
+   tested: "A synthetic beam-inversion study recovers stiffness and damping from vibration data and predicts held-out responses. It does not use World Labs and is not full 3D elastic FWI.",
+   hyp: "Identifiability, experimental design and model-discrepancy handling for real-to-sim parameters. Estimation itself is heavily covered.", ev: "Low–medium" },
+ { name: "Illumination and resolution analysis", rows: ["illumination_fisher"], link: "#w-tomo",
+   seismic: "Report, with every image, how strongly the data constrain each point (illumination) and how a single point would look after imaging (resolution, or the point-spread function).",
+   tested: `Illumination experiment: the per-splat illumination score is practically equal to plain visibility, differing by about 0.003 (pooled AUROC ${f.n(D.wp0.pooled.ours, 3)} against ${f.n(D.wp0.pooled.visibility, 3)}), and it clearly beats an in-frame test (${f.n(D.wp0.pooled.frustum, 3)}).`,
+   hyp: "Resolution matrices and point-spread functions as deliverables rather than diagonal scores; target-oriented Hessians for a task region.", ev: "Medium (synthetic)", page: "illumination.html" },
+ { name: "Velocity–depth ambiguity and null spaces", rows: ["ambiguity"], link: "#w-moveout",
+   seismic: "A reflection time gives only depth divided by velocity: a shallower reflector in slower rock looks like a deeper one in faster rock. Recording at wider offsets resolves it.",
+   tested: "The shadows experiment shows the monocular analogue: near-and-small versus far-and-large is an exact null direction of the Fisher information for one view.",
+   hyp: "Trade-off and resolution-curve practice for multi-parameter ambiguity. In bundle adjustment the same idea appears as gauge freedom.", ev: "Medium (simulation)", page: "shadows.html" },
+ { name: "Misfit design and cycle skipping", rows: ["cycle_skipping_ot"], link: "#w-fwi",
+   seismic: "If the first guess is too far off, matching waveforms can lock onto the wrong wiggle (cycle skipping). Misfits built on envelopes, optimal transport or multiple scales are used to avoid it.",
+   tested: sens ? `Alignment experiment: the first run made one point-cloud optimal-transport formulation look far worse than ICP (clean-check basin ${f.n(D.wp2.C.basins.strict.ot, 3)} against ${f.n(D.wp2.C.basins.strict.icp, 3)}), but optimal transport had a tenth of ICP's update budget. At matched compute (100 updates each) the basins are ${f.n(sens.basins.ot100, 3)} against ${f.n(sens.basins.icp, 3)}, a difference of ${f.signed(sens.vs_icp.ot100.diff, 3)} with a 95% interval from ${f.signed(sens.vs_icp.ot100.diff_lo, 3)} to ${f.signed(sens.vs_icp.ot100.diff_hi, 3)}: inconclusive. Optimal-transport registration already exists in vision, so this is one formulation, not a verdict.` : `WP2: a point-cloud optimal-transport formulation had a narrower convergence basin than ICP in the first run (clean check ${f.n(D.wp2 ? D.wp2.C.basins.strict.ot : NaN, 3)} against ${f.n(D.wp2 ? D.wp2.C.basins.strict.icp : NaN, 3)}), at a smaller compute budget; a matched-compute rerun is pending. Optimal-transport registration already exists in vision, so this is one formulation, not a verdict.`,
+   hyp: "Basin-width diagnostics and trace-wise or per-ray one-dimensional misfits (untried).", ev: "Inconclusive at matched compute", page: "alignment.html" },
+ { name: "Uncertainty quantification", rows: ["uq", "b4", "b3"],
+   seismic: "Estimate not only one answer but how many other answers would also fit the data, through sampling, ensembles or approximations.",
+   tested: "The robot experiment (does a trust map keep a robot safe?) is inconclusive: underpowered, with post-hoc fixes. Ensembles of real Marble generations were not run, pending credits and permission.",
+   hyp: "External ensembles of a black-box generator with shared-error accounting; calibration discipline.", ev: "Low (not run)", page: "robots.html" },
+ { name: "Survey and experimental design", rows: ["survey_design", "b1h"],
+   seismic: "Choose where to put sources and receivers before acquiring data, so the survey learns as much as possible about a target.",
+   tested: "Not tested. Next-best-view selection with Fisher information is a crowded area.",
+   hyp: "Multi-parameter and target-oriented design criteria; cost-aware acquisition for inspection robots.", ev: "Low" },
+ { name: "Wave-physics sensing", rows: ["wave_robots_ml", "b2a", "b2b", "b1f", "b1g"],
+   seismic: "Image with acoustic, elastic or electromagnetic waves (ultrasound, ground-penetrating radar, sonar) to see what cameras cannot.",
+   tested: "Not tested.",
+   hyp: "Phase-aware modelling and velocity analysis for radar, sonar, ultrasound and acoustic world models. Relevance to World Labs' products is unconfirmed.", ev: "Low–medium (crowded)" },
+];
+
+const skills = document.getElementById("skills"), panel = document.getElementById("panel");
+const H4 = (t, top) => E("h4", { style: `margin:${top ? "14px" : "0"} 0 4px;color:var(--ink2);font-size:.85rem` }, t);
+function show(i) {
+  skills.querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", String(k === i)));
+  const s = SKILLS[i], rows = s.rows.map((id) => rowById[id]).filter(Boolean);
+  const refs = rows.flatMap((r) => (r.counterparts || r.works || []).slice(0, 3));
+  panel.replaceChildren(
+    E("h3", { style: "margin-top:0" }, s.name),
+    E("div", { class: "grid g2", style: "gap:18px" },
+      E("div", {}, H4("In seismic practice"), E("p", { class: "small" }, s.seismic, s.link ? [" ", E("a", { href: s.link }, "See the picture →")] : null),
+        H4("What this project tested", true), E("p", { class: "small" }, s.tested, s.page ? [" ", E("a", { href: s.page }, "Details →")] : null)),
+      E("div", {}, H4("Already exists (verified map)"),
+        rows.length ? E("ul", { class: "small", style: "padding-left:1.1em;margin:0 0 8px" }, rows.map((r) => E("li", {}, E("b", {}, (r.topic || r.id.replace(/_/g, " ")) + ": "), stat(r).slice(0, 230) + (stat(r).length > 230 ? "…" : "")))) : E("p", { class: "small muted" }, "Literature data not loaded."),
+        refs.length ? E("p", { class: "small muted", style: "margin:0" }, "Examples: ", refs.map((r, k) => [k ? "; " : "", refUrl(r.id) ? E("a", { href: refUrl(r.id), rel: "noopener" }, `${r.authors} ${r.year}`) : `${r.authors} ${r.year}`])) : null)),
+    E("div", { class: "callout", style: "margin-bottom:0" }, E("strong", {}, "Plausible contribution (hypothesis)"), s.hyp, E("div", { class: "small muted", style: "margin-top:6px" }, "Evidence level: " + s.ev)));
+}
+SKILLS.forEach((s, i) => { const b = E("button", { type: "button", "aria-pressed": "false" }, s.name); b.addEventListener("click", () => show(i)); skills.append(b); });
+show(0);
+
+/* ---------- glossary ---------- */
+const GLOSS = [
+ ["Illumination", "How strongly the data constrain a given point. In the Gauss–Newton picture it is the diagonal of JᵀJ, the sum of squared sensitivities of the data to that point."],
+ ["Point-spread function (resolution)", "What a single point looks like after imaging. A sharp spot means good resolution; a smear means some directions were never measured."],
+ ["Null space", "Changes to the model that leave the data unchanged. They cannot be found from the data, only from assumptions."],
+ ["Misfit", "A number measuring how badly the model's predictions match the measurements. Inversion tries to make it small."],
+ ["Adjoint", "A way to compute the gradient of the misfit by running the physics backwards, so one extra simulation per source gives the update direction for every parameter at once. In vision it is reverse-mode automatic differentiation."],
+ ["Multiple", "A wave that bounced more than once on its way to the receiver."],
+ ["Cycle skipping", "When the first guess predicts an arrival more than about half a period late or early, the misfit pulls the model toward the wrong wiggle."],
+ ["Offset and aperture", "Offset is the distance between source and receiver. Aperture is the range of angles or offsets recorded. Wider coverage separates effects that look the same at one position."],
+ ["Gaussian splat", "A soft, semi-transparent coloured blob. A scene is stored as hundreds of thousands to millions of them."],
+];
+document.getElementById("gloss").append(...GLOSS.flatMap(([t, d]) => [E("dt", {}, t), E("dd", {}, d)]));
+
+/* ---------- lessons, ledger, quotes ---------- */
+const L = document.getElementById("lessons-grid");
+[["Illumination", "mixed", "Matches a simple baseline", "The seismic score is practically equal to plain visibility. Its value is the framing: tiers, shadow zones and the depth-versus-appearance split.", "illumination.html"],
+ ["Robots", "mixed", "Inconclusive", "A trust map must change a robot's outcome to matter. The benchmark was underpowered; the design flaws are listed.", "robots.html"],
+ ["Alignment", "mixed", "Inconclusive at matched compute", "The first run made optimal transport look clearly worse than ICP, but it had a tenth of the update budget. At matched compute the comparison is inconclusive. Transport-based registration already exists.", "alignment.html"],
+ ["Shadows", "mixed", "Simulation only", "A shadow can make depth locally identifiable, if it lands in frame. A multiples-style argument, shown only in idealised simulation.", "shadows.html"]]
+ .forEach(([t, k, b, x, h]) => L.append(E("a", { class: "card link", href: h }, E("div", { style: "display:flex;justify-content:space-between;gap:10px;margin-bottom:8px" }, E("b", {}, t), V.badge(k, b)), E("p", { class: "small muted", style: "margin:0" }, x))));
+
+const LEDGER = [
+ ["Illumination and null-space analysis of generated worlds", "Fisher and visibility maps in reconstruction; evidence tracking inside generators", "A post-hoc analysis of the exported splats of a world generated elsewhere", "Illumination experiment: practically equal to visibility"],
+ ["Ensembles of generated worlds", "Multi-hypothesis sampling inside generators", "An external ensemble test with shared-error analysis (needs credits and permission)", "Not run"],
+ ["Wave-physics sensors on generated geometry", "Acoustic, radar, sonar and ultrasound rendering", "Phase-aware modelling with geometry-uncertainty propagation", "Not run"],
+ ["Hidden-structure inspection by robots", "Impact-echo, GPR and vibration robots, at component level", "Joint visual and geophysical active inspection with a proper evaluation", "Not run"],
+ ["Physical-parameter inversion for real-to-sim", "Heavily covered (video-based estimation, differentiable simulation)", "Identifiability, measurement design, model discrepancy", "Beam study (synthetic)"],
+ ["Robust misfits for registration", "Optimal-transport registration exists", "Other formulations (image or depth distributions, per ray)", "Alignment experiment: inconclusive at matched compute"],
+ ["Task-based evaluation of generated geometry", "Accuracy-versus-task gaps shown in active mapping", "A trust-map benchmark tied to robot outcomes", "Robot experiment: inconclusive"],
+ ["Migration and transient imaging", "Established (non-line-of-sight imaging, SAR)", "Only new sensors or regimes; not a novelty claim", "Not run"]];
+document.getElementById("ledger").append(...LEDGER.map((r) => E("tr", {}, r.map((c) => E("td", {}, c)))));
+
+const Q = [["Taxonomy of World Models", "AI-generated geometry can look correct while containing self-intersections or wrong scale that produce nonsensical physics.", "https://www.worldlabs.ai/blog/taxonomy-of-world-models"],
+ ["Real-to-Sim-to-Real", "Object shape, weight, and friction may be uncertain; cameras and robots can differ from their specifications; and cables, packaging, and tools deform in ways that simple models cannot fully capture.", "https://www.worldlabs.ai/blog/real-to-sim-to-real"],
+ ["Marble prompt guide: unseen areas", "Parts of the scene the cameras never see, such as behind closed doors, around solid walls, or up a staircase, are generated plausibly to keep the world explorable, so they won't match a real floor plan of those hidden areas.", "https://docs.worldlabs.ai/marble/create/prompt-guides/multi-image-prompt.md", "A design choice that keeps worlds explorable. A measure of how strongly the input constrains each part could complement it."]];
+document.getElementById("quotes").append(...Q.map(([t, q, u, note]) => E("div", { class: "card" }, E("div", { class: "muted small", style: "font-weight:600;margin-bottom:6px" }, t), E("p", { class: "small", style: "margin:0 0 8px" }, "“" + q + "”"), note ? E("p", { class: "small muted", style: "margin:0 0 8px" }, note) : null, E("a", { class: "small", href: u, rel: "noopener" }, "Source page"))));
+</script>
+</body>
+</html>

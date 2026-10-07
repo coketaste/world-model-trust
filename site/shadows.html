@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shadows · world-model-trust</title>
+<meta name="description" content="Why one photo cannot give distance, and how a cast shadow acts like a second view: an interactive explanation and results.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Shadows · world-model-trust">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/shadow-geom.js"></script>
+</head>
+<body data-autotoc>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">Experiment 3 of 4 · shadows as a second view</p>
+  <h1>Can a shadow tell you how far away something is?</h1>
+  <p class="lede">From one photo, "near and small" looks identical to "far and large". Seismologists know the same trap: a reflection time cannot separate velocity from depth. They break it with <em>multiples</em>, energy that travelled a different path. A cast shadow is a second viewpoint from the light. <span id="gate-badge"></span></p>
+</section>
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will learn</div><p>Why one photo cannot tell near-and-small from far-and-large, and how a cast shadow acts like a second view.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>In an idealised simulation a shadow makes depth identifiable, if it lands in frame; textured floors and a mislocated light weaken it.</p></div>
+</aside>
+
+
+<div class="grid g3" id="tiles" style="margin-top:22px"></div>
+
+<h2>See the ambiguity</h2>
+<p class="narrow">The grey disc is an occluder on a fixed line of sight from the camera. Drag the depth slider: the disc grows as it moves away, so the camera's view of it never changes (the silhouette angle stays put). The shadow on the floor does change. Whether that helps depends on whether the shadow falls on floor the camera can see.</p>
+<div class="filters" id="geo-controls"></div>
+<div class="card" style="padding:12px 14px">
+  <div class="legend" id="geo-legend"></div>
+  <svg id="geo" class="chart" viewBox="0 0 760 300" role="img" aria-label="Side view: camera, occluder on a fixed line of sight, light, and the shadow on the floor"></svg>
+  <div class="stats" id="geo-stats" aria-live="polite"></div>
+</div>
+
+<h2>The Hessian spectrum, read like a geophysicist</h2>
+<p class="narrow">In seismic inversion, directions the data cannot see show up as near-zero eigenvalues of the Gauss–Newton Hessian. Here the Fisher information plays that role. Without a shadow, one eigenvalue sits at numerical zero: that is the depth–size direction. With the shadow term it rises to about 7, within a factor of five of the next eigenvalue (about 34): the direction becomes observable, though still the weakest.</p>
+<div id="spectrum"></div>
+
+<h2>Where does it work?</h2>
+<p class="narrow">Fisher information was computed over a sweep of 1,080 setups: nine light azimuths, five elevations, four light sizes, two floor brightnesses and three depths. Each cell below shows how well depth is pinned down, as the standard deviation of log depth (0.1 means about ±10%). The stronger the colour, the more uncertain the depth (see the legend). Cells marked × miss your threshold.</p>
+<div class="filters" id="heat-controls"></div>
+<div class="chartcard" id="heat-card">
+  <header><h3>Depth uncertainty by light direction</h3><div class="tools" id="heat-tools"></div></header>
+  <p class="sub" id="heat-sub"></p>
+  <div class="legend" id="heat-legend"></div>
+  <div class="chartbody"><svg id="heat" class="chart" viewBox="0 0 760 340" role="img" aria-label="Heat map of depth uncertainty by light azimuth and elevation"></svg></div>
+  <div class="tablewrap" id="heat-table" hidden></div>
+  <div class="stats" id="heat-stats" aria-live="polite"></div>
+</div>
+
+<h2>The scoreboard, by regime</h2>
+<div id="charts"></div>
+
+<h2>What it does not show</h2>
+<div class="callout warn"><strong>Inverse crime.</strong>The data and the estimator use the same forward model. This shows local identifiability, not that the estimate would be accurate on real photos.</div>
+<div class="callout warn"><strong>No real shadows were tested.</strong>Splat worlds store appearance as colour, so the photos rendered from them have no separately modelled cast shadows, and any test there would be circular. Stage B was skipped on purpose.</div>
+<div class="callout warn"><strong>Textured floors hurt.</strong>When the unknown floor texture has a scale comparable to the shadow, information collapses (see the stress test above). Single-image shadow methods are most plausible for sunlit scenes or one dominant lamp.</div>
+<details><summary>Prior art and the seismic analogy</summary>
+  <p>Methods that recover geometry from shadows or two-bounce light already exist, including ShadowNeuS (arXiv 2211.14086) and, with lidar, PlatoNeRF (arXiv 2312.14239); their exact capture requirements were not re-verified here. The claim in this page, one image under one natural light, is shown only in simulation.</p>
+  <p>In reflection seismology a single traveltime cannot separate velocity from depth (Bickel 1990); offset (moveout) resolves it, just as camera baseline (parallax) resolves scale. A multiple is energy on a different path that illuminates what the primary arrivals do not, and its usefulness depends on whether that path lands inside the recorded aperture. For a shadow, that condition is "the shadow falls inside the frame".</p>
+</details>
+<footer><p><a href="index.html">← Overview</a> · Source: <code>results/WP3.md</code>, <code>src/wmt/wp3_shadow_model.py</code></p></footer>
+</main>
+<script>
+V.nav("shadows.html");
+const D = window.WMT.wp3, E = V.el, G = ShadowGeom;
+document.getElementById("gate-badge").append(V.badge("mixed", "Success criterion met · in simulation only"));
+
+const tiles = document.getElementById("tiles");
+[["Without a shadow", V.fmt.sci(D.S1.ratio), "ratio of smallest to largest Fisher eigenvalue: the depth–size direction is exactly unobservable"],
+ ["With a shadow", V.fmt.n(D.S2.std_logd, 4), `std(log depth) at noise 0.02, about ±${(D.S2.std_logd * 100).toFixed(1)}%. Without a shadow it is infinite`],
+ ["Favourable setups passing", V.fmt.pct(D.S3.frac), "a 54-setup slice (lateral light, mid elevation, hard light, bright floor, known light); only if the shadow lands on floor the camera can see"]]
+  .forEach(([l, v, n]) => tiles.append(E("div", { class: "card tile" }, E("div", { class: "label" }, l), E("div", { class: "value" }, v), E("div", { class: "note" }, n))));
+
+/* ---------- side-view geometry ---------- */
+const gs = { z: 3, elev: 50, side: -1 };
+const gc = document.getElementById("geo-controls");
+gc.append(V.slider("Occluder depth along the line of sight", () => gs.z, (v) => (gs.z = v), 1.5, 6, 0.25, " m", drawGeo));
+gc.append(V.slider("Light elevation", () => gs.elev, (v) => (gs.elev = v), 15, 80, 5, "°", drawGeo));
+gc.append(V.seg("Light is on the", [[-1, "Camera side"], [1, "Behind the occluder"]], () => gs.side, (k) => (gs.side = k), drawGeo));
+document.getElementById("geo-legend").append(
+  E("span", {}, E("i", { style: "background:var(--ink2)" }), "Occluder (same view at every depth)"),
+  E("span", {}, E("i", { style: "background:var(--s2)" }), "Shadow on the floor"),
+  E("span", {}, E("i", { style: "background:var(--s1)" }), "Floor the camera can see"));
+
+const geo = document.getElementById("geo"), X = (z) => 24 + z * 88, Y = (y) => 262 - y * 74;
+const layer = E("g"); geo.append(layer);
+function drawGeo() {
+  const o = G.occluder(gs.z), L = G.lightPos(o, gs.elev, gs.side), s = G.shadow(o, L), cam = [0, G.CAM_H], pieces = [];
+  pieces.push(E("line", { x1: X(0), x2: X(8), y1: Y(0), y2: Y(0), stroke: "var(--axis)", "stroke-width": 1 }));
+  // visible floor
+  pieces.push(E("line", { x1: X(G.Z_VISIBLE), x2: X(8), y1: Y(0) + 5, y2: Y(0) + 5, stroke: "var(--s1)", "stroke-width": 4, "stroke-linecap": "butt" }));
+  pieces.push(E("text", { x: X(G.Z_VISIBLE) + 4, y: Y(0) + 22 }, "visible floor starts at " + G.Z_VISIBLE.toFixed(1) + " m"));
+  // view cone lower edge + silhouette rays
+  const sil = G.silhouetteDeg(o) * Math.PI / 180, base = Math.atan2(o.y - cam[1], o.z);
+  [-1, 1].forEach((sgn) => { const a = base + sgn * sil, len = 7.5; pieces.push(E("line", { x1: X(0), y1: Y(cam[1]), x2: X(len * Math.cos(a)), y2: Y(cam[1] + len * Math.sin(a)), stroke: "var(--axis)", "stroke-width": 1 })); });
+  // shadow bar
+  if (s) {
+    const lo = Math.max(0, s.lo), hi = isFinite(s.hi) ? Math.min(8, s.hi) : 8;
+    pieces.push(E("line", { x1: X(lo), x2: X(hi), y1: Y(0) - 3, y2: Y(0) - 3, stroke: "var(--s2)", "stroke-width": 6 }));
+  }
+  // light rays (tangents) as thin lines
+  if (s) [s.lo, s.hi].forEach((zz) => { if (isFinite(zz) && zz >= 0 && zz <= 8) pieces.push(E("line", { x1: X(L.z), y1: Y(L.y), x2: X(zz), y2: Y(0), stroke: "var(--axis)", "stroke-width": 1 })); });
+  pieces.push(E("circle", { cx: X(o.z), cy: Y(o.y), r: o.r * 74, fill: "var(--ink2)", style: "opacity:.85" }));
+  pieces.push(E("circle", { cx: X(L.z), cy: Y(L.y), r: 7, fill: "var(--warn)", stroke: "var(--surface)", "stroke-width": 2 }), E("text", { x: X(L.z) + 11, y: Y(L.y) + 4 }, "light"));
+  pieces.push(E("circle", { cx: X(cam[0]), cy: Y(cam[1]), r: 7, fill: "var(--ink)", stroke: "var(--surface)", "stroke-width": 2 }), E("text", { x: X(0) - 4, y: Y(cam[1]) - 12, class: "strong" }, "camera"));
+  layer.replaceChildren(...pieces);
+  const vs = G.visibleShadow(s), lever = G.leverArm(gs.z, gs.elev, gs.side);
+  document.getElementById("geo-stats").replaceChildren(
+    ...[[G.silhouetteDeg(o).toFixed(2) + "°", "silhouette half-angle (never changes)"],
+      [s ? (isFinite(s.hi) ? `${Math.max(0, s.lo).toFixed(1)}–${s.hi.toFixed(1)} m` : "reaches far past the scene") : "none", "shadow on the floor"],
+      [vs.toFixed(1) + " m", "of that shadow on visible floor"],
+      [lever == null ? "n/a" : (lever * 100).toFixed(0) + " cm", "shadow shift per +10% depth (the lever arm)"]].map(([b, t]) => E("div", {}, E("b", {}, b), E("span", {}, t))));
+}
+drawGeo();
+
+/* ---------- heat map explorer ---------- */
+const A = D.axes, hs = { depth: 1, R: 0, alb: 1, know: 5, noise: 0.02, thr: 0.1 };
+const KN = [[5, "Light and floor known"], [6, "Floor brightness unknown"], [7, "Light position unknown"], [8, "Both unknown"]];
+const hc = document.getElementById("heat-controls");
+hc.append(V.seg("Occluder depth", A.depth.map((d, i) => [i, d + " m"]), () => hs.depth, (v) => (hs.depth = v), drawHeat));
+hc.append(V.seg("Light size", A.R.map((r, i) => [i, r === 0 ? "Point" : r + " m"]), () => hs.R, (v) => (hs.R = v), drawHeat));
+hc.append(V.seg("Floor", A.floor_albedo.map((a, i) => [i, a < 0.4 ? "Dark" : "Bright"]), () => hs.alb, (v) => (hs.alb = v), drawHeat));
+hc.append(V.seg("What the estimator knows", KN, () => hs.know, (v) => (hs.know = v), drawHeat));
+hc.append(V.slider("Image noise", () => hs.noise, (v) => (hs.noise = v), 0.005, 0.05, 0.005, "", drawHeat));
+hc.append(V.slider("Accept depth uncertainty up to", () => hs.thr, (v) => (hs.thr = v), 0.02, 0.3, 0.01, "", drawHeat));
+
+const BINS = [[0.01, "var(--o1)", "< 0.01"], [0.03, "var(--o2)", "0.01–0.03"], [0.1, "var(--o3)", "0.03–0.1"], [0.3, "var(--o4)", "0.1–0.3"], [Infinity, "var(--o5)", "> 0.3 or unobservable"]];
+document.getElementById("heat-legend").append(...BINS.map(([, c, t]) => E("span", {}, E("i", { style: `background:${c}` }), "std(log depth) " + t)));
+const binOf = (v) => { const i = BINS.findIndex(([m]) => v < m); return i < 0 ? BINS.length - 1 : i; }; /* Infinity or NaN falls in the last bin */
+const heat = document.getElementById("heat"), CW = 66, CH = 52, X0 = 70, Y0 = 8;
+function cellValue(pi, ei) {
+  const row = D.cells.find((r) => r[0] === pi && r[1] === ei && r[2] === hs.R && r[3] === hs.alb && r[4] === hs.depth);
+  const u = row && row[hs.know]; return u == null ? Infinity : u * hs.noise;
+}
+function drawHeat() {
+  const parts = [], tbl = [];
+  A.elev.slice().reverse().forEach((el, ri) => {
+    const ei = A.elev.indexOf(el);
+    parts.push(E("text", { x: X0 - 10, y: Y0 + ri * CH + CH / 2 + 4, "text-anchor": "end", class: "ink2" }, el + "°"));
+    A.phi.forEach((ph, pi) => {
+      const v = cellValue(pi, ei), b = binOf(v), bad = !(v <= hs.thr), x = X0 + pi * CW, y = Y0 + ri * CH;
+      const r = E("rect", { class: "mark", x: x + 1, y: y + 1, width: CW - 2, height: CH - 2, rx: 4, fill: BINS[b][1] });
+      parts.push(r);
+      if (bad) parts.push(E("text", { x: x + CW / 2, y: y + CH / 2 + 6, "text-anchor": "middle", style: "font-size:18px;font-weight:700;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round" }, "×"));
+      const hit = E("rect", { class: "hit", x, y, width: CW, height: CH });
+      V.attachTip(hit, () => ({ title: `light azimuth ${ph}°, elevation ${el}°`, rows: [{ value: isFinite(v) ? V.fmt.n(v, 4) : "unobservable", label: "std(log depth)" }, { value: bad ? "misses" : "meets", label: `threshold ${hs.thr}` }] }));
+      hit.addEventListener("pointerenter", () => (r.style.opacity = 0.8)); hit.addEventListener("pointerleave", () => (r.style.opacity = 1));
+      parts.push(hit);
+      tbl.push([`${ph}°`, `${el}°`, isFinite(v) ? V.fmt.n(v, 4) : "unobservable", bad ? "no" : "yes"]);
+    });
+  });
+  A.phi.forEach((ph, pi) => parts.push(E("text", { x: X0 + pi * CW + CW / 2, y: Y0 + A.elev.length * CH + 20, "text-anchor": "middle", class: "ink2" }, ph + "°")));
+  parts.push(E("text", { x: X0 + (A.phi.length * CW) / 2, y: Y0 + A.elev.length * CH + 40, "text-anchor": "middle" }, "light azimuth: 0° = camera side, 90° = to the side, 180° = behind the occluder"));
+  heat.replaceChildren(...parts);
+  const vals = A.phi.flatMap((_, pi) => A.elev.map((_, ei) => cellValue(pi, ei))), pass = vals.filter((v) => v <= hs.thr).length;
+  document.getElementById("heat-sub").textContent = `Occluder at ${A.depth[hs.depth]} m, ${A.R[hs.R] === 0 ? "point light" : "light of radius " + A.R[hs.R] + " m"}, ${A.floor_albedo[hs.alb] < 0.4 ? "dark" : "bright"} floor, image noise ${hs.noise}. Elevation 80° is at the top.`;
+  document.getElementById("heat-stats").replaceChildren(E("div", {}, E("b", {}, `${pass} of ${vals.length}`), E("span", {}, "light directions meet the threshold")),
+    E("div", {}, E("b", {}, "0 of 45"), E("span", {}, "would meet it without the shadow term (always unobservable)")));
+  const t = document.getElementById("heat-table"); t.replaceChildren(E("table", {}, E("thead", {}, E("tr", {}, ["Azimuth", "Elevation", "std(log depth)", "Meets threshold"].map((h, i) => E("th", { class: i ? "num" : "" }, h)))), E("tbody", {}, tbl.map((r) => E("tr", {}, r.map((c, i) => E("td", { class: i ? "num" : "" }, c)))))));
+}
+const hb = E("button", { class: "ghost", type: "button", "aria-pressed": "false" }, "Table view");
+hb.addEventListener("click", () => { const t = document.getElementById("heat-table"), body = document.querySelector("#heat-card .chartbody"), on = t.hidden; t.hidden = !on; body.hidden = on; hb.textContent = on ? "Chart view" : "Table view"; });
+document.getElementById("heat-tools").append(hb);
+drawHeat();
+
+
+/* ---------- Fisher spectrum, log scale ---------- */
+(function () {
+  const sp = D.spectrum, mount = document.getElementById("spectrum");
+  const c = V.card(mount, { title: "Fisher eigenvalues of the occluder's five parameters", sub: "Reference setup, light and floor known, noise 0.02. Log scale; the smallest eigenvalue without a shadow is numerical noise around 1e-14, i.e. exactly unobservable.", legend: [{ label: "With the shadow term", color: "var(--s1)" }, { label: "Without the shadow term", color: "var(--s2)" }] });
+  const W = 760, H = 320, x0 = 64, x1 = W - 20, y0 = 14, y1 = H - 46, lo = -16, hi = 4;
+  const sy = V.scale(hi, lo, y0, y1), n = 5, gw = (x1 - x0) / n, bw = 22, gap = 2;
+  const svg = V.el("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Fisher eigenvalue spectrum with and without the shadow term" }), g = V.el("g", { class: "grid" });
+  for (let e = lo; e <= hi; e += 4) { g.append(V.el("line", { x1: x0, x2: x1, y1: sy(e), y2: sy(e) })); svg.append(V.el("text", { x: x0 - 8, y: sy(e) + 4, "text-anchor": "end" }, "1e" + e)); }
+  svg.prepend(g);
+  const series = [["with_shadow", "var(--s1)", "With the shadow term"], ["no_shadow", "var(--s2)", "Without the shadow term"]], rows = [];
+  for (let i = 0; i < n; i++) {
+    const cx = x0 + gw * i + gw / 2;
+    svg.append(V.el("text", { x: cx, y: H - 24, "text-anchor": "middle", class: "ink2" }, i === 0 ? "smallest" : i === n - 1 ? "largest" : "λ" + (i + 1)));
+    const vals = series.map(([k]) => sp[k][i]); rows.push([i === 0 ? "smallest" : i === n - 1 ? "largest" : "λ" + (i + 1), ...vals.map((v) => v.toExponential(2))]);
+    series.forEach(([k, col, name], j) => {
+      const v = Math.max(sp[k][i], 1e-16), top = sy(Math.log10(v)), x = cx + (j === 0 ? -bw - gap / 2 : gap / 2), h = y1 - top;
+      const m = V.el("path", { class: "mark", d: `M${x},${y1}V${top + 4}Q${x},${top} ${x + 4},${top}H${x + bw - 4}Q${x + bw},${top} ${x + bw},${top + 4}V${y1}Z`, fill: col });
+      svg.append(m);
+      const hit = V.el("rect", { class: "hit", x: x - 2, y: y0, width: bw + 4, height: y1 - y0 });
+      V.attachTip(hit, () => ({ title: i === 0 ? "smallest eigenvalue" : "eigenvalue " + (i + 1) + " of 5", rows: [{ value: sp[k][i].toExponential(2), label: name, color: col }] }));
+      svg.append(hit);
+    });
+  }
+  svg.append(V.el("line", { class: "axis", x1: x0, x2: x1, y1: y1, y2: y1 }));
+  c.body.append(svg);
+  V.addTable(c, ["Eigenvalue", "With shadow", "Without shadow"], rows);
+})();
+
+/* ---------- regime + stress charts ---------- */
+const charts = document.getElementById("charts");
+const SS = [{ key: "known", label: "Light and floor known", color: "var(--s1)" }, { key: "both", label: "Light and floor both unknown", color: "var(--s2)" }];
+const regimes = Object.entries(D.regimes).map(([k, v]) => ({ label: k.replace(/\(.*\)/, "").trim(), full: k, values: { known: v.known.frac, both: v.both.frac } }));
+const c1 = V.card(charts, { title: "Share of setups that pin depth down, by regime", sub: "Fraction of cells with std(log depth) ≤ 0.10 at noise 0.02. Higher is better.", legend: SS.map((s) => ({ ...s, shape: "dot" })) });
+V.dotPlot(c1, { rows: regimes, series: SS, domain: [0, 1], labelW: 210, tickFmt: (t) => Math.round(t * 100) + "%", valueFmt: (v) => V.fmt.pct(v, 0) });
+V.addTable(c1, ["Regime", ...SS.map((s) => s.label)], Object.entries(D.regimes).map(([k, v]) => [k, V.fmt.pct(v.known.frac), V.fmt.pct(v.both.frac)]));
+
+const depths = Object.entries(D.by_depth).map(([z, v]) => ({ label: z + " m", values: { known: v.known.frac, light: v.light.frac } }));
+const SD = [{ key: "known", label: "Light known", color: "var(--s1)" }, { key: "light", label: "Light unknown", color: "var(--s2)" }];
+const c2 = V.card(charts, { title: "The shadow has to land in frame", sub: "Share of all 1,080 setups that pin depth down, by occluder depth. In this modelled setup the camera sees floor only beyond about 3.5 m, so a close occluder casts its shadow out of view.", legend: SD.map((s) => ({ ...s, shape: "dot" })) });
+V.dotPlot(c2, { rows: depths, series: SD, domain: [0, 1], labelW: 90, tickFmt: (t) => Math.round(t * 100) + "%", valueFmt: (v) => V.fmt.pct(v, 0) });
+V.addTable(c2, ["Occluder depth", ...SD.map((s) => s.label)], depths.map((r) => [r.label, V.fmt.pct(r.values.known), V.fmt.pct(r.values.light)]));
+
+const T = D.stress.texture, tex = [["Known texture", "known texture"], ["4 m", "scale 4.0 m (21 nodes)"], ["2 m", "scale 2.0 m (52 nodes)"], ["1 m", "scale 1.0 m (153 nodes)"], ["0.5 m", "scale 0.5 m (452 nodes)"]];
+const c3 = V.card(charts, { title: "Unknown floor texture erodes the signal", sub: "Depth uncertainty as the unknown texture gets finer, for the reference setup (exploratory stress test). The shadow itself is about 1.2 m wide.", });
+V.hbars(c3, { items: tex.map(([l, k]) => ({ label: l === "Known texture" ? l : "Texture scale " + l, value: T[k].std_logd_at_nu0p02, tipLabel: "std(log depth)" })), max: 0.32, valueFmt: (v) => V.fmt.n(v, 3), labelW: 150, ref: { value: 0.1, label: "0.10 target" } });
+V.addTable(c3, ["Texture", "std(log depth)"], tex.map(([l, k]) => [l, V.fmt.n(T[k].std_logd_at_nu0p02, 4)]));
+
+const c4 = V.card(charts, { title: "A wrong light position biases depth", sub: "Median bias of log depth when the estimator's light is displaced (exploratory). 0.04 means about 4%." });
+V.hbars(c4, { items: D.stress.light_error.map((r) => ({ label: `Light off by ${r.light_error_m} m`, value: r.median_abs_bias_logd, tipLabel: `median bias; max ${V.fmt.n(r.max_abs_bias_logd, 3)}` })), max: 0.05, valueFmt: (v) => V.fmt.n(v, 3), labelW: 150 });
+V.addTable(c4, ["Light error", "Median bias", "Max bias"], D.stress.light_error.map((r) => [r.light_error_m + " m", V.fmt.n(r.median_abs_bias_logd, 4), V.fmt.n(r.max_abs_bias_logd, 4)]));
+window.addEventListener("themechange", () => { drawGeo(); drawHeat(); });
+</script>
+</body>
+</html>

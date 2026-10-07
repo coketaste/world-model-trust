@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ideas: what could a geophysicist contribute? · world-model-trust</title>
+<meta name="description" content="A brainstorm board: nine ways seismic-imaging methods could contribute to spatial intelligence and physical AI, with what already exists, what was tested, and what is next.">
+<meta name="twitter:card" content="summary">
+<meta property="og:title" content="Ideas: what could a geophysicist contribute to spatial intelligence and physical AI?">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/viz.js"></script>
+<script src="assets/data.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<noscript><div class="callout warn"><strong>JavaScript is off</strong>The charts, filters and demos on these pages need JavaScript. The text, tables and links still work, but some sections will be empty.</div></noscript>
+<section class="hero" style="padding-bottom:8px">
+  <p class="eyebrow">The brainstorm</p>
+  <h1>Nine ways seismic ideas could help</h1>
+  <p class="lede">Each card pairs an open problem that World Labs or the wider field describes with a seismic-imaging idea, offered as a complementary idea (nothing here evaluates anyone's products), and says honestly what already exists, what this project tested, and what would come next. These are hypotheses to examine, not claims of new methods. New to the methods? Start with the <a href="geophysics.html#methods-in-pictures">illustrated primer</a>.</p>
+</section>
+
+<aside class="glance" aria-label="At a glance">
+  <div><div class="glance-label">What you will find</div><p>A filterable board of ideas. Each shows the open problem it addresses, the seismic idea behind it, existing work, our evidence so far, and the next step.</p></div>
+  <div><div class="glance-label">Key takeaway</div><p>The best-supported ideas are about <b>trust and identifiability</b>: saying what a generated world or a fitted physical parameter does and does not tell you. Most other ideas already have strong prior work.</p></div>
+</aside>
+
+<div class="callout"><strong>Two terms</strong><b>Spatial intelligence</b> here means understanding and generating 3D scenes from images, as World Labs' world models do. <b>Physical AI</b> means agents, such as robots, that act in the physical world and need those scenes to be trustworthy and physically meaningful.</div>
+
+<div class="filters" id="filters"></div>
+<p class="muted small" id="count" aria-live="polite"></p>
+<div class="grid g2" id="board"></div>
+
+<h2>How these were chosen</h2>
+<p class="narrow">Each idea has a documented need (quoted from World Labs' public pages where one exists) and a seismic method that plausibly applies. The "already exists" lines come from the <a href="literature.html">verified literature map</a>; "not found in this search" never means "does not exist". Ideas that look already covered are included on purpose, so that nothing is presented as new when it is not.</p>
+<footer><p><a href="index.html">← Overview</a></p></footer>
+</main>
+<script>
+V.nav("ideas.html");
+const E = V.el, D = window.WMT;
+const f = V.fmt;
+
+const IDEAS = [
+ { title: "A trust map for generated worlds", themes: ["spatial", "physical"], ev: "tested", needs: "none",
+   need: "Marble's documentation explains that parts of a scene the cameras never see are \"generated plausibly to keep the world explorable\". A per-region measure of how strongly the input constrains each part could complement that design.",
+   seismic: "Illumination and resolution analysis: show how strongly the data constrain each point, and mark shadow zones.",
+   exists: "Fisher-information and visibility uncertainty for radiance fields (FisherRF, GAVIS, Bayes' Rays); evidence tracking inside generators (OracleGS, 3D-Belief). A post-hoc analysis of the exported splats of a world generated elsewhere was not found in an arXiv search.",
+   tested: `Illumination experiment: the score is practically equal to plain visibility (pooled AUROC ${f.n(D.wp0.pooled.ours, 3)} against ${f.n(D.wp0.pooled.visibility, 3)}) and clearly beats an in-frame test (${f.n(D.wp0.pooled.frustum, 3)}).`,
+   next: "Tie the map to a robot task and report where it changes the outcome.", link: ["illumination.html", "Illumination experiment"], lit: "Fisher" },
+ { title: "Ensembles: how different could the filled-in part be?", themes: ["spatial"], ev: "untested", needs: "credits",
+   need: "The same documentation notes that generated hidden areas are plausible rather than a record of the real space, so a user who needs a faithful copy of a real room benefits from knowing which parts came from the photos.",
+   seismic: "Posterior sampling and ensembles to quantify uncertainty in an inversion, with care for errors shared across samples.",
+   exists: "Multi-hypothesis sampling inside generators (3D-Belief). An external ensemble of a generator whose internals are not public was not found in this search.",
+   tested: "Not run. It needs paid API credits and, first, World Labs' agreement that this use is acceptable.",
+   next: "Ask for permission; then generate 3–5 worlds from one photo of a measured room and map where they disagree.", link: ["method.html", "Limits and permissions"], lit: "belief" },
+ { title: "Shadows as a second view for depth", themes: ["spatial"], ev: "partly", needs: "data",
+   need: "A single photo cannot separate near-and-small from far-and-large; generators must choose a scale.",
+   seismic: "Imaging with multiples: energy on a different path illuminates what primary arrivals miss.",
+   exists: "Shape-from-shadow and two-bounce lidar methods (ShadowNeuS, PlatoNeRF); their exact capture requirements were not re-verified here.",
+   tested: `Shadows experiment (idealised simulation): without a shadow the depth–size direction is exactly unobservable; with one, depth is locally identifiable (std of log depth about ${f.n(D.wp3.S2.std_logd, 3)}), if the shadow falls in frame.`,
+   next: "Test on real sunlit photographs with a measured scene.", link: ["shadows.html", "Shadows experiment"], lit: "shadow" },
+ { title: "Which measurements pin down a robot's physical parameters?", themes: ["physical"], ev: "partly", needs: "data",
+   need: "World Labs' real-to-sim-to-real post: \"Object shape, weight, and friction may be uncertain\".",
+   seismic: "Full-waveform-style inversion with resolution and null-space analysis, and experimental design: which experiment constrains which parameter.",
+   exists: "Parameter estimation from video and differentiable simulation is heavily covered (PAC-NeRF, PhysDreamer, gradSim). Formal identifiability and measurement design are less covered.",
+   tested: "A synthetic beam study recovers stiffness and damping from vibration data. With an incorrect support model the held-out waveform error stays near 2% while the intrinsic stiffness is off by about 25%: a fitted effective parameter can predict well and still be the wrong property.",
+   next: "Real cantilever measurements; compare against standard modal identification.", link: ["geophysics.html", "Geophysics page"], lit: "physical-parameter" },
+ { title: "Wave sensors on generated geometry", themes: ["physical"], ev: "untested", needs: "none",
+   need: "World Labs' pages focus on visual outputs (splats, meshes, panoramas, video). Robots also sense with sound, radar and ultrasound, an area where wave-physics experience could complement visual world models.",
+   seismic: "Finite-difference wave modelling, diffraction and low-frequency behaviour; velocity analysis.",
+   exists: "Acoustic simulation for embodied AI (SoundSpaces 2.0, GWA) and radar, sonar and ultrasound splatting (RadarSplat, SonarSplat, PAGS) are active areas. Wave acoustics on generated geometry with propagated uncertainty was not found.",
+   tested: "Not run.", next: "Validate a finite-difference solver on a measured-room benchmark, then try generated geometry.", link: ["literature.html?q=acoustic", "Related work"], lit: "acoustic" },
+ { title: "Robots that inspect hidden structure", themes: ["physical"], ev: "untested", needs: "none",
+   need: "An open question for physical AI: could an agent combine visual and geophysical sensing to decide where to measure next?",
+   seismic: "Tomography and migration to localise structure, survey design to choose the next measurement, belief updating.",
+   exists: "Robots doing impact-echo, GPR and vibration inspection exist at component level. Joint visual and geophysical active inspection was not found as one paper.",
+   tested: "Not run.", next: "A synthetic study with one buried feature and a fair comparison against fixed-grid surveys.", link: ["literature.html?q=inspection", "Related work"], lit: "inspection" },
+ { title: "Robust alignment of generated worlds to real data", themes: ["physical", "spatial"], ev: "tested", needs: "none",
+   need: "Real-to-sim-to-real needs the generated world aligned with what the robot sees.",
+   seismic: "Misfit design to avoid local minima (cycle skipping), including optimal-transport misfits.",
+   exists: "Optimal-transport registration and point-to-plane ICP already exist in vision.",
+   tested: `Alignment experiment: at its original, smaller budget one optimal-transport formulation had a much narrower basin than ICP (clean check ${f.n(D.wp2 ? D.wp2.C.basins.strict.ot : NaN, 3)} against ${f.n(D.wp2 ? D.wp2.C.basins.strict.icp : NaN, 3)}). At matched compute (100 updates) the two are about level and the comparison is inconclusive.`,
+   next: "Other formulations and per-ray one-dimensional misfits; note that optimal transport followed by ICP beat plain ICP at matched compute (hybrid, exploratory).", link: ["alignment.html", "Alignment experiment"], lit: "optimal transport" },
+ { title: "Does a trust map keep a robot safe?", themes: ["physical"], ev: "tested", needs: "none",
+   need: "World Labs' taxonomy post names this as an open problem for generated geometry in general: \"AI-generated geometry can look correct while containing self-intersections or wrong scale that produce nonsensical physics.\"",
+   seismic: "Blind tests against known truth and quality control culture.",
+   exists: "An active-mapping study (arXiv 2609.06820) finds that correcting occupancy errors alone does not consistently improve final coverage.",
+   tested: "Robot experiment: inconclusive. The benchmark was underpowered and needed post-hoc fixes; no trust policy beat \"unknown = obstacle\".",
+   next: "Redesign with a camera that sees the floor, more worlds and more goals.", link: ["robots.html", "Robot experiment"], lit: "coverage" },
+ { title: "Migration-style imaging for new sensors", themes: ["physical"], ev: "untested", needs: "data",
+   need: "Not a topic World Labs' pages address; relevant to robots with radar or time-of-flight sensors.",
+   seismic: "Migration: back-propagate recorded wavefields to image reflectors; least-squares migration.",
+   exists: "Established: f-k migration was adapted to non-line-of-sight imaging in 2019 and to SAR. It does not apply to ordinary RGB images, which have no phase or time axis.",
+   tested: "Not run.", next: "Only worthwhile with a transient or radar dataset.", link: ["literature.html?q=migration", "Related work"], lit: "migration" }
+];
+
+const EVL = { tested: ["Tested here", "run"], partly: ["Partly tested", "run"], untested: ["Not tested", "run"] };
+const NEEDS = { none: "Nothing special needed", credits: "Needs credits and permission", data: "Needs data or hardware" };
+const st = { theme: "all", ev: "all", needs: "all" }, fl = document.getElementById("filters");
+const seg = (label, opts, key) => fl.append(V.seg(label, opts, () => st[key], (k) => (st[key] = k), paint));
+seg("Area", [["all", "All"], ["spatial", "Spatial intelligence"], ["physical", "Physical AI"]], "theme");
+seg("Evidence so far", [["all", "All"], ["tested", "Tested here"], ["partly", "Partly"], ["untested", "Not tested"]], "ev");
+seg("What it needs", [["all", "All"], ["none", "Nothing special"], ["credits", "Credits or permission"], ["data", "Data or hardware"]], "needs");
+
+const board = document.getElementById("board"), count = document.getElementById("count");
+const row = (k, v) => E("div", { class: "row" }, E("b", {}, k + ". "), v);
+const cards = IDEAS.map((i, n) => E("article", { class: "card idea" },
+  E("div", { class: "tags" }, V.badge(EVL[i.ev][1], EVL[i.ev][0]), ...i.themes.map((t) => E("span", { class: "tag" }, t === "spatial" ? "Spatial intelligence" : "Physical AI")), E("span", { class: "tag" }, NEEDS[i.needs])),
+  E("h3", {}, (n + 1) + ". " + i.title),
+  row("The open problem", i.need), row("The seismic idea", i.seismic), row("Already exists", i.exists), row("This project", i.tested), row("Next step", i.next),
+  E("div", { class: "row" }, E("a", { href: i.link[0] }, i.link[1] + " →"))));
+function paint() {
+  let shown = 0;
+  cards.forEach((c, k) => { const i = IDEAS[k], ok = (st.theme === "all" || i.themes.includes(st.theme)) && (st.ev === "all" || i.ev === st.ev) && (st.needs === "all" || i.needs === st.needs); c.hidden = !ok; if (ok) shown++; });
+  count.textContent = `${shown} of ${IDEAS.length} ideas shown`;
+}
+board.append(...cards); paint();
+</script>
+</body>
+</html>
