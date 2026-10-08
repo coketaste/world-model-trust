@@ -11,6 +11,7 @@ dependencies = ["numpy", "scipy", "matplotlib", "pillow"]
 depth = ["torch", "transformers"]
 dev = ["pytest"]
 wp2 = ["open3d", "libusb-package"]
+salt = ["scikit-image", "h5py"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

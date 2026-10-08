@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explore a 3D salt model · world-model-trust</title>
+<meta name="description" content="Explore the SEG/EAGE 3D salt benchmark: rotate its salt body, move velocity slices, and compare schematic acquisition layouts.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/salt.css">
+<script src="assets/viz.js"></script>
+</head>
+<body>
+<div id="nav"></div>
+<main class="wrap">
+<section class="hero salt-hero">
+  <p class="eyebrow"><a href="geophysics.html">Geophysics</a> / An existing 3D benchmark</p>
+  <h1>Look beneath the salt.</h1>
+  <p class="lede">A complicated shape, a known model, and an incomplete view. Explore the SEG/EAGE salt body to see why recovering a 3D world takes more than a convincing surface.</p>
+  <p class="small" id="model-summary"><b>SEG/EAGE 3D Salt Model (1997).</b> This preview uses the recoverable interior of a published derivative: <b>0.30–3.66 km depth</b>, across the model’s X/Y sample extent of 13.50 × 13.50 km. <a href="#provenance">Source and transformations ↓</a></p>
+</section>
+
+<section class="salt-explorer" aria-label="Interactive salt model">
+  <div class="salt-stage-wrap">
+    <div class="salt-stage" id="salt-stage">
+      <img id="salt-fallback" src="assets/salt/preview.png" alt="Oblique view of the SEG/EAGE salt body within the retained 0.30 to 3.66 kilometre depth interval. Its irregular canopy and steep sides sit inside the full horizontal model footprint.">
+      <div class="salt-canvas-host" id="salt-canvas-host"></div>
+      <div class="salt-stage-tag">SEG/EAGE <span id="crop-tag">/ interior crop</span></div>
+      <div class="salt-axis-labels" aria-hidden="true"></div>
+      <div class="salt-stage-note">Physical scale · depth positive down · no vertical exaggeration</div>
+    </div>
+    <div class="salt-toolbar">
+      <span id="salt-status" role="status" aria-live="polite">Static preview. Interactive exploration requires JavaScript and WebGL.</span>
+      <button class="ghost" id="retry" type="button" hidden>Retry loading</button>
+    </div>
+    <p class="small salt-instructions" id="viewer-help">Drag to rotate · scroll or pinch to zoom · arrow keys to rotate when the view is focused. Use the view buttons for preset angles.</p>
+    <noscript><p class="callout">The image above and reference sections below work without JavaScript. Enable JavaScript for rotation and movable slices.</p></noscript>
+  </div>
+
+  <fieldset class="salt-controls" id="salt-controls" disabled>
+    <legend class="sr">Explore the model</legend>
+    <div class="salt-control-section">
+      <h2>Your viewpoint</h2>
+      <div class="salt-buttons" aria-label="Camera presets">
+        <button type="button" data-view="overview" class="ghost">Overview</button>
+        <button type="button" data-view="top" class="ghost">From above</button>
+        <button type="button" data-view="side" class="ghost">From the side</button>
+        <button type="button" data-view="below" class="ghost">From below</button>
+      </div>
+      <div class="salt-buttons"><button type="button" class="ghost" id="zoom-in" aria-label="Zoom in">Zoom +</button><button type="button" class="ghost" id="zoom-out" aria-label="Zoom out">Zoom −</button><button type="button" class="ghost" id="reset">Reset all</button></div>
+    </div>
+    <div class="salt-control-section">
+      <h2>The salt body</h2>
+      <label class="salt-check"><input type="checkbox" id="show-salt" checked> Show salt surface</label>
+      <label class="salt-range" for="salt-opacity">Opacity <output class="val" id="opacity-value">85%</output><input id="salt-opacity" type="range" min="0" max="100" value="85" step="1"></label>
+      <p class="small muted">Salt is selected at 4,482 m/s. Its surface ends where the retained volume ends.</p>
+    </div>
+    <div class="salt-control-section">
+      <h2>Slice through the volume</h2>
+      <label class="salt-check"><input type="checkbox" id="show-x"> X section</label>
+      <label class="salt-range" for="slice-x">X position <output class="val" id="x-value">—</output><input id="slice-x" type="range" min="0" max="1" value="0" step="1"></label>
+      <label class="salt-check"><input type="checkbox" id="show-y" checked> Y section</label>
+      <label class="salt-range" for="slice-y">Y position <output class="val" id="y-value">—</output><input id="slice-y" type="range" min="0" max="1" value="0" step="1"></label>
+      <label class="salt-check"><input type="checkbox" id="show-z"> Horizontal section</label>
+      <label class="salt-range" for="slice-z">Depth <output class="val" id="z-value">—</output><input id="slice-z" type="range" min="0" max="1" value="0" step="1"></label>
+      <div class="salt-colorbar" role="img" aria-label="P-wave velocity colour scale from 1.5 kilometres per second in dark purple to 4.5 kilometres per second in yellow"></div>
+      <div class="salt-scale"><span>1.5</span><span>P-wave velocity (km/s)</span><span>4.5</span></div>
+    </div>
+    <div class="salt-control-section">
+      <h2>Where would you measure?</h2>
+      <label for="acquisition" class="small">Schematic surface survey</label>
+      <select id="acquisition"><option value="none">No survey overlay</option><option value="narrow">Parallel survey lines</option><option value="wide">Crossing survey lines</option></select>
+      <p class="small muted">Blue markers show possible measurement positions at depth 0. These layouts are illustrative; no wave paths or illumination are calculated.</p>
+    </div>
+  </fieldset>
+</section>
+
+<section class="salt-guidance" aria-label="Guided exploration">
+  <article><span class="salt-step">01 / Shape</span><h2>Find the overhang.</h2><p>Choose “From below”, then rotate. A surface seen from one direction can conceal a much more complex underside.</p></article>
+  <article><span class="salt-step">02 / Interior</span><h2>Move through the salt.</h2><p>Lower the surface opacity and move the Y section. The colours are model velocities, not measured seismic amplitudes or a confidence score.</p></article>
+  <article><span class="salt-step">03 / Evidence</span><h2>Change where you observe.</h2><p>Compare parallel and crossing survey lines. Different positions offer different potential constraints; showing which helps requires a wave-propagation experiment.</p></article>
+</section>
+
+<h2 id="connection">Why this belongs in a discussion of 3D worlds</h2>
+<div class="grid g2">
+  <div class="card"><h3>A shape we know</h3><p>The SEG/EAGE model is a designed synthetic benchmark. Here we display its prescribed geometry. It gives us a reference against which a future reconstruction could be checked.</p><p>Salt’s velocity contrast bends and reflects seismic waves. Its complex boundaries make imaging the region beneath it difficult.</p></div>
+  <div class="card"><h3>A question we can share</h3><p>Image-based spatial reconstruction also has to infer geometry from limited observations. For a generated 3D world, the useful question is: <b>which parts are supported by evidence?</b></p><p>The physics differs: optical occlusion and seismic wave propagation are not interchangeable. This viewer illustrates the question; it does not test World Labs or measure reconstruction quality.</p></div>
+</div>
+<div class="callout"><strong>What this demonstration establishes</strong>It lets you inspect a known 3D model and its velocity sections. The survey overlay is schematic. There is no simulated acquisition, inversion, reconstructed-model comparison, or calibrated uncertainty map in this version.</div>
+
+<h2 id="reference">Reference sections</h2>
+<p class="narrow">Central sections through the same reduced volume, available even if the interactive viewer cannot run. D denotes depth. The horizontal and vertical distances use the same physical scale.</p>
+<figure class="salt-reference"><img src="assets/salt/sections.png" alt="Three central sections of the retained SEG/EAGE velocity volume, showing X, Y and horizontal cuts. Vertical sections have depth increasing downward." loading="lazy"><figcaption class="small muted">Derived from the retained SEG/EAGE interior. P-wave velocity in m/s; these are model sections, not seismic recordings.</figcaption></figure>
+
+<h2 id="provenance">Source, processing, and limits</h2>
+<p class="narrow" id="source-explanation">The original SEG archive was unavailable when this preview was prepared. We used the <a href="https://github.com/emsig/data/blob/2021-05-21/emg3d/models/SEG-EAGE-Salt-Model.h5">EMsig derivative</a>, verified against its published SHA-256. In its unchanged interior, the <a href="https://github.com/emsig/emg3d-gallery/blob/89997efe7ee5a7fceba1b9b559e5fac3fd9c0bef/examples/models/SEG-EAGE_3D_salt_model.py">published conversion</a> is reversible: ρ = (v / 1700)<sup>3.88</sup>. We reversed that conversion to recover velocities. We excluded the overwritten shallow water and deep basement, retaining original depth samples 15–183: 0.30–3.66 km. This is not the complete original volume.</p>
+<ul class="salt-source-list">
+  <li>The source grid has 676 × 676 × 210 samples at 20 m spacing. Coordinates here follow sample indices, with depth increasing down.</li>
+  <li>The browser volume samples every fourth X/Y point and every second depth point, preserving the final endpoints. Fine features can disappear at this resolution.</li>
+  <li>Velocities are stored to the nearest 1 m/s. The surface is extracted from salt membership near 4,482 m/s using marching cubes, without smoothing. It is open where it intersects the crop boundary.</li>
+  <li>The salt surface has a constant amber display colour; the sections use a separate velocity colour scale. Surface transparency does not represent uncertainty.</li>
+</ul>
+<p class="small"><a href="assets/salt/metadata.json">Exact dimensions, processing and checksums (JSON)</a> · <a href="assets/salt/README.md">Asset provenance</a> · <a href="assets/salt/LICENSE.txt">Data licence and attribution</a></p>
+<p class="small"><b>Credit:</b> SEG/EAGE 3-D Modeling committee; F. Aminzadeh, J. Brac and T. Kunz, <i>SEG/EAGE 3-D Salt and Overthrust Models</i> (1997). Copyright 1997 Society of Exploration Geophysicists. Model: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Published derivative and conversion: Dieter Werthmüller / EMsig. This project made the crop, recovered velocities, reduced the volume and generated the mesh and figures. No endorsement is implied.</p>
+<footer><p><a href="geophysics.html">← Back to the geophysics primer</a> · <a href="illumination.html">Explore the existing visibility experiment →</a></p></footer>
+</main>
+<script>
+V.nav("salt.html");
+if (location.protocol === 'file:') {
+  document.getElementById('salt-status').textContent = 'Interactive loading needs a local web server. The static model and sections are available.';
+} else {
+  const viewer = document.createElement('script');
+  viewer.type = 'module'; viewer.src = 'assets/salt-viewer.js';
+  viewer.onerror = () => { document.getElementById('salt-status').textContent = 'The 3D viewer could not load. The static model and reference sections are available.'; };
+  document.body.append(viewer);
+}
+</script>
+<script nomodule>document.getElementById('salt-status').textContent = 'This browser cannot run the interactive viewer. The static model and reference sections are available.';</script>
+</body>
+</html>

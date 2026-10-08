@@ -6,12 +6,12 @@ const path = require("path"), fs = require("fs");
 const SITE = path.resolve(__dirname, "..", "site");
 (async () => {
   let bad = 0;
-  for (const page of ["index", "ideas", "geophysics", "experiments", "illumination", "robots", "shadows", "alignment", "literature", "method"]) {
+  for (const page of ["index", "ideas", "geophysics", "salt", "experiments", "illumination", "robots", "shadows", "alignment", "literature", "method"]) {
     const errors = [];
     const vc = new VirtualConsole();
     vc.on("jsdomError", (e) => errors.push("jsdomError: " + (e.detail && e.detail.stack ? e.detail.stack.split("\n").slice(0, 3).join(" | ") : e.message)));
     vc.on("error", (e) => errors.push("console.error: " + e));
-    if (!fs.existsSync(path.join(SITE, page + ".html"))) { console.log(page + ": (not built yet)"); continue; }
+    if (!fs.existsSync(path.join(SITE, page + ".html"))) { console.log(page + ": missing page"); bad++; continue; }
     const dom = await JSDOM.fromFile(path.join(SITE, page + ".html"), { runScripts: "dangerously", resources: "usable", pretendToBeVisual: true, virtualConsole: vc, url: "file://" + SITE + "/" + page + ".html", beforeParse(w) { w.matchMedia = () => ({ matches: false, addEventListener() {}, addListener() {} }); w.SVGElement.prototype.createSVGPoint = () => ({ x: 0, y: 0, matrixTransform() { return this; } }); } });
     await new Promise((r) => setTimeout(r, 600));
     const d = dom.window.document;
@@ -39,4 +39,5 @@ const SITE = path.resolve(__dirname, "..", "site");
     dom.window.close();
   }
   console.log(bad ? "ERRORS FOUND" : "all pages ran without errors");
-})();
+  if (bad) process.exitCode = 1;
+})().catch((error) => { console.error(error); process.exitCode = 1; });

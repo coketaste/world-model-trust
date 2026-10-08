@@ -1,11 +1,11 @@
 /* Styles for the geophysics primer widgets only (linked from geophysics.html). Colours come from the site's CSS variables. */
-.wg { margin: 22px 0; scroll-margin-top: 72px; }
+.wg { margin: 22px 0; }
 .wg h3 { margin: 0 0 6px; }
 .wg h4 { margin: 0 0 6px; font-size: 0.85rem; color: var(--ink2); }
 .wg-idea { font-size: 1.02rem; max-width: 52em; margin: 0 0 8px; }
 .wg-controls { padding-top: 6px; }
 .wg-panels { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 10px 0; }
-.wg-panels.two { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.wg-panels.two { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
 .wg-panel { margin: 0; }
 .wg-panel figcaption { margin-top: 6px; font-size: 0.8rem; color: var(--ink2); line-height: 1.4; }
 .wg-grid { width: 100%; height: auto; display: block; aspect-ratio: 1; border: 1px solid var(--ring); border-radius: 6px; background: var(--surface); overflow: hidden; }

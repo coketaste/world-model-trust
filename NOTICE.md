@@ -14,9 +14,21 @@ The project starts from open problems that World Labs describes on its own publi
 
 - No World Labs or Spark data files, and no images or renders derived from World Labs content, are included in this repository. `scripts/fetch_data.py` downloads public example files from their public locations on demand; check World Labs' terms before reusing them.
 - No model weights are included.
-- All figures on the site are original: inline SVG drawn in `site/assets/*.js`, plots from this project's own results, and renders of a procedurally generated synthetic room (`scripts/make_figures.py`, no third-party assets). The site's icons are drawn for this project; no logos or third-party artwork are used.
+- Figures include inline SVG drawn in `site/assets/*.js`, plots from this project's own results, renders of a procedurally generated synthetic room, and the SEG/EAGE-derived salt visualisations credited below. The site's icons are drawn for this project; no logos are used.
 
 ## Third-party code
+
+### Three.js 0.160.1
+
+`site/assets/vendor/three.module.js` and `OrbitControls.js` are vendored from Three.js 0.160.1 (MIT, copyright 2010–2023 Three.js Authors). The OrbitControls import path is changed to the local module; otherwise these files are unmodified. The complete notice is in `site/assets/vendor/THREE-LICENSE.txt`. Sources: https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js and https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/controls/OrbitControls.js.
+
+## SEG/EAGE salt model data and derived figures
+
+`site/assets/salt/` contains a reduced interior volume, an extracted salt mesh and figures derived from the SEG/EAGE 3D Salt Model. Copyright 1997 Society of Exploration Geophysicists; licensed under CC BY 4.0. Credit the SEG/EAGE 3-D Modeling committee and Aminzadeh, Brac & Kunz (1997), *SEG/EAGE 3-D Salt and Overthrust Models*.
+
+The source used is the checksum-verified EMsig derivative by Dieter Werthmüller, https://github.com/emsig/data/blob/2021-05-21/emg3d/models/SEG-EAGE-Salt-Model.h5. The original SEG archive returned HTTP 403 during preparation. We reverse the published velocity-to-resistivity transform only in the unchanged interior (0.30–3.66 km under the sample-coordinate convention), exclude overwritten layers, subsample, quantize velocities, and extract a salt-membership surface. This is not a copy of the complete original volume. Processing and source references are in `site/assets/salt/README.md` and `metadata.json`; the full licence and attribution are in `site/assets/salt/LICENSE.txt`. Keep these notices with redistributed assets. No endorsement is implied.
+
+## Other third-party code
 
 ### Spark SPZ decoder (`src/wmt/spz_io.py`)
 
@@ -63,6 +75,7 @@ The SPZ file format was created by Niantic Labs (https://github.com/nianticlabs/
 | transformers (optional) | Apache-2.0 |
 | open3d, libusb-package (optional, for one experiment) | MIT; Apache-2.0 |
 | pytest (development) | MIT |
+| scikit-image, h5py (optional salt asset preparation) | BSD-3-Clause |
 
 Licences were read from package metadata; check each project for the current terms.
 

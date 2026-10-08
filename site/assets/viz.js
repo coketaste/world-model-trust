@@ -8,12 +8,16 @@
     const n = SVG_TAGS.has(tag) ? document.createElementNS(NS, tag) : document.createElement(tag);
     for (const [k, v] of Object.entries(attrs || {})) {
       if (v == null || v === false) continue;
+      if (k === "style") continue;
       if (k === "fill" || k === "stroke") n.style.setProperty(k, v);
       else if (k === "class") n.setAttribute("class", v);
       else if (k.startsWith("on") && typeof v === "function") n.addEventListener(k.slice(2), v);
       else n.setAttribute(k, v === true ? "" : v);
     }
-    for (const kid of kids.flat()) if (kid != null) n.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+    // Merge authored CSS after presentation styles. setAttribute("style", ...)
+    // would erase fill/stroke above (e.g. ray colours plus opacity).
+    if (attrs && attrs.style != null && attrs.style !== false) n.style.cssText += ";" + attrs.style;
+    for (const kid of kids.flat(Infinity)) if (kid != null) n.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
     return n;
   }
 
@@ -98,8 +102,9 @@
 
   const PAGES = [["index.html", "Overview"], ["ideas.html", "Ideas"], ["geophysics.html", "Geophysics"], ["experiments.html", "Experiments"], ["literature.html", "Literature"], ["method.html", "Method"]];
   const EXPERIMENTS = [["experiments.html", "All experiments"], ["illumination.html", "Illumination"], ["robots.html", "Robots"], ["shadows.html", "Shadows"], ["alignment.html", "Alignment"]];
-  const ORDER = ["index.html", "ideas.html", "geophysics.html", "experiments.html", "illumination.html", "robots.html", "shadows.html", "alignment.html", "literature.html", "method.html"];
-  const TITLES = { "index.html": "Overview", "ideas.html": "Ideas: what could be contributed", "geophysics.html": "Geophysics methods, explained", "experiments.html": "The experiments", "illumination.html": "Experiment: illumination", "robots.html": "Experiment: robots", "shadows.html": "Experiment: shadows", "alignment.html": "Experiment: alignment", "literature.html": "What already exists", "method.html": "Method and limits" };
+  const GEOPHYSICS = [["geophysics.html", "Methods & primer"], ["salt.html", "3D salt model"]];
+  const ORDER = ["index.html", "ideas.html", "geophysics.html", "salt.html", "experiments.html", "illumination.html", "robots.html", "shadows.html", "alignment.html", "literature.html", "method.html"];
+  const TITLES = { "index.html": "Overview", "ideas.html": "Ideas: what could be contributed", "geophysics.html": "Geophysics methods, explained", "salt.html": "Explore the 3D salt model", "experiments.html": "The experiments", "illumination.html": "Experiment: illumination", "robots.html": "Experiment: robots", "shadows.html": "Experiment: shadows", "alignment.html": "Experiment: alignment", "literature.html": "What already exists", "method.html": "Method and limits" };
 
   function nav(current) {
     const mount = document.getElementById("nav");
@@ -110,10 +115,17 @@
     const main = document.querySelector("main"); if (main && !main.id) main.id = "main";
     document.body.prepend(el("a", { class: "sr skip", href: "#main" }, "Skip to content"));
     const inExp = EXPERIMENTS.some(([h]) => h === current);
+    const inGeo = GEOPHYSICS.some(([h]) => h === current);
     mount.className = "nav";
     mount.append(el("div", { class: "wrap" }, el("a", { class: "brand", href: "index.html" }, "world-model-trust"),
-      ...PAGES.map(([h, l]) => el("a", { class: "link", href: h, "aria-current": h === current ? "page" : (h === "experiments.html" && inExp ? "true" : null) }, l)), el("span", { class: "spacer" }), btn));
+      ...PAGES.map(([h, l]) => el("a", { class: "link", href: h, "aria-current": h === current ? "page" : ((h === "experiments.html" && inExp) || (h === "geophysics.html" && inGeo) ? "true" : null) }, l)), el("span", { class: "spacer" }), btn));
     if (inExp) mount.append(el("nav", { class: "subnav", "aria-label": "Experiments" }, el("div", { class: "wrap" }, ...EXPERIMENTS.map(([h, l]) => el("a", { href: h, "aria-current": h === current ? "page" : null }, l)))));
+    if (inGeo) mount.append(el("nav", { class: "subnav", "aria-label": "Geophysics" }, el("div", { class: "wrap" }, ...GEOPHYSICS.map(([h, l]) => el("a", { href: h, "aria-current": h === current ? "page" : null }, l)))));
+    // Anchor targets must clear both navigation rows, including touch layouts.
+    const measureNav = () => document.documentElement.style.setProperty("--nav-height", mount.getBoundingClientRect().height + "px");
+    measureNav();
+    if (window.ResizeObserver) new ResizeObserver(measureNav).observe(mount);
+    else window.addEventListener("resize", measureNav);
     pager(current); autoToc(); disclaimer();
   }
 
@@ -240,7 +252,8 @@
   }
 
 
-  /* segmented control: returns a <label> to append to a .filters row; onChange runs after the state setter */
+  /* Segmented control: the group has a name; buttons keep their own names.
+     A wrapping <label> would label (and activate) only the first button. */
   function seg(label, options, get, set, onChange) {
     const g = el("div", { class: "seg", role: "group", "aria-label": label });
     options.forEach(([k, t]) => {
@@ -248,7 +261,7 @@
       b.addEventListener("click", () => { set(k); g.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); onChange(); });
       g.append(b);
     });
-    return el("label", {}, el("span", {}, label), g);
+    return el("div", { class: "control-group" }, el("span", {}, label), g);
   }
 
   /* range slider with a live value readout; returns a <label> */

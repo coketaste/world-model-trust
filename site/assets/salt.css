@@ -1,0 +1,52 @@
+.salt-hero { padding-top: 48px; }
+.salt-explorer { display: grid; grid-template-columns: minmax(0, 1fr) 280px; border: 1px solid var(--ring); border-radius: 14px; overflow: hidden; background: var(--surface); }
+.salt-stage-wrap { min-width: 0; display: flex; flex-direction: column; }
+.salt-stage { position: relative; height: 560px; flex: 1; min-height: 560px; overflow: hidden; background: #101e2c; color: #e7edf4; }
+.salt-stage > img { width: 100%; height: 100%; object-fit: contain; }
+.salt-canvas-host { position: absolute; inset: 0; }
+.salt-canvas-host canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.salt-stage-tag { position: absolute; top: 18px; left: 20px; pointer-events: none; font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+.salt-stage-tag span { color: #b8c9d8; font-weight: 400; letter-spacing: 0; }
+.salt-stage-note { position: absolute; bottom: 15px; left: 20px; right: 20px; color: #b8c9d8; pointer-events: none; font-size: 11px; }
+.salt-axis-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.salt-axis-labels span { position: absolute; font-size: 11px; color: #dae5ef; background: #101e2cbf; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+.salt-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 18px 4px; font-size: 12px; color: var(--ink2); }
+.salt-instructions { padding: 8px 18px 16px; margin: 0; color: var(--ink2); }
+.salt-controls { border: 0; border-left: 1px solid var(--ring); margin: 0; padding: 8px 18px 18px; min-width: 0; }
+.salt-controls:disabled { opacity: .55; }
+.salt-control-section { padding: 15px 0; border-bottom: 1px solid var(--ring); }
+.salt-control-section:last-child { border-bottom: 0; padding-bottom: 0; }
+.salt-control-section h2 { margin: 0 0 12px; font-size: .95rem; }
+.salt-control-section p { font-size: 12px; line-height: 1.5; margin: 9px 0 0; }
+.salt-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.salt-buttons .ghost { font-size: 12px; padding: 5px 8px; }
+.salt-check { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.salt-check input { accent-color: var(--s1); }
+.salt-range { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 3px; margin: 8px 0 12px; font-size: 12px; color: var(--ink2); }
+.salt-range .val { font-variant-numeric: tabular-nums; }
+.salt-range input { grid-column: 1 / -1; width: 100%; margin: 3px 0; accent-color: var(--s1); }
+.salt-colorbar { height: 9px; border-radius: 4px; background: linear-gradient(90deg,#440154,#3b528b,#21918c,#5ec962,#fde725); margin-top: 12px; }
+.salt-scale { display: flex; justify-content: space-between; gap: 3px; margin-top: 4px; font-size: 10px; color: var(--ink2); }
+.salt-controls select { width: 100%; margin-top: 6px; padding: 8px; border: 1px solid var(--axis); border-radius: 6px; background: var(--surface); color: var(--ink); font: inherit; font-size: 12px; }
+.salt-guidance { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 30px; }
+.salt-step { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.salt-guidance h2 { font-size: 1.05rem; margin: 9px 0; }
+.salt-guidance p { color: var(--ink2); font-size: 14px; }
+.salt-reference { margin: 0; background: white; border: 1px solid var(--ring); border-radius: 10px; overflow: hidden; }
+.salt-reference img { display: block; width: 100%; }
+.salt-reference figcaption { padding: 10px 16px; background: var(--surface); }
+.salt-source-list { padding-left: 22px; max-width: 800px; }
+.salt-source-list li { margin: 8px 0; }
+@media (max-width: 800px) {
+  .salt-explorer { grid-template-columns: 1fr; }
+  .salt-stage { height: 440px; min-height: 440px; flex: none; }
+  .salt-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; border-left: 0; border-top: 1px solid var(--ring); }
+  .salt-guidance { gap: 16px; }
+}
+@media (max-width: 500px) {
+  .salt-hero { padding-top: 30px; }
+  .salt-stage { height: 330px; min-height: 330px; }
+  .salt-controls, .salt-guidance { grid-template-columns: 1fr; }
+  .salt-stage-note { font-size: 10px; }
+  .salt-guidance { gap: 8px; }
+}
